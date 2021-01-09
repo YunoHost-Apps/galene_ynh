@@ -94,7 +94,6 @@ cp -R ../sources/* $final_path/
 pushd "$final_path"
 	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout data/key.pem -x509 -days 365 -out data/cert.pem \
 	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-	#chown root:ssl-cert data/{key.pem,cert.pem}
     chmod 640 data/{key.pem,cert.pem}
 popd
 
