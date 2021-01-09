@@ -25,10 +25,9 @@ ynh_abort_if_errors
 #=================================================
 
 domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH
+path_url="/"
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
-language=$YNH_APP_ARG_LANGUAGE
 password=$YNH_APP_ARG_PASSWORD
 
 app=$YNH_APP_INSTANCE_NAME
@@ -38,7 +37,7 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 ynh_script_progression --message="Validating installation parameters..." --time --weight=1
 
-final_path=/var/www/$app
+final_path=/opt/yunohost/$app
 test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
 # Register (book) web path
@@ -53,7 +52,6 @@ ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=is_public --value=$is_public
-ynh_app_setting_set --app=$app --key=language --value=$language
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -63,7 +61,7 @@ ynh_app_setting_set --app=$app --key=language --value=$language
 ynh_script_progression --message="Configuring firewall..." --time --weight=1
 
 # Find an available port
-port=$(ynh_find_port --port=8095)
+port=$(ynh_find_port --port=8443)
 ynh_app_setting_set --app=$app --key=port --value=$port
 
 # Optional: Expose this port publicly
@@ -76,9 +74,9 @@ ynh_app_setting_set --app=$app --key=port --value=$port
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing dependencies..." --time --weight=1
+#ynh_script_progression --message="Installing dependencies..." --time --weight=1
 
-ynh_install_app_dependencies $pkg_dependencies
+#ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -87,7 +85,20 @@ ynh_script_progression --message="Setting up source files..." --time --weight=1
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir="$final_path"
+#ynh_setup_source --dest_dir="$final_path"
+mkdir -p $final_path
+cp -R ../sources/* $final_path/
+
+#=================================================
+# CREATE A SERVER CERTIFICATE
+#=================================================
+
+pushd "$final_path"
+	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout data/key.pem -x509 -days 365 -out data/cert.pem \
+	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
+	#chown root:ssl-cert data/{key.pem,cert.pem}
+    chmod 640 data/{key.pem,cert.pem}
+popd
 
 #=================================================
 # NGINX CONFIGURATION
@@ -117,14 +128,23 @@ ynh_add_systemd_config
 # MODIFY A CONFIG FILE
 #=================================================
 
-ynh_replace_string --match_string="match_string" --replace_string="replace_string" --target_file="$final_path/CONFIG_FILE"
+cp ../conf/passwd $final_path/data/passwd
+
+ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/data/passwd"
+ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/data/passwd"
+
+cp ../conf/groupname.json $final_path/groups/groupname.json
+
+ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/groups/groupname.json"
+ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/groups/groupname.json"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
 # Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum --file="$final_path/CONFIG_FILE"
+ynh_store_file_checksum --file="$final_path/data/passwd"
+ynh_store_file_checksum --file="$final_path/groups/groupname.json"
 
 #=================================================
 # GENERIC FINALIZATION
@@ -133,22 +153,23 @@ ynh_store_file_checksum --file="$final_path/CONFIG_FILE"
 #=================================================
 
 # Set permissions to app files
-chown -R root: $final_path
+chown -R $app: $final_path
+chmod -R 755 $final_path
 
 #=================================================
 # SETUP LOGROTATE
 #=================================================
-ynh_script_progression --message="Configuring log rotation..." --time --weight=1
+#ynh_script_progression --message="Configuring log rotation..." --time --weight=1
 
 # Use logrotate to manage application logfile(s)
-ynh_use_logrotate
+#ynh_use_logrotate
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --time --weight=1
 
-yunohost service add $app --description="A short description of the app" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -166,8 +187,7 @@ ynh_script_progression --message="Configuring SSOwat..." --time --weight=1
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
+	ynh_permission_update --permission "main" --add "visitors"
 fi
 
 #=================================================
