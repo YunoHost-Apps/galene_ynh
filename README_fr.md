@@ -23,7 +23,6 @@ Galène est un serveur de visioconférence facile à déployer (il suffit de cop
 
 ## Configuration
 
-
 ## Documentation
 
  * Documentation officielle : https://galene.org/
