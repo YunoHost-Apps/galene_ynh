@@ -33,8 +33,8 @@ Galène is a videoconferencing server that is easy to deploy (just copy a few fi
 
 #### Multi-user support
 
- * Are LDAP and HTTP auth supported?
- * Can the app be used by multiple users?
+ * Are LDAP and HTTP auth supported? **No**
+ * Can the app be used by multiple users? **Yes**
 
 #### Supported architectures
 
@@ -48,9 +48,6 @@ Galène is a videoconferencing server that is easy to deploy (just copy a few fi
 ## Additional information
 
 * Other info you would like to add about this app.
-
-**More info on the documentation page:**  
-https://yunohost.org/packaging_apps
 
 ## Links
 

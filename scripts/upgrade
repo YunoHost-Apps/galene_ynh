@@ -95,7 +95,7 @@ then
 	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout data/key.pem -x509 -days 365 -out data/cert.pem \
 	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
     chmod 640 data/{key.pem,cert.pem}
-  popd
+  	popd
 fi
 
 #=================================================
@@ -128,19 +128,6 @@ ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-#=================================================
-# MODIFY A CONFIG FILE
-#=================================================
-
-# ### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
-# ### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
-# ynh_backup_if_checksum_is_different --file="$final_path/CONFIG_FILE"
-
-# ynh_replace_string --match_string="match_string" --replace_string="replace_string" --target_file="$final_path/CONFIG_FILE"
-
-# # Recalculate and store the checksum of the file for the next upgrade.
-# ynh_store_file_checksum --file="$final_path/CONFIG_FILE"
 
 #=================================================
 # GENERIC FINALIZATION
