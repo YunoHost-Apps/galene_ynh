@@ -21,6 +21,7 @@ path_url=$(ynh_app_setting_get --app=$app --key=path)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 
 #=================================================
 # CHECK VERSION
@@ -82,9 +83,23 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Upgrading source files..." --time --weight=1
 
-	# Download, check integrity, uncompress and patch the source from app.src
-	#ynh_setup_source --dest_dir="$final_path"
-	cp -R ../sources $final_path
+	# Create a temporary directory
+	tmpdir="$(mktemp -d)"
+
+	# Backup the config file in the temp dir
+	cp -ar "$final_path/groups" "$tmpdir/groups"
+
+	# Remove the app directory securely
+	ynh_secure_remove --file="$final_path"
+
+	mkdir -p $final_path
+	cp -R ../sources/* $final_path/
+
+	# Copy the admin saved settings from tmp directory to final path	
+	cp -ar "$tmpdir/groups" "$final_path/groups"
+
+	# Remove the tmp directory securely
+	ynh_secure_remove --file="$tmpdir"
 fi
 
 #=================================================
@@ -138,7 +153,8 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chown -R root: $final_path
+chown -R $app: $final_path
+chmod -R 755 $final_path
 
 #=================================================
 # SETUP LOGROTATE
