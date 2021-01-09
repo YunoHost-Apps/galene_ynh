@@ -29,6 +29,7 @@ path_url="/"
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
 password=$YNH_APP_ARG_PASSWORD
+group_name=$YNH_APP_ARG_GROUPNAME
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -133,10 +134,10 @@ cp ../conf/passwd $final_path/data/passwd
 ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/data/passwd"
 ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/data/passwd"
 
-cp ../conf/groupname.json $final_path/groups/groupname.json
+cp ../sources/groups/groupname.json $final_path/groups/$group_name.json
 
-ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/groups/groupname.json"
-ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/groups/groupname.json"
+ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/groups/$group_name.json"
+ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/groups/$group_name.json"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
@@ -144,7 +145,7 @@ ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --
 
 # Calculate and store the config file checksum into the app settings
 ynh_store_file_checksum --file="$final_path/data/passwd"
-ynh_store_file_checksum --file="$final_path/groups/groupname.json"
+ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
 
 #=================================================
 # GENERIC FINALIZATION
