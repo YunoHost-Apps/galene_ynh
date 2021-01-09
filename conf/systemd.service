@@ -1,5 +1,5 @@
 [Unit]
-Description=Galène
+Description=Galene
 After=network.target
 
 [Service]

@@ -133,7 +133,8 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions to app files
-chown -R root: $final_path
+chown -R $app: $final_path
+chmod -R 755 $final_path
 
 #=================================================
 # SETUP LOGROTATE
