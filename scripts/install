@@ -90,6 +90,17 @@ mkdir -p $final_path
 cp -R ../sources/* $final_path/
 
 #=================================================
+# CREATE A SERVER CERTIFICATE
+#=================================================
+
+pushd "$final_path"
+	openssl req -newkey rsa:2048 -nodes -keyout data/key.pem -x509 -days 365 -out data/cert.pem \
+	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
+	#chown root:ssl-cert data/{key.pem,cert.pem}
+    chmod 640 data/{key.pem,cert.pem}
+popd
+
+#=================================================
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Configuring NGINX web server..." --time --weight=1
@@ -117,14 +128,17 @@ ynh_add_systemd_config
 # MODIFY A CONFIG FILE
 #=================================================
 
-#ynh_replace_string --match_string="match_string" --replace_string="replace_string" --target_file="$final_path/CONFIG_FILE"
+cp ../conf/passwd $final_path/data/passwd
+
+ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/data/passwd"
+ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/data/passwd"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
 #=================================================
 
 # Calculate and store the config file checksum into the app settings
-#ynh_store_file_checksum --file="$final_path/CONFIG_FILE"
+ynh_store_file_checksum --file="$final_path/data/passwd"
 
 #=================================================
 # GENERIC FINALIZATION
