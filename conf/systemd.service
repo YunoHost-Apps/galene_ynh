@@ -1,5 +1,5 @@
 [Unit]
-Description=Galene: videoconferencing server
+Description=Galène: videoconferencing server
 After=network.target
 
 [Service]

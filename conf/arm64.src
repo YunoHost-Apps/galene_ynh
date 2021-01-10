@@ -1,0 +1,7 @@
+SOURCE_URL=https://github.com/ericgaspar/galene_ynh/releases/download/v0.2/galene_0.2_Linux_arm64.tar.gz
+SOURCE_SUM=71233692bed5b11a040aa9ba2e3fb819d6eede84182b9f1da1b8c506bde14594
+SOURCE_SUM_PRG=sha256sum
+SOURCE_FORMAT=tar.gz
+SOURCE_IN_SUBDIR=true
+SOURCE_FILENAME=
+SOURCE_EXTRACT=true
