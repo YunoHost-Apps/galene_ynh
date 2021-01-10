@@ -15,7 +15,7 @@ Galène est un serveur de visioconférence facile à déployer (il suffit de cop
 
 ## Captures d'écran
 
-![](Link to a screenshot of this app.)
+![](France_in_XXI_Century._School.jpg)
 
 ## Démo
 

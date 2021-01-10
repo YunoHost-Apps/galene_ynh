@@ -15,7 +15,7 @@ Galène is a videoconferencing server that is easy to deploy (just copy a few fi
 
 ## Screenshots
 
-![](Link to a screenshot of this app.)
+![](France_in_XXI_Century._School.jpg)
 
 ## Demo
 
