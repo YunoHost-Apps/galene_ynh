@@ -11,11 +11,11 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 Galène is a videoconferencing server that is easy to deploy (just copy a few files and run the binary) and that requires moderate server resources. It was originally designed for lectures and conferences (where a single speaker streams audio and video to hundreds or thousands of users), but later evolved to be useful for student practicals (where users are divided into many small groups), and meetings (where a few dozen users interact with each other). 
 
-**Shipped version:** 0.1
+**Shipped version:** 0.2
 
 ## Screenshots
 
-![](Link to a screenshot of this app.)
+![](France_in_XXI_Century._School.jpg)
 
 ## Demo
 
@@ -33,8 +33,8 @@ Galène is a videoconferencing server that is easy to deploy (just copy a few fi
 
 #### Multi-user support
 
- * Are LDAP and HTTP auth supported?
- * Can the app be used by multiple users?
+ * Are LDAP and HTTP auth supported? **No**
+ * Can the app be used by multiple users? **Yes**
 
 #### Supported architectures
 
@@ -48,9 +48,6 @@ Galène is a videoconferencing server that is easy to deploy (just copy a few fi
 ## Additional information
 
 * Other info you would like to add about this app.
-
-**More info on the documentation page:**  
-https://yunohost.org/packaging_apps
 
 ## Links
 

@@ -10,7 +10,7 @@
 		admin="john"	(USER)
 		is_public=1	(PUBLIC|public=1|private=0)
 		password="pass"
-		group_name="groupname"
+		group_name="public"
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=0
@@ -21,7 +21,7 @@
 		upgrade=1
 		backup_restore=1
 		multi_instance=0
-		port_already_use=0
+		port_already_use=1
 		change_url=1
 ;;; Options
 Email=

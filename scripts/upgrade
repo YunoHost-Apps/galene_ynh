@@ -23,6 +23,7 @@ is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
+architecture=$(ynh_detect_arch)
 
 #=================================================
 # CHECK VERSION
@@ -81,8 +82,7 @@ then
 	# Remove the app directory securely
 	ynh_secure_remove --file="$final_path"
 
-	mkdir -p $final_path
-	cp -R ../sources/* $final_path/
+	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 
 	# Copy the admin saved settings from tmp directory to final path	
 	cp -ar "$tmpdir/groups" "$final_path/groups"
@@ -94,7 +94,7 @@ then
 	pushd "$final_path"
 	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout data/key.pem -x509 -days 365 -out data/cert.pem \
 	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-    chmod 640 data/{key.pem,cert.pem}
+  chmod 640 data/{key.pem,cert.pem}
   popd
 fi
 
@@ -128,19 +128,6 @@ ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-#=================================================
-# MODIFY A CONFIG FILE
-#=================================================
-
-# ### Verify the checksum of a file, stored by `ynh_store_file_checksum` in the install script.
-# ### And create a backup of this file if the checksum is different. So the file will be backed up if the admin had modified it.
-# ynh_backup_if_checksum_is_different --file="$final_path/CONFIG_FILE"
-
-# ynh_replace_string --match_string="match_string" --replace_string="replace_string" --target_file="$final_path/CONFIG_FILE"
-
-# # Recalculate and store the checksum of the file for the next upgrade.
-# ynh_store_file_checksum --file="$final_path/CONFIG_FILE"
 
 #=================================================
 # GENERIC FINALIZATION
