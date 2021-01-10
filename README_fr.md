@@ -11,7 +11,7 @@ Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/#/install
 ## Vue d'ensemble
 Galène est un serveur de visioconférence facile à déployer (il suffit de copier quelques fichiers et d'exécuter le binaire) et qui nécessite des ressources serveur modérées. Il a été conçu à l'origine pour les conférences (où un seul orateur diffuse l'audio et la vidéo à des centaines ou des milliers d'utilisateurs), mais a ensuite évolué pour être utile pour les travaux pratiques des étudiants (où les utilisateurs sont divisés en plusieurs petits groupes) et les réunions (où un quelques dizaines d'utilisateurs interagissent les uns avec les autres).
 
-**Version incluse :** 0.1
+**Version incluse :** 0.2
 
 ## Captures d'écran
 
@@ -23,7 +23,6 @@ Galène est un serveur de visioconférence facile à déployer (il suffit de cop
 
 ## Configuration
 
-
 ## Documentation
 
  * Documentation officielle : https://galene.org/
@@ -33,8 +32,8 @@ Galène est un serveur de visioconférence facile à déployer (il suffit de cop
 
 #### Support multi-utilisateur
 
-* L'authentification LDAP est-elle prise en charge ?
-* L'application peut-elle être utilisée par plusieurs utilisateurs ?
+* L'authentification LDAP est-elle prise en charge ? **Non**
+* L'application peut-elle être utilisée par plusieurs utilisateurs ? **Oui**
 
 #### Supported architectures
 
