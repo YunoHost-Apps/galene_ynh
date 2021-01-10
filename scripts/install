@@ -14,8 +14,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 ynh_clean_setup () {
-	### Remove this function if there's nothing to clean before calling the remove script.
-	true
+	ynh_clean_check_starting
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
@@ -30,6 +29,7 @@ admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
 password=$YNH_APP_ARG_PASSWORD
 group_name=$YNH_APP_ARG_GROUP_NAME
+architecture=$(ynh_detect_arch)
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -83,9 +83,7 @@ ynh_script_progression --message="Setting up source files..." --weight=1
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-#ynh_setup_source --dest_dir="$final_path"
-mkdir -p $final_path
-cp -R ../sources_2/* $final_path/
+ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 
 #=================================================
 # CREATE A SERVER CERTIFICATE
