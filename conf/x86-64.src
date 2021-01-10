@@ -1,5 +1,5 @@
-SOURCE_URL=url of app's source
-SOURCE_SUM=sha256 checksum
+SOURCE_URL=https://github.com/ericgaspar/galene_ynh/releases/download/v0.2/galene-0.2_Linux_x86_64.tar.gz
+SOURCE_SUM=438ba8fbb2d3c8a02b5baa2c11940ee2d957b64c830062dae8456b290130e8bd
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
