@@ -82,7 +82,7 @@ then
 	ynh_secure_remove --file="$final_path"
 
 	mkdir -p $final_path
-	cp -R ../sources/* $final_path/
+	cp -R ../sources_2/* $final_path/
 
 	# Copy the admin saved settings from tmp directory to final path	
 	cp -ar "$tmpdir/groups" "$final_path/groups"

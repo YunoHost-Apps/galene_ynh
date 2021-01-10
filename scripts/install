@@ -85,7 +85,7 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 #ynh_setup_source --dest_dir="$final_path"
 mkdir -p $final_path
-cp -R ../sources/* $final_path/
+cp -R ../sources_2/* $final_path/
 
 #=================================================
 # CREATE A SERVER CERTIFICATE
@@ -130,7 +130,7 @@ cp ../conf/passwd $final_path/data/passwd
 ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/data/passwd"
 ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/data/passwd"
 
-cp ../sources/groups/groupname.json $final_path/groups/$group_name.json
+cp ../sources_2/groups/groupname.json $final_path/groups/$group_name.json
 
 ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/groups/$group_name.json"
 ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/groups/$group_name.json"
