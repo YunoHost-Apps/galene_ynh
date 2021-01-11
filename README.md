@@ -13,16 +13,27 @@ Galène is a videoconferencing server that is easy to deploy (just copy a few fi
 
 **Shipped version:** 0.2
 
-## Screenshots
-
-![](France_in_XXI_Century._School.jpg)
-
 ## Demo
 
-* [Official demo](https://galene.org:8443/)
+* [Official demo](https://galene.org:8443/) *(NB: this is a public instance, your microphone and camera streams might be exposed to anyone joining that demo)*
 
 ## Configuration
 
+#### Groups (meeting rooms)
+
+*Galène* meeting rooms are called "groups".
+
+Any group is accessible at `https://yourgalenedomain.tld/group/GroupName`, by typing its name in the home page search field, or by selecting it in the public list (if the group is configured as publicly visible, see below).
+
+#### Configuring groups and adding new ones
+
+Groups are defined by *json* files located in *Galène* folder (`/opt/yunohost/galene/groups`). Each group is represented by a `GroupName.json` file.
+To create a new group, you need to create a `GroupNameExample.json` file (you can also make subfolder, and the groups will be accessible with `https://yourgalenedomain.tld/group/subfolder/GroupName`).
+
+*NB: spaces are **not** supported in group file names.*
+
+You can configure your groups to be accessible without any pseudo or password (anonymous login), only with a defined password, with username but no password, or both username and password.
+Check the documentation: [how to configure groups](https://galene.org/README.html).
 
 ## Documentation
 
@@ -43,11 +54,20 @@ Galène is a videoconferencing server that is easy to deploy (just copy a few fi
 
 ## Limitations
 
-* Any known limitations.
+* For now there is no web administration interface. To configure your servers (groups, …) you need to use the command line to edit *Galène* configuration files.
+* See https://galene.org/ for limitations, browsers support and other Frequently Asked Questions
 
 ## Additional information
 
-* Other info you would like to add about this app.
+#### Recondings
+
+[How to record your sessions](https://galene.org/).
+
+Once you recorded one session, the content is located in `/opt/yunohost/galene/recordings/GroupName` folder.
+
+#### Statistics
+
+* Server statistics are available at `https://yourgalenedomain.tld/stats` using admin login + password
 
 ## Links
 
