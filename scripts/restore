@@ -45,7 +45,15 @@ test ! -d $final_path \
 	|| ynh_die --message="There is already a directory: $final_path "
 
 #=================================================
-# STANDARD RESTORATION STEPS
+# SPECIFIC RESTORATION
+#=================================================
+# REINSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Reinstalling dependencies..." --weight=1
+
+# Define and install dependencies
+ynh_install_app_dependencies $pkg_dependencies
+
 #=================================================
 # RESTORE THE NGINX CONFIGURATION
 #=================================================
@@ -66,11 +74,13 @@ ynh_script_progression --message="Recreating the dedicated system user..." --wei
 
 # Create the dedicated user (if not existing)
 ynh_system_user_create --username=$app
-adduser turnserver ssl-cert
+ynh_system_user_create --username=$turnserver ssl-cert
+#adduser turnserver ssl-cert
 
 #=================================================
 # RESTORE USER RIGHTS
 #=================================================
+ynh_script_progression --message="Restoring permissions..." --weight=1
 
 # Restore permissions on app files
 # Set permissions on app files
@@ -80,16 +90,6 @@ chmod u=rwX,g=rX,o= -R /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app
 setfacl -R -m user:turnserver:rwX  /var/log/$app
-
-#=================================================
-# SPECIFIC RESTORATION
-#=================================================
-# REINSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Reinstalling dependencies..." --weight=1
-
-# Define and install dependencies
-ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # RESTORE SYSTEMD
