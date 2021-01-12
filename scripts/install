@@ -64,17 +64,29 @@ ynh_script_progression --message="Finding an available port..." --weight=3
 
 # Find an available port
 port=$(ynh_find_port --port=8443)
+turnserver_tls_port=$(ynh_find_port --port=5349)
+turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
+cli_port=$(ynh_find_port --port=5766)
+
 ynh_app_setting_set --app=$app --key=port --value=$port
 
 # Open the port
-# ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
+ynh_exec_warn_less yunohost firewall allow TCP $synapse_tls_port
+ynh_exec_warn_less yunohost firewall allow Both $turnserver_tls_port
+ynh_exec_warn_less yunohost firewall allow Both $turnserver_alt_tls_port
+
+# Store opened ports
+ynh_app_setting_set --app=$app --key=port --value=$port
+ynh_app_setting_set --app=$app --key=turnserver_tls_port --value=$turnserver_tls_port
+ynh_app_setting_set --app=$app --key=turnserver_alt_tls_port --value=$turnserver_alt_tls_port
+ynh_app_setting_set --app=$app --key=cli_port --value=$cli_port
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-#ynh_script_progression --message="Installing dependencies..." --time --weight=1
+ynh_script_progression --message="Installing dependencies..." --weight=5
 
-#ynh_install_app_dependencies $pkg_dependencies
+ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -119,6 +131,10 @@ ynh_script_progression --message="Configuring a systemd service..." --weight=1
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
+# Create systemd service for turnserver
+cp ../conf/coturn/default_coturn /etc/default/coturn-$app
+ynh_add_systemd_config --service=coturn-$app --template=coturn-galene.service
+
 #=================================================
 # MODIFY A CONFIG FILE
 #=================================================
@@ -142,6 +158,67 @@ ynh_store_file_checksum --file="$final_path/data/passwd"
 ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
 
 #=================================================
+# SET COTURN CONFIG
+#=================================================
+ynh_script_progression --message="Configuring coturn..." --weight=1
+
+# WARNING : theses command are used in INSTALL, UPGRADE
+# For any update do it in all files
+
+# Find password for turnserver
+ynh_print_OFF
+turnserver_pwd=$(ynh_string_random --length=30)
+ynh_app_setting_set --app=$app --key=turnserver_pwd --value=$turnserver_pwd
+ynh_print_ON
+
+coturn_config_path="/etc/$app/coturn.conf"
+
+cp ../conf/coturn/turnserver.conf "$coturn_config_path"
+
+ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$coturn_config_path"
+ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$coturn_config_path"
+ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$coturn_config_path"
+ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$coturn_config_path"
+ynh_replace_string --match_string=__CLI_PORT__ --replace_string=$cli_port --target_file="$coturn_config_path"
+ynh_print_OFF
+ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$coturn_config_path"
+ynh_print_ON
+
+# Get public IP and set as external IP for coturn
+# note : '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
+public_ip4="$(curl ip.yunohost.org)" || true
+public_ip6="$(curl ipv6.yunohost.org)" || true
+
+if [ -n "$public_ip4" ] && ynh_validate_ip4 --ip_address="$public_ip4"
+then
+    echo "external-ip=$public_ip4" >> "$coturn_config_path"
+fi
+
+if [ -n "$public_ip6" ] && ynh_validate_ip6 --ip_address="$public_ip6"
+then
+    echo "external-ip=$public_ip6" >> "$coturn_config_path"
+fi
+
+ynh_store_file_checksum --file="$coturn_config_path"
+
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Configuring log rotation..." --weight=1
+
+ynh_use_logrotate --logfile "/var/log/$app"
+
+#=================================================
+# ADD SCRIPT FOR COTURN CRON AND APP SERVICE
+#=================================================
+
+# WARNING : theses command are used in INSTALL, UPGRADE
+# For any update do it in all files
+
+cp ../sources/Coturn_config_rotate.sh $final_path/
+ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
+
+#=================================================
 # GENERIC FINALIZATION
 #=================================================
 # SECURE FILES AND DIRECTORIES
@@ -150,14 +227,9 @@ ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
 # Set permissions to app files
 chown -R $app: $final_path
 chmod -R 755 $final_path
-
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-#ynh_script_progression --message="Configuring log rotation..." --time --weight=1
-
-# Use logrotate to manage application logfile(s)
-#ynh_use_logrotate
+chmod 770 $final_path/Coturn_config_rotate.sh
+setfacl -R -m user:turnserver:rX  /etc/$app
+setfacl -R -m user:turnserver:rwX  /var/log/$app
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -165,6 +237,7 @@ chmod -R 755 $final_path
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
 yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
+yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -172,7 +245,8 @@ yunohost service add $app --description="Videoconferencing server" --log="/var/l
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=coturn-$app.service --action=restart
+ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # SETUP SSOWAT
