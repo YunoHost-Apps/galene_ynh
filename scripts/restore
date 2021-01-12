@@ -98,6 +98,8 @@ setfacl -R -m user:turnserver:rwX  /var/log/$app
 ynh_script_progression --message="Restoring the systemd configuration..." --weight=1
 
 ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
+ynh_restore_file --origin_path="/etc/default/coturn-$app"
+ynh_restore_file --origin_path="/etc/systemd/system/coturn-$app.service"
 systemctl enable $app.service --quiet
 systemctl enable coturn-$app.service --quiet
 
