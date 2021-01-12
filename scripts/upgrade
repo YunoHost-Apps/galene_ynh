@@ -147,7 +147,7 @@ ynh_script_progression --message="Updating coturn config..." --weight=1
 # WARNING : theses command are used in INSTALL, UPGRADE
 # For any update do it in all files
 
-coturn_config_path="/etc/matrix-$app/coturn.conf"
+coturn_config_path="/etc/$app/coturn.conf"
 
 cp ../conf/turnserver.conf "$coturn_config_path"
 
