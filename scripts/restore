@@ -79,6 +79,23 @@ ynh_system_user_create --username=turnserver ssl-cert
 #adduser turnserver ssl-cert
 
 #=================================================
+# RESTORE SYSTEMD
+#=================================================
+ynh_script_progression --message="Restoring the systemd configuration..." --weight=1
+
+ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
+ynh_restore_file --origin_path="/etc/default/coturn-$app"
+ynh_restore_file --origin_path="/etc/systemd/system/coturn-$app.service"
+systemctl enable $app.service --quiet
+systemctl enable coturn-$app.service --quiet
+
+#=================================================
+# RESTORE THE LOGROTATE CONFIGURATION
+#=================================================
+
+ynh_restore_file --logfile "/var/log/$app"
+
+#=================================================
 # RESTORE USER RIGHTS
 #=================================================
 ynh_script_progression --message="Restoring permissions..." --weight=1
@@ -91,17 +108,6 @@ chmod u=rwX,g=rX,o= -R /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app
 setfacl -R -m user:turnserver:rwX  /var/log/$app
-
-#=================================================
-# RESTORE SYSTEMD
-#=================================================
-ynh_script_progression --message="Restoring the systemd configuration..." --weight=1
-
-ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
-ynh_restore_file --origin_path="/etc/default/coturn-$app"
-ynh_restore_file --origin_path="/etc/systemd/system/coturn-$app.service"
-systemctl enable $app.service --quiet
-systemctl enable coturn-$app.service --quiet
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -118,12 +124,6 @@ ynh_script_progression --message="Starting a systemd service..." --weight=3
 
 ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
 yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
-
-#=================================================
-# RESTORE THE LOGROTATE CONFIGURATION
-#=================================================
-
-ynh_restore_file --logfile "/var/log/$app"
 
 #=================================================
 # CREATE A DH FILE
