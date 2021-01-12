@@ -150,9 +150,10 @@ chmod -R 755 $final_path
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
 yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
+yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
 
 #=================================================
 # START SYSTEMD SERVICE
