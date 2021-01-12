@@ -64,10 +64,10 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 #ynh_backup --src_path="/etc/logrotate.d/$app"
 
 #=================================================
-# BACKUP SYNAPSE LOG
+# BACKUP GALÈNE LOG
 #=================================================
 
-ynh_backup --src_path="/var/log/$app"
+#ynh_backup --src_path="/var/log/$app"
 
 #=================================================
 # BACKUP SYSTEMD
