@@ -27,7 +27,9 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
+ynh_print_OFF
 password=$YNH_APP_ARG_PASSWORD
+ynh_print_ON
 group_name=$YNH_APP_ARG_GROUP_NAME
 architecture=$(ynh_detect_arch)
 
@@ -143,13 +145,22 @@ ynh_add_systemd_config --service=coturn-$app --template=coturn-galene.service
 
 cp ../conf/passwd $final_path/data/passwd
 
-ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/data/passwd"
-ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/data/passwd"
+ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/data/passwd"
+ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/data/passwd"
 
 mv -f $final_path/groups/groupname.json $final_path/groups/$group_name.json
 
-ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/groups/$group_name.json"
-ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/groups/$group_name.json"
+ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/$group_name.json"
+ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/$group_name.json"
+
+cp ../conf/ice-servers.json $final_path/data/ice-servers.json
+
+ynh_replace_string --match_string=__DOMAIN__ --replace_string=$admin --target_file="$final_path/data/ice-servers.json"
+ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$final_path/data/ice-servers.json"
+ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$final_path/data/ice-servers.json"
+ynh_print_OFF
+ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$final_path/data/ice-servers.json"
+ynh_print_ON
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
@@ -158,6 +169,7 @@ ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --
 # Calculate and store the config file checksum into the app settings
 ynh_store_file_checksum --file="$final_path/data/passwd"
 ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
+ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
 
 #=================================================
 # SET COTURN CONFIG
@@ -208,7 +220,7 @@ ynh_store_file_checksum --file="$coturn_config_path"
 #=================================================
 ynh_script_progression --message="Configuring log rotation..." --weight=1
 
-ynh_use_logrotate --logfile "/var/log/$app"
+ynh_use_logrotate --origin_path="/etc/logrotate.d/$app"
 
 #=================================================
 # ADD SCRIPT FOR COTURN CRON AND APP SERVICE
@@ -229,6 +241,7 @@ ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$
 # Set permissions to app files
 chown -R $app: $final_path
 chmod -R 755 $final_path
+chmod u=rwX,g=rX,o= -R /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app
 setfacl -R -m user:turnserver:rwX  /var/log/$app

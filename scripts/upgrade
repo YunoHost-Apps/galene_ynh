@@ -23,6 +23,10 @@ is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
+turnserver_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_tls_port)
+turnserver_alt_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_tls_port)
+cli_port=$(ynh_app_setting_get --app=$app --key=cli_port)
+turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
 architecture=$(ynh_detect_arch)
 
 #=================================================
@@ -99,6 +103,91 @@ then
 fi
 
 #=================================================
+# MULTINSTANCE SUPPORT
+#=================================================
+
+if [ ! -e /etc/matrix-$app/coturn.conf ]
+then
+    ynh_script_progression --message="Creating an independant service for coturn..." --weight=1
+
+    #=================================================
+    # CREATE AN INDEPENDANT SERVICE FOR COTURN
+    #=================================================
+
+    # Disable default config for turnserver and create a new service
+    systemctl stop coturn.service
+
+    # Set by default the system config for coturn
+    echo "" > /etc/turnserver.conf
+    ynh_replace_string --match_string="TURNSERVER_ENABLED=1" --replace_string="TURNSERVER_ENABLED=0" --target_file=/etc/default/coturn
+
+    # Set a port for each service in turnserver
+    turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
+    cli_port=$(ynh_find_port --port=5766)
+
+    ynh_app_setting_set --app=$app --key=turnserver_alt_tls_port --value=$turnserver_alt_tls_port
+    ynh_app_setting_set --app=$app --key=cli_port --value=$cli_port
+
+    yunohost firewall allow Both $turnserver_alt_tls_port > /dev/null 2>&1
+
+    #=================================================
+    # MAKE A CLEAN LOGROTATE CONFIG
+    #=================================================
+
+    ynh_use_logrotate --logfile /var/log/matrix-$app --nonappend
+fi
+
+#=================================================
+# SPECIFIC UPGRADE
+#=================================================
+# UPDATE COTURN CONFIG
+#=================================================
+ynh_script_progression --message="Updating coturn config..." --weight=1
+
+# WARNING : theses command are used in INSTALL, UPGRADE
+# For any update do it in all files
+
+coturn_config_path="/etc/matrix-$app/coturn.conf"
+
+cp ../conf/turnserver.conf "$coturn_config_path"
+
+ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$coturn_config_path"
+ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$coturn_config_path"
+ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$coturn_config_path"
+ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$coturn_config_path"
+ynh_replace_string --match_string=__CLI_PORT__ --replace_string=$cli_port --target_file="$coturn_config_path"
+ynh_print_OFF
+ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$coturn_config_path"
+ynh_print_ON
+
+# Get public IP and set as external IP for coturn
+# note : '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
+public_ip4="$(curl ip.yunohost.org)" || true
+public_ip6="$(curl ipv6.yunohost.org)" || true
+
+if [ -n "$public_ip4" ] && ynh_validate_ip4 --ip_address="$public_ip4"
+then
+    echo "external-ip=$public_ip4" >> "$coturn_config_path"
+fi
+
+if [ -n "$public_ip6" ] && ynh_validate_ip6 --ip_address="$public_ip6"
+then
+    echo "external-ip=$public_ip6" >> "$coturn_config_path"
+fi
+
+ynh_store_file_checksum --file="$coturn_config_path"
+
+#=================================================
+# ADD SCRIPT FOR COTURN CRON AND APP SERVICE
+#=================================================
+
+# WARNING : theses command are used in INSTALL, UPGRADE
+# For any update do it in all files
+
+cp ../sources/Coturn_config_rotate.sh $final_path/
+ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
+
+#=================================================
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=3
@@ -138,14 +227,18 @@ ynh_add_systemd_config
 # Set permissions on app files
 chown -R $app: $final_path
 chmod -R 755 $final_path
+chmod u=rwX,g=rX,o= -R /etc/$app
+chmod 770 $final_path/Coturn_config_rotate.sh
+setfacl -R -m user:turnserver:rX  /etc/matrix-$app
+setfacl -R -m user:turnserver:rwX  /var/log/matrix-$app
 
 #=================================================
 # SETUP LOGROTATE
 #=================================================
-# ynh_script_progression --message="Upgrading logrotate configuration..." --time --weight=1
+ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
 
 # # Use logrotate to manage app-specific logfile(s)
-# ynh_use_logrotate --non-append
+ynh_use_logrotate --non-append
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -160,7 +253,8 @@ yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=coturn-$app.service --action=restart
+ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # RELOAD NGINX

@@ -1,11 +1,46 @@
 [
     {
         "urls": [
-            "turn:turn.example.com:443",
-            "turn:turn.example.com:443?transport=tcp"
+            "turn:__DOMAIN__:__TLS_PORT__",
+            "turn:__DOMAIN__:__TLS_PORT__?transport=tcp"
         ],
-        "username": "galene",
-        "credential": "secret",
+        "username": "__APP__",
+        "credential": "__TURNPWD__",
+        "credentialType": "hmac-sha1"
+    }
+]
+[
+    {
+        "urls": [
+            "turn:__DOMAIN__:__TLS_ALT_PORT__",
+            "turn:__DOMAIN__:__TLS_ALT_PORT__?transport=tcp"
+        ],
+        "username": "__APP__",
+        "credential": "__TURNPWD__",
+        "credentialType": "hmac-sha1"
+    }
+]
+
+[
+    {
+        "urls": [
+            "turn:__DOMAIN__:__TLS_PORT__",
+            "turn:__DOMAIN__:__TLS_PORT__?transport=udp"
+        ],
+        "username": "__APP__",
+        "credential": "__TURNPWD__",
+        "credentialType": "hmac-sha1"
+    }
+]
+
+[
+    {
+        "urls": [
+            "turn:__DOMAIN__:__TLS_ALT_PORT__",
+            "turn:__DOMAIN__:__TLS_ALT_PORT__?transport=udp"
+        ],
+        "username": "__APP__",
+        "credential": "__TURNPWD__",
         "credentialType": "hmac-sha1"
     }
 ]

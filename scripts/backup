@@ -55,10 +55,18 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 #ynh_backup --src_path="/etc/logrotate.d/$app"
 
 #=================================================
+# BACKUP SYNAPSE LOG
+#=================================================
+
+ynh_backup --src_path="/var/log/$app"
+
+#=================================================
 # BACKUP SYSTEMD
 #=================================================
 
 ynh_backup --src_path="/etc/systemd/system/$app.service"
+ynh_backup --src_path="/etc/default/coturn-$app"
+ynh_backup --src_path="/etc/systemd/system/coturn-$app.service"
 
 #=================================================
 # END OF SCRIPT
