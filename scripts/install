@@ -132,7 +132,6 @@ ynh_script_progression --message="Configuring a systemd service..." --weight=1
 ynh_add_systemd_config
 
 mkdir -p /var/log/$app
-mkdir -p /etc/default/coturn-$app
 mkdir -p /etc/$app
 # Create systemd service for turnserver
 cp ../conf/coturn/default_coturn /etc/default/coturn-$app
