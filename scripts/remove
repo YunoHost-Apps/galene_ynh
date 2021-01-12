@@ -35,7 +35,7 @@ then
 	yunohost service remove $app
 fi
 
-if ynh_exec_warn_less yunohost service status coturn-$app >/dev/null >/dev/null
+if ynh_exec_warn_less yunohost service status coturn-$app >/dev/null
 then
 	yunohost service remove coturn-$app
 fi
@@ -89,15 +89,19 @@ ynh_remove_logrotate
 
 closeport() {
     local port=$1
-    if yunohost firewall list | grep -q "\- $port$"
+    if yunohost firewall list | grep -q "\- $$turnserver_tls_port$"
     then
-            ynh_script_progression --message="Closing port $port"
-            ynh_exec_warn_less yunohost firewall disallow Both $port
+            ynh_script_progression --message="Closing port $turnserver_tls_port port"
+            ynh_exec_warn_less yunohost firewall disallow Both $turnserver_tls_port  
+    elif yunohost firewall list | grep -q "\- $turnserver_alt_tls_port$"
+    then
+    	ynh_script_progression --message="Closing port $turnserver_alt_tls_port port"
+    	ynh_exec_warn_less yunohost firewall disallow Both $turnserver_alt_tls_port
     fi
 }
 
-closeport $turnserver_tls_port
-closeport $turnserver_alt_tls_port
+#closeport $turnserver_tls_port
+#closeport $turnserver_alt_tls_port
 
 #=================================================
 # GENERIC FINALIZATION
