@@ -116,7 +116,7 @@ yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
 # RESTORE THE LOGROTATE CONFIGURATION
 #=================================================
 
-ynh_restore_file --logfile "/etc/logrotate.d/$app"
+ynh_restore_file --logfile "/var/log/$app"
 
 #=================================================
 # RECONFIGURE THE TURNSERVER

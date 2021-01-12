@@ -220,7 +220,7 @@ ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
 #=================================================
 ynh_script_progression --message="Configuring log rotation..." --weight=1
 
-ynh_use_logrotate --logfile "/etc/logrotate.d/$app"
+ynh_use_logrotate --logfile "/var/log/$app"
 
 #=================================================
 # ADD SCRIPT FOR COTURN CRON AND APP SERVICE
