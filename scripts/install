@@ -59,6 +59,22 @@ ynh_app_setting_set --app=$app --key=group_name --value=$group_name
 ynh_app_setting_set --app=$app --key=password --value=$password
 
 #=================================================
+# CREATE A DH FILE
+#=================================================
+ynh_script_progression --message="Creating a dh file..." --weight=3
+
+# WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
+# For any update do it in all files
+
+# Make dh cert for synapse if it doesn't exist
+if [ ! -e /etc/ssl/private/dh2048.pem ]
+then
+    ynh_exec_warn_less openssl dhparam -out /etc/ssl/private/dh2048.pem -outform PEM -2 2048 -dsaparam
+    chown root:ssl-cert /etc/ssl/private/dh2048.pem
+    chmod 640 /etc/ssl/private/dh2048.pem
+fi
+
+#=================================================
 # STANDARD MODIFICATIONS
 #=================================================
 # FIND AND OPEN A PORT
