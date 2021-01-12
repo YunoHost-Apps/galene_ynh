@@ -11,7 +11,7 @@ EnvironmentFile=/etc/default/coturn-__APP__
 PIDFile=/run/coturn-__APP__/turnserver.pid
 RuntimeDirectory=coturn-__APP__
 RuntimeDirectoryMode=0755
-ExecStart=/usr/bin/turnserver -o -c /etc/matrix-__APP__/coturn.conf $EXTRA_OPTIONS
+ExecStart=/usr/bin/turnserver -o -c /etc/__APP__/coturn.conf $EXTRA_OPTIONS
 ExecStopPost=/bin/rm -f /run/coturn-__APP__/turnserver.pid
 Restart=on-abort
 
