@@ -135,13 +135,13 @@ then
     # MAKE A CLEAN LOGROTATE CONFIG
     #=================================================
 
-    ynh_use_logrotate --logfile /var/log/matrix-$app --nonappend
+    ynh_use_logrotate --logfile /var/log/$app --nonappend
 fi
 
 #=================================================
 # CREATE A DH FILE
 #=================================================
-ynh_script_progression --message="Creating a dh file..." --weight=3
+ynh_script_progression --message="Creating a dhparam file..." --weight=3
 
 # WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
 # For any update do it in all files

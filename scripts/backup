@@ -67,7 +67,7 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 # BACKUP GALÈNE LOG
 #=================================================
 
-#ynh_backup --src_path="/var/log/$app"
+ynh_backup --src_path="/var/log/$app"
 
 #=================================================
 # BACKUP SYSTEMD
