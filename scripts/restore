@@ -73,8 +73,13 @@ adduser turnserver ssl-cert
 #=================================================
 
 # Restore permissions on app files
+# Set permissions on app files
 chown -R $app: $final_path
 chmod -R 755 $final_path
+chmod u=rwX,g=rX,o= -R /etc/$app
+chmod 770 $final_path/Coturn_config_rotate.sh
+setfacl -R -m user:turnserver:rX  /etc/$app
+setfacl -R -m user:turnserver:rwX  /var/log/$app
 
 #=================================================
 # SPECIFIC RESTORATION
@@ -135,7 +140,7 @@ ynh_print_ON
 # WARNING : these commands are used in INSTALL, UPGRADE
 # For any update do it in all files
 
-coturn_config_path="/etc/matrix-$app/coturn.conf"
+coturn_config_path="/etc/$app/coturn.conf"
 
 cp ../settings/conf/turnserver.conf "$coturn_config_path"
 

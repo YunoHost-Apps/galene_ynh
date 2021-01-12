@@ -106,7 +106,7 @@ fi
 # MULTINSTANCE SUPPORT
 #=================================================
 
-if [ ! -e /etc/matrix-$app/coturn.conf ]
+if [ ! -e /etc/$app/coturn.conf ]
 then
     ynh_script_progression --message="Creating an independant service for coturn..." --weight=1
 
@@ -188,6 +188,30 @@ cp ../sources/Coturn_config_rotate.sh $final_path/
 ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
 
 #=================================================
+# MODIFY A CONFIG FILE
+#=================================================
+
+cp ../conf/passwd $final_path/data/passwd
+
+ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/data/passwd"
+ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/data/passwd"
+
+mv -f $final_path/groups/groupname.json $final_path/groups/$group_name.json
+
+ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/$group_name.json"
+ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/$group_name.json"
+
+cp ../conf/ice-servers.json $final_path/data/ice-servers.json
+
+ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$final_path/data/ice-servers.json"
+ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/data/ice-servers.json"
+ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$final_path/data/ice-servers.json"
+ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$final_path/data/ice-servers.json"
+ynh_print_OFF
+ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$final_path/data/ice-servers.json"
+ynh_print_ON
+
+#=================================================
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=3
@@ -230,8 +254,8 @@ chown -R $app: $final_path
 chmod -R 755 $final_path
 chmod u=rwX,g=rX,o= -R /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
-setfacl -R -m user:turnserver:rX  /etc/matrix-$app
-setfacl -R -m user:turnserver:rwX  /var/log/matrix-$app
+setfacl -R -m user:turnserver:rX  /etc/$app
+setfacl -R -m user:turnserver:rwX  /var/log/$app
 
 #=================================================
 # SETUP LOGROTATE
