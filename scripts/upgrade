@@ -138,6 +138,18 @@ then
 fi
 
 #=================================================
+# MIGRATION 3 : USE STANDARD ACCESS FOR CERTIFCATE
+#=================================================
+
+# Fix issue about certificates access
+if [ ! $(grep "ssl-cert:x:[0-9]*:.*$app" /etc/group) ]
+then
+    ynh_script_progression --message="Use standard access for certificate..." --weight=1
+
+    adduser turnserver ssl-cert
+fi
+
+#=================================================
 # SPECIFIC UPGRADE
 #=================================================
 # UPDATE COTURN CONFIG
