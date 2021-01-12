@@ -7,9 +7,7 @@
         "username": "__APP__",
         "credential": "__TURNPWD__",
         "credentialType": "hmac-sha1"
-    }
-]
-[
+    },
     {
         "urls": [
             "turn:__DOMAIN__:__TLS_ALT_PORT__",
@@ -18,10 +16,7 @@
         "username": "__APP__",
         "credential": "__TURNPWD__",
         "credentialType": "hmac-sha1"
-    }
-]
-
-[
+    },
     {
         "urls": [
             "turn:__DOMAIN__:__TLS_PORT__",
@@ -30,10 +25,7 @@
         "username": "__APP__",
         "credential": "__TURNPWD__",
         "credentialType": "hmac-sha1"
-    }
-]
-
-[
+    },
     {
         "urls": [
             "turn:__DOMAIN__:__TLS_ALT_PORT__",
