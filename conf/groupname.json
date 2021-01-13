@@ -4,13 +4,13 @@
         {"username": "", "password": ""},
         {"username": "", "password": ""}
     ],
-    "public": "true",
+    "public": true,
     "description": "This is displayed on the landing page for public groups.",
     "max-clients": 20,
     "max-history-age": 14400,
-    "allow-recording": "true",
-    "allow-anonymous": "true",
-    "allow-subgroups": "true",
+    "allow-recording": true,
+    "allow-anonymous": true,
+    "allow-subgroups": true,
     "redirect": "",
     "codecs": ["vp8", "opus"]
 }
