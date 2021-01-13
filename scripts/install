@@ -66,7 +66,7 @@ ynh_script_progression --message="Creating a dhparam file..." --weight=3
 # WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
 # For any update do it in all files
 
-# Make dh cert for synapse if it doesn't exist
+# Make dh cert for Galène if it doesn't exist
 if [ ! -e /etc/ssl/private/dh2048.pem ]
 then
     ynh_exec_warn_less openssl dhparam -out /etc/ssl/private/dh2048.pem -outform PEM -2 2048 -dsaparam
@@ -85,7 +85,7 @@ ynh_script_progression --message="Finding an available port..." --weight=3
 port=$(ynh_find_port --port=8443)
 turnserver_tls_port=$(ynh_find_port --port=5349)
 turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
-cli_port=$(ynh_find_port --port=5766)
+#cli_port=$(ynh_find_port --port=5766)
 
 ynh_app_setting_set --app=$app --key=port --value=$port
 
@@ -97,7 +97,7 @@ ynh_exec_warn_less yunohost firewall allow Both $turnserver_alt_tls_port
 ynh_app_setting_set --app=$app --key=port --value=$port
 ynh_app_setting_set --app=$app --key=turnserver_tls_port --value=$turnserver_tls_port
 ynh_app_setting_set --app=$app --key=turnserver_alt_tls_port --value=$turnserver_alt_tls_port
-ynh_app_setting_set --app=$app --key=cli_port --value=$cli_port
+#ynh_app_setting_set --app=$app --key=cli_port --value=$cli_port
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -257,9 +257,11 @@ ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$
 #=================================================
 
 # Set permissions to app files
-chown -R $app: $final_path
+chown -R $app:root $final_path
 chmod -R 755 $final_path
-chmod u=rwX,g=rX,o= -R /etc/$app
+chown -R $app:root /var/log/$app
+chown -R $app:root /etc/$app
+chmod -R u=rwX,g=rX,o= /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app
 setfacl -R -m user:turnserver:rwX  /var/log/$app
@@ -278,8 +280,8 @@ yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
 # Start a systemd service
-ynh_systemd_action --service_name=coturn-$app.service --action=restart
 ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=coturn-$app.service --action=restart
 
 #=================================================
 # SETUP SSOWAT

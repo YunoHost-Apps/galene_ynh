@@ -267,9 +267,11 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chown -R $app: $final_path
+chown -R $app:root $final_path
 chmod -R 755 $final_path
-chmod u=rwX,g=rX,o= -R /etc/$app
+chown -R $app:root /var/log/$app
+chown -R $app:root /etc/$app
+chmod -R u=rwX,g=rX,o= /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app
 setfacl -R -m user:turnserver:rwX  /var/log/$app
