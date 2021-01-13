@@ -209,7 +209,7 @@ cp ../conf/passwd $final_path/data/passwd
 ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/data/passwd"
 ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/data/passwd"
 
-mv $final_path/groups/groupname.json $final_path/groups/$group_name.json
+mv $final_path/groups/name_group_to_change.json $final_path/groups/$group_name.json
 
 ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/$group_name.json"
 ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/$group_name.json"
