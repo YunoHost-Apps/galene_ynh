@@ -209,11 +209,12 @@ cp ../conf/passwd $final_path/data/passwd
 ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/data/passwd"
 ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/data/passwd"
 
+cp -f $final_path/groups/groupname.json $final_path/groups/groupname.json
+
+ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/groupname.json"
+ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/groupnamejson"
+
 mv -f $final_path/groups/groupname.json $final_path/groups/$group_name.json
-
-ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/$group_name.json"
-ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/$group_name.json"
-
 cp ../conf/ice-servers.json $final_path/data/ice-servers.json
 
 ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$final_path/data/ice-servers.json"
