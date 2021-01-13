@@ -1,0 +1,15 @@
+[
+    {
+        "urls": [
+            "turn:__DOMAIN__:__TLS_PORT__",
+            "turn:__DOMAIN__:__TLS_ALT_PORT__",
+            "turn:__DOMAIN__:__TLS_PORT__?transport=tcp",
+            "turn:__DOMAIN__:__TLS_ALT_PORT__?transport=tcp",
+            "turn:__DOMAIN__:__TLS_PORT__?transport=udp",
+            "turn:__DOMAIN__:__TLS_ALT_PORT__?transport=udp"
+        ],
+        "username": "__APP__",
+        "credential": "__TURNPWD__",
+        "credentialType": "hmac-sha1"
+    }
+]

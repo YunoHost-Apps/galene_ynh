@@ -39,6 +39,15 @@ ynh_print_info --message="Declaring files to be backed up..."
 #=================================================
 
 ynh_backup --src_path="$final_path"
+ynh_backup --src_path="/etc/$app"
+
+#=================================================
+# BACKUP SYSTEMD
+#=================================================
+
+ynh_backup --src_path="/etc/systemd/system/$app.service"
+ynh_backup --src_path="/etc/default/coturn-$app"
+ynh_backup --src_path="/etc/systemd/system/coturn-$app.service"
 
 #=================================================
 # BACKUP THE NGINX CONFIGURATION
@@ -52,13 +61,21 @@ ynh_backup --src_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 # BACKUP LOGROTATE
 #=================================================
 
-#ynh_backup --src_path="/etc/logrotate.d/$app"
+ynh_backup --src_path="/etc/logrotate.d/$app"
+
+#=================================================
+# BACKUP GALÈNE LOG
+#=================================================
+
+ynh_backup --src_path="/var/log/$app"
 
 #=================================================
 # BACKUP SYSTEMD
 #=================================================
 
 ynh_backup --src_path="/etc/systemd/system/$app.service"
+ynh_backup --src_path="/etc/default/coturn-$app"
+ynh_backup --src_path="/etc/systemd/system/coturn-$app.service"
 
 #=================================================
 # END OF SCRIPT

@@ -23,6 +23,7 @@ Galène is a videoconferencing server that is easy to deploy (just copy a few fi
 
 ## Configuration
 
+To check if the TURN server is up and running, type `/relay-test` in the chat box; if the TURN server is properly configured, you should see a message saying that the relay test has been successful.
 
 ## Documentation
 
