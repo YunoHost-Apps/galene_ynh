@@ -35,6 +35,11 @@ To create a new group, you need to create a `GroupNameExample.json` file (you ca
 You can configure your groups to be accessible without any pseudo or password (anonymous login), only with a defined password, with username but no password, or both username and password.
 Check the documentation: [how to configure groups](https://galene.org/README.html).
 
+#### TURN server and stream relay
+
+To allow any users to connect thought their NAT firewall to your server, Galene use a TURN server. If it doesn't run properly, your (audio+video) streams might not be shared to the servers, thus not shared to other participants.
+To check if the TURN server is up and running, type `/relay-test` in the chat box; if the TURN server is properly configured, you should see a message saying that the relay test has been successful.
+
 ## Documentation
 
  * Official documentation: https://galene.org/
