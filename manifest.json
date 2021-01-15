@@ -78,7 +78,7 @@
                     "fr": "Le nom sera utilisé comme nom de fichier (n'utilisez pas d'espace, de points ou / dans votre groupe de noms)."
                 },
                 "default": "groupname",
-                "example": "groupname"
+                "example": "public"
             }
         ]
     }
