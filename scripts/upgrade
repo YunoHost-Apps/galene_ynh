@@ -50,7 +50,7 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
+ynh_script_progression --message="Backing up Galène before upgrading (may take a while)..." --weight=1
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -109,7 +109,7 @@ fi
 
 if [ ! -e /etc/$app/coturn.conf ]
 then
-    ynh_script_progression --message="Creating an independant service for coturn..." --weight=1
+    ynh_script_progression --message="Creating an independant service for Coturn..." --weight=1
 
     #=================================================
     # CREATE AN INDEPENDANT SERVICE FOR COTURN
@@ -159,7 +159,7 @@ fi
 #=================================================
 # UPDATE COTURN CONFIG
 #=================================================
-ynh_script_progression --message="Updating coturn config..." --weight=1
+ynh_script_progression --message="Updating Coturn config..." --weight=1
 
 # WARNING : theses command are used in INSTALL, UPGRADE
 # For any update do it in all files
@@ -209,12 +209,10 @@ ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$
 #=================================================
 
 cp ../conf/passwd $final_path/data/passwd
-
 ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/data/passwd"
 ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/data/passwd"
 
 cp ../conf/ice-servers.json $final_path/data/ice-servers.json
-
 ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$final_path/data/ice-servers.json"
 ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/data/ice-servers.json"
 ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$final_path/data/ice-servers.json"
@@ -306,4 +304,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --last
+ynh_script_progression --message="Upgrade of Galène completed" --last

@@ -159,7 +159,7 @@ ynh_add_systemd_config --service=coturn-$app --template=coturn-galene.service
 #=================================================
 # SET COTURN CONFIG
 #=================================================
-ynh_script_progression --message="Configuring coturn..." --weight=1
+ynh_script_progression --message="Configuring Coturn..." --weight=1
 
 # WARNING: theses command are used in INSTALL, UPGRADE
 # For any update do it in all files
@@ -173,7 +173,6 @@ ynh_print_ON
 coturn_config_path="/etc/$app/coturn.conf"
 
 cp ../conf/coturn/turnserver.conf "$coturn_config_path"
-
 ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$coturn_config_path"
 ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$coturn_config_path"
 ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$coturn_config_path"
@@ -205,17 +204,14 @@ ynh_store_file_checksum --file="$coturn_config_path"
 #=================================================
 
 cp ../conf/passwd $final_path/data/passwd
-
 ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/data/passwd"
 ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/data/passwd"
 
 cp ../conf/groupname.json $final_path/groups/$group_name.json
-
 ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/$group_name.json"
 ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/$group_name.json"
 
 cp ../conf/ice-servers.json $final_path/data/ice-servers.json
-
 ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$final_path/data/ice-servers.json"
 ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/data/ice-servers.json"
 ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$final_path/data/ice-servers.json"
@@ -328,4 +324,4 @@ ynh_send_readme_to_admin --app_message="mail_to_send" --type="install"
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression --message="Installation of Galène completed" --last

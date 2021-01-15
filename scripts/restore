@@ -63,7 +63,7 @@ ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 #=================================================
 # RESTORE THE APP MAIN DIR
 #=================================================
-ynh_script_progression --message="Restoring the app main directory..." --weight=1
+ynh_script_progression --message="Restoring Galène main directory..." --weight=1
 
 ynh_restore_file --origin_path="$final_path"
 ynh_restore_file --origin_path="/etc/$app"
@@ -125,7 +125,7 @@ fi
 #=================================================
 # RECONFIGURE THE TURNSERVER
 #=================================================
-ynh_script_progression --message="Reconfiguring coturn..." --weight=23
+ynh_script_progression --message="Reconfiguring Coturn..." --weight=23
 
 # To be sure that at the restoration the IP address in coturn config is the same as the real address we remake the coturn config
 
@@ -226,4 +226,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Restoration completed for $app" --last
+ynh_script_progression --message="Restoration completed for Galène" --last
