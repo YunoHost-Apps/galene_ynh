@@ -4,7 +4,7 @@
         {"username": "", "password": ""},
         {"username": "", "password": ""}
     ],
-    "contact": "__EMAIL__",
+    "contact": "username@domain.com",
     "comment": "Public Conference",
     "description": "a human-readable description of the group; this is displayed on the landing page for public groups.",
     "autolock": true,

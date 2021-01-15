@@ -26,7 +26,6 @@ ynh_abort_if_errors
 domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 admin=$YNH_APP_ARG_ADMIN
-email=$(ynh_user_get_info "$admin" mail)
 is_public=$YNH_APP_ARG_IS_PUBLIC
 ynh_print_OFF
 password=$YNH_APP_ARG_PASSWORD
@@ -211,7 +210,6 @@ ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --targ
 mv ../conf/groupname.json $final_path/groups/$group_name.json
 ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/$group_name.json"
 ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/$group_name.json"
-ynh_replace_string --match_string=__EMAIL__ --replace_string=$email --target_file="$final_path/groups/$group_name.json"
 
 cp ../conf/ice-servers.json $final_path/data/ice-servers.json
 ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$final_path/data/ice-servers.json"
