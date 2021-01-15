@@ -23,6 +23,8 @@ Galène est un serveur de visioconférence facile à déployer (il suffit de cop
 
 ## Configuration
 
+Pour vérifier si le serveur TURN est opérationnel, tapez `/relay-test` dans la boîte de dialogue; si le serveur TURN est correctement configuré, vous devriez voir un message indiquant que le test du relais a réussi.
+
 ## Documentation
 
  * Documentation officielle : https://galene.org/

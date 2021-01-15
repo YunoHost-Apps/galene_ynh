@@ -1,0 +1,27 @@
+[Unit]
+Description=Coturn STUN/TURN Server
+Documentation=man:coturn(1) man:turnadmin(1) man:turnserver(1)
+After=syslog.target network.target
+
+[Service]
+User=turnserver
+Group=turnserver
+Type=forking
+EnvironmentFile=/etc/default/coturn-__APP__
+PIDFile=/run/coturn-__APP__/turnserver.pid
+RuntimeDirectory=coturn-__APP__
+RuntimeDirectoryMode=0755
+ExecStart=/usr/bin/turnserver -o -c /etc/__APP__/coturn.conf $EXTRA_OPTIONS
+ExecStopPost=/bin/rm -f /run/coturn-__APP__/turnserver.pid
+Restart=on-abort
+
+LimitCORE=infinity
+LimitNOFILE=999999
+LimitNPROC=60000
+LimitRTPRIO=infinity
+LimitRTTIME=7000000
+CPUSchedulingPolicy=other
+UMask=0007
+
+[Install]
+WantedBy=multi-user.target
