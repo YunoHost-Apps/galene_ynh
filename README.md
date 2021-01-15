@@ -23,7 +23,34 @@ Galène is a videoconferencing server that is easy to deploy (just copy a few fi
 
 ## Configuration
 
-To check if the TURN server is up and running, type `/relay-test` in the chat box; if the TURN server is properly configured, you should see a message saying that the relay test has been successful.
+### Turnserver
+
+For Voip and video conferencing a turnserver is also installed (and configured). The turnserver listens on two UDP and TCP ports. You can get them with these commands:
+
+```
+sudo yunohost app setting galene turnserver_tls_port
+sudo yunohost app setting galene turnserver_alt_tls_port
+```
+
+The turnserver will also choose a port dynamically when a new call starts. The range is between 49153 - 49193.
+
+For some security reason the ports range (49153 - 49193) isn't automatically open by default. If you want to use the synapse server for voip or conferencing you will need to open this port range manually. To do this just run this command:
+
+```
+sudo yunohost firewall allow Both 49153:49193
+```
+
+You might also need to open these ports (if it is not automatically done) on your ISP box.
+
+To prevent the situation when the server is behind a NAT, the public IP is written in the turnserver config. By this the turnserver can send its real public IP to the client. For more information see [the coturn example config file](https://github.com/coturn/coturn/blob/master/examples/etc/turnserver.conf#L102-L120).So if your IP changes, you could run the script `/opt/yunohost/__GALENE_INSTANCE_NAME__/Coturn_config_rotate.sh` to update your config.
+
+If you have a dynamic IP address, you also might need to update this config automatically. To do that just edit a file named `/etc/cron.d/coturn_config_rotate` and add the following content (just adapt the __SYNAPSE_INSTANCE_NAME__ which could be `galene` or maybe `galene__2`).
+
+```
+*/15 * * * * root bash /opt/yunohost/__GALENE_INSTANCE_NAME__/Coturn_config_rotate.sh;
+```
+
+To check if the TURN server is up and running in Galène, connect as operator and type `/relay-test` in the chat box; if the TURN server is properly configured, you should see a message saying that the relay test has been successful.
 
 ## Documentation
 
