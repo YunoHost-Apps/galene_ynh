@@ -1,5 +1,5 @@
 [Unit]
-Description=coturn
+Description=Coturn STUN/TURN Server
 Documentation=man:coturn(1) man:turnadmin(1) man:turnserver(1)
 After=syslog.target network.target
 
