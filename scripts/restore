@@ -207,9 +207,7 @@ ynh_restore_file --origin_path="/etc/logrotate.d/$app"
 # WARNING : theses command are used in INSTALL, RESTORE
 # For any update do it in all files
 
-echo "
-
-Your Galène server also implements a turnserver (for VoIP), to have this fully functional please read the 'Turnserver' section in the README available here: https://github.com/YunoHost-Apps/galene_ynh .
+echo "Galène also implements a TURN server (for VoIP), to have this fully functional please read the 'Turnserver' section in the README available here: https://github.com/YunoHost-Apps/galene_ynh .
 
 If you're facing an issue or want to improve this app, please open a new issue in this project: https://github.com/YunoHost-Apps/galene_ynh" > mail_to_send
 

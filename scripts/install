@@ -308,10 +308,15 @@ ynh_systemd_action --service_name=nginx --action=reload
 # WARNING : theses command are used in INSTALL, RESTORE
 # For any update do it in all files
 
-echo "
-You also need to open the TCP port $synapse_tls_port on your ISP box if it's not automatically done.
+echo "Galène was successfully installed :)
 
-Your Galène server also implements a turnserver (for VoIP), to have this fully functional please read the 'Turnserver' section in the README available here: https://github.com/YunoHost-Apps/galene_ynh .
+Galène is now accesible at this adress: https://$domain
+
+Your operator credentials:
+Username: $admin
+Password: $password
+
+Galène implements a TURN server (for VoIP), to have this fully functional please read the 'TURN server' section in the README available here: https://github.com/YunoHost-Apps/galene_ynh .
 
 If you're facing an issue or want to improve this app, please open a new issue in this project: https://github.com/YunoHost-Apps/galene_ynh
 
