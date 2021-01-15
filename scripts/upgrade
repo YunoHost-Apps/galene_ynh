@@ -146,7 +146,7 @@ ynh_script_progression --message="Creating a dhparam file..." --weight=3
 # WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
 # For any update do it in all files
 
-# Make dh cert for Galène if it doesn't exist
+# Make dhparam cert for Galène if it doesn't exist
 if [ ! -e /etc/ssl/private/dh2048.pem ]
 then
     ynh_exec_warn_less openssl dhparam -out /etc/ssl/private/dh2048.pem -outform PEM -2 2048 -dsaparam

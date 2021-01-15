@@ -4,8 +4,11 @@
         {"username": "", "password": ""},
         {"username": "", "password": ""}
     ],
+    "contact": "__EMAIL__",
+    "comment": "Public Conference",
+    "description": "a human-readable description of the group; this is displayed on the landing page for public groups.",
+    "autolock": true,
     "public": true,
-    "description": "This is displayed on the landing page for public groups.",
     "max-clients": 20,
     "max-history-age": 14400,
     "allow-recording": true,
@@ -14,3 +17,4 @@
     "redirect": "",
     "codecs": ["vp8", "opus"]
 }
+
