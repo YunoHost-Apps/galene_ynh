@@ -308,15 +308,9 @@ echo "Galène was successfully installed :)
 
 Galène is now accesible at this adress: https://$domain
 
-Your operator credentials:
-Username: $admin
-Password: $password
-
 Galène implements a TURN server (for VoIP), to have this fully functional please read the 'TURN server' section in the README available here: https://github.com/YunoHost-Apps/galene_ynh .
 
-If you're facing an issue or want to improve this app, please open a new issue in this project: https://github.com/YunoHost-Apps/galene_ynh
-
-You also need a valid TLS certificate for the domain used by Galène. To do that you can refer to the documentation here: https://yunohost.org/#/certificate_en" > mail_to_send
+If you're facing an issue or want to improve this app, please open a new issue in this project: https://github.com/YunoHost-Apps/galene_ynh" > mail_to_send
 
 ynh_send_readme_to_admin --app_message="mail_to_send" --type="install"
 

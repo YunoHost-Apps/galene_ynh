@@ -23,7 +23,34 @@ Galène est un serveur de visioconférence facile à déployer (il suffit de cop
 
 ## Configuration
 
-Pour vérifier si le serveur TURN est opérationnel, tapez `/relay-test` dans la boîte de dialogue; si le serveur TURN est correctement configuré, vous devriez voir un message indiquant que le test du relais a réussi.
+### Serveur TURN
+
+Pour la VoIP et la visioconférence, un serveur TURN est également installé (et configuré). Le serveur TURN écoute sur deux ports UDP et TCP. Vous pouvez les obtenir avec ces commandes :
+
+```
+sudo yunohost application paramètre galene turnerserver_tls_port
+sudo yunohost application paramètre galene turnerserver_alt_tls_port
+``` 
+
+Le serveur TURN choisira également un port de manière dynamique lors du démarrage d'un nouvel appel. La plage est comprise entre 49153 et 49193.
+
+Pour une raison de sécurité, la plage de ports (49153 - 49193) n'est pas automatiquement ouverte par défaut. Si vous souhaitez utiliser le serveur Galène pour la VoIP ou la conférence, vous devrez ouvrir cette plage de ports manuellement. Pour ce faire, exécutez simplement cette commande :
+
+```
+sudo yunohost pare-feu autorise les deux 49153:49193
+```
+
+Vous devrez peut-être également ouvrir ces ports (si ce n'est pas fait automatiquement) sur votre box FAI.
+
+Pour éviter la situation où le serveur est derrière un NAT, l'adresse IP publique est écrite dans la configuration du serveur TURN. De cette manière, le serveur TURN peut envoyer sa véritable adresse IP publique au client. Pour plus d'informations, consultez [le fichier de configuration d'exemple Coturn](https://github.com/coturn/coturn/blob/master/examples/etc/turnserver.conf#L56-L62) .Donc, si votre adresse IP change, vous pouvez exécuter le script `/opt/yunohost/__GALENE_INSTANCE_NAME __/Coturn_config_rotate.sh` pour mettre à jour votre configuration.
+
+Si vous avez une adresse IP dynamique, vous devrez peut-être également mettre à jour cette configuration automatiquement. Pour ce faire, éditez simplement un fichier nommé `/etc/cron.d/coturn_config_rotate` et ajoutez le contenu suivant (adaptez simplement le __GALENE_INSTANCE_NAME__ qui pourrait être `galene` ou peut-être `galene__2`).
+
+```
+* / 15 * * * * root bash /opt/yunohost/__GALENE_INSTANCE_NAME__/Coturn_config_rotate.sh;
+```
+
+Pour vérifier si Galène peut se connecter au serveur TURN, connectez-vous à Galène en tant qu'opérateur et tapez `/relay-test` dans la boîte de dialogue; si le serveur TURN est correctement configuré, vous devriez voir un message indiquant que le test du relais a réussi.
 
 ## Documentation
 
