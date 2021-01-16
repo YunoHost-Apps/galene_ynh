@@ -66,7 +66,7 @@ ynh_script_progression --message="Creating a dhparam file..." --weight=3
 # WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
 # For any update do it in all files
 
-# Make dh cert for Galène if it doesn't exist
+# Make dhparam cert for Galène if it doesn't exist
 if [ ! -e /etc/ssl/private/dh2048.pem ]
 then
     ynh_exec_warn_less openssl dhparam -out /etc/ssl/private/dh2048.pem -outform PEM -2 2048 -dsaparam
@@ -159,9 +159,9 @@ ynh_add_systemd_config --service=coturn-$app --template=coturn-galene.service
 #=================================================
 # SET COTURN CONFIG
 #=================================================
-ynh_script_progression --message="Configuring coturn..." --weight=1
+ynh_script_progression --message="Configuring Coturn..." --weight=1
 
-# WARNING : theses command are used in INSTALL, UPGRADE
+# WARNING: theses command are used in INSTALL, UPGRADE
 # For any update do it in all files
 
 # Find password for turnserver
@@ -173,7 +173,6 @@ ynh_print_ON
 coturn_config_path="/etc/$app/coturn.conf"
 
 cp ../conf/coturn/turnserver.conf "$coturn_config_path"
-
 ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$coturn_config_path"
 ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$coturn_config_path"
 ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$coturn_config_path"
@@ -184,7 +183,7 @@ ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd -
 ynh_print_ON
 
 # Get public IP and set as external IP for coturn
-# note : '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
+# note: '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
 public_ip4="$(curl ip.yunohost.org)" || true
 public_ip6="$(curl ipv6.yunohost.org)" || true
 
@@ -205,17 +204,14 @@ ynh_store_file_checksum --file="$coturn_config_path"
 #=================================================
 
 cp ../conf/passwd $final_path/data/passwd
-
 ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/data/passwd"
 ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/data/passwd"
 
 mv ../conf/groupname.json $final_path/groups/$group_name.json
-
 ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/$group_name.json"
 ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/$group_name.json"
 
 cp ../conf/ice-servers.json $final_path/data/ice-servers.json
-
 ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$final_path/data/ice-servers.json"
 ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/data/ice-servers.json"
 ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$final_path/data/ice-servers.json"
@@ -247,7 +243,7 @@ ynh_use_logrotate --logfile "/var/log/$app"
 # WARNING : theses command are used in INSTALL, UPGRADE
 # For any update do it in all files
 
-cp ../sources/Coturn_config_rotate.sh $final_path/
+cp ../sources/Coturn_config_rotate.sh $final_path/Coturn_config_rotate.sh
 ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
 
 #=================================================
@@ -302,7 +298,24 @@ ynh_script_progression --message="Reloading NGINX web server..." --weight=2
 ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
+# SEND A README FOR THE ADMIN
+#=================================================
+
+# WARNING : theses command are used in INSTALL, RESTORE
+# For any update do it in all files
+
+echo "Galène was successfully installed :)
+
+Galène is now accesible at this adress: https://$domain
+
+Galène implements a TURN server (for VoIP), to have this fully functional please read the 'TURN server' section in the README available here: https://github.com/YunoHost-Apps/galene_ynh .
+
+If you're facing an issue or want to improve this app, please open a new issue in this project: https://github.com/YunoHost-Apps/galene_ynh" > mail_to_send
+
+ynh_send_readme_to_admin --app_message="mail_to_send" --type="install"
+
+#=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression --message="Installation of Galène completed" --last
