@@ -244,7 +244,6 @@ ynh_use_logrotate --logfile "/var/log/$app"
 # For any update do it in all files
 
 cp ../sources/Coturn_config_rotate.sh $final_path/Coturn_config_rotate.sh
-ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
 
 #=================================================
 # GENERIC FINALIZATION
