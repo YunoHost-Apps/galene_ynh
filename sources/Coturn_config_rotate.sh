@@ -1,6 +1,5 @@
 #!/bin/bash
 
-app_instance=__APP__
 
 source /usr/share/yunohost/helpers
 
@@ -19,15 +18,15 @@ then
     echo "external-ip=$public_ip6" >> "$coturn_config_path"
 fi
 
-old_config_line=$(egrep "^external-ip=.*\$" "/etc/matrix-$app_instance/coturn.conf")
-ynh_replace_string "^external-ip=.*\$" "$external_IP_line" "/etc/matrix-$app_instance/coturn.conf"
-new_config_line=$(egrep "^external-ip=.*\$" "/etc/matrix-$app_instance/coturn.conf")
+old_config_line=$(egrep "^external-ip=.*\$" "/etc/$app/coturn.conf")
+ynh_replace_string "^external-ip=.*\$" "$external_IP_line" "/etc/$app/coturn.conf"
+new_config_line=$(egrep "^external-ip=.*\$" "/etc/$app/coturn.conf")
 
-setfacl -R -m user:turnserver:rX  /etc/matrix-$app_instance
+setfacl -R -m user:turnserver:rX  /etc/$app
 
 if [ "$old_config_line" != "$new_config_line" ]
 then
-    systemctl restart coturn-$app_instance.service
+    systemctl restart coturn-$app.service
 fi
 
 exit 0
