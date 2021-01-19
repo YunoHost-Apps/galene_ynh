@@ -109,7 +109,7 @@ ynh_script_progression --message="Removing the dedicated system user..." --weigh
 
 # Delete a system user
 ynh_system_user_delete --username=$app
-deluser turnserver ssl-cert
+ynh_system_user_delete --username=turnserver
 
 #=================================================
 # END OF SCRIPT
