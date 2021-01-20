@@ -152,7 +152,7 @@ chmod -R 755 $final_path
 #=================================================
 # SETUP LOGROTATE
 #=================================================
-#ynh_script_progression --message="Configuring log rotation..." --time --weight=1
+#ynh_script_progression --message="Configuring log rotation..." --weight=1
 
 # Use logrotate to manage application logfile(s)
 #ynh_use_logrotate
