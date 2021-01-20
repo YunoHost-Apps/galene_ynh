@@ -26,7 +26,7 @@ Galène est un serveur de visioconférence facile à déployer (il suffit de cop
 ## Documentation
 
  * Documentation officielle : https://galene.org/
- * Documentation YunoHost : If specific documentation is needed, feel free to contribute.
+ * Documentation YunoHost : https://yunohost.org/#/app_galene_fr
 
 ## Caractéristiques spécifiques YunoHost
 
