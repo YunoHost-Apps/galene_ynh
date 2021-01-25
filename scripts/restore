@@ -76,8 +76,8 @@ ynh_script_progression --message="Recreating the dedicated system user..." --wei
 
 # Create the dedicated user (if not existing)
 ynh_system_user_create --username=$app
-ynh_system_user_create --username=turnserver ssl-cert
-#adduser turnserver ssl-cert
+ynh_system_user_create --username=turnserver
+adduser turnserver ssl-cert
 
 #=================================================
 # RESTORE SYSTEMD
