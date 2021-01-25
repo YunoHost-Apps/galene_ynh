@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 source /usr/share/yunohost/helpers
 
 external_IP_line="external-ip=__IPV4__/__IPV6__"
