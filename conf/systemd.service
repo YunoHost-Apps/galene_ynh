@@ -1,5 +1,6 @@
 [Unit]
 Description=Galène: videoconferencing server
+Documentation=https://galene.org
 After=network.target
 
 [Service]

@@ -55,7 +55,7 @@ To check if Galène can connect to the TURN server, connect to Galène as operat
 ## Documentation
 
  * Official documentation: https://galene.org/
- * YunoHost documentation: If specific documentation is needed, feel free to contribute.
+ * YunoHost documentation: https://yunohost.org/#/app_galene
 
 ## YunoHost specific features
 
