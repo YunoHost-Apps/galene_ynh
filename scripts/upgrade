@@ -279,7 +279,7 @@ ynh_use_logrotate --non-append
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
 yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
-yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
+yunohost service add coturn-$app --description="Coturn TURN server" --needs_exposed_ports $turnserver_tls_port
 
 #=================================================
 # START SYSTEMD SERVICE
