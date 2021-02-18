@@ -201,30 +201,28 @@ ynh_store_file_checksum --file="$coturn_config_path"
 # MODIFY A CONFIG FILE
 #=================================================
 
-cp ../conf/passwd $final_path/data/passwd
-ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/data/passwd"
-ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/data/passwd"
+# cp ../conf/passwd $final_path/data/passwd
+# ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/data/passwd"
+# ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/data/passwd"
 
-mv ../conf/groupname.json $final_path/groups/$group_name.json
-ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/$group_name.json"
-ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/$group_name.json"
-
-cp ../conf/ice-servers.json $final_path/data/ice-servers.json
-ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$final_path/data/ice-servers.json"
-ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/data/ice-servers.json"
-ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$final_path/data/ice-servers.json"
-ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$final_path/data/ice-servers.json"
-ynh_print_OFF
-ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$final_path/data/ice-servers.json"
-ynh_print_ON
-
-#=================================================
-# STORE THE CONFIG FILE CHECKSUM
-#=================================================
-
-# Calculate and store the config file checksum into the app settings
+ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
 ynh_store_file_checksum --file="$final_path/data/passwd"
+
+# mv ../conf/groupname.json $final_path/groups/$group_name.json
+# ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/$group_name.json"
+# ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/$group_name.json"
+ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
 ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
+
+# cp ../conf/ice-servers.json $final_path/data/ice-servers.json
+# ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$final_path/data/ice-servers.json"
+# ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/data/ice-servers.json"
+# ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$final_path/data/ice-servers.json"
+# ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$final_path/data/ice-servers.json"
+# ynh_print_OFF
+# ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$final_path/data/ice-servers.json"
+# ynh_print_ON
+ynh_add_config --template="../conf/ice-servers.json" --destination="$final_path/data/ice-servers.json"
 ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
 
 #=================================================
