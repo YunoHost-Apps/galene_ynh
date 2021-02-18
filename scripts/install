@@ -266,7 +266,7 @@ setfacl -R -m user:turnserver:rwX  /var/log/$app
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
 yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
-yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
+yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_tls_port
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -275,7 +275,7 @@ ynh_script_progression --message="Starting a systemd service..." --weight=1
 
 # Start a systemd service
 ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
-ynh_systemd_action --service_name=coturn-$app.service --action=restart
+ynh_systemd_action --service_name=coturn-$app.service --action=restart --log_path="/var/log/$app/turnserver.log"
 
 #=================================================
 # SETUP SSOWAT
