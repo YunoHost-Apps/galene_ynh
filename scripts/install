@@ -66,16 +66,6 @@ ynh_script_progression --message="Finding an available port..." --weight=3
 port=$(ynh_find_port --port=8443)
 ynh_app_setting_set --app=$app --key=port --value=$port
 
-# Open the port
-# ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
-
-#=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-#ynh_script_progression --message="Installing dependencies..." --time --weight=1
-
-#ynh_install_app_dependencies $pkg_dependencies
-
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
@@ -122,19 +112,27 @@ public_ip4="$(curl ip.yunohost.org)" || true
 ynh_add_systemd_config --others_var="public_ip4"
 
 #=================================================
+# CREAT GROUPS FILE
+#=================================================
+
+# Define app's groups directory
+groups="$final_path/groups"
+# Create groups folders
+mkdir -p "$groups"
+
+#=================================================
 # MODIFY A CONFIG FILE
 #=================================================
 
-#ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-#ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
+#cp ../conf/passwd $final_path/data/passwd
+#ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/data/passwd"
+#ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/data/passwd"
+ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
 
-cp ../conf/passwd $final_path/data/passwd
-ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/data/passwd"
-ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/data/passwd"
-
-mv ../conf/groupname.json $final_path/groups/$group_name.json
-ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/groups/$group_name.json"
-ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/groups/$group_name.json"
+#mv ../conf/groupname.json $final_path/groups/$group_name.json
+#ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/groups/$group_name.json"
+#ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/groups/$group_name.json"
+ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
 
 #=================================================
 # STORE THE CONFIG FILE CHECKSUM
@@ -153,14 +151,6 @@ ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
 # Set permissions to app files
 chown -R $app: $final_path
 chmod -R 755 $final_path
-
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-#ynh_script_progression --message="Configuring log rotation..." --weight=1
-
-# Use logrotate to manage application logfile(s)
-#ynh_use_logrotate
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -185,7 +175,7 @@ ynh_script_progression --message="Configuring permissions..." --weight=2
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	ynh_permission_update --permission "main" --add "visitors"
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
 #=================================================

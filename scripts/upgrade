@@ -42,6 +42,12 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
+# If groups folder doesn't exist, create it
+if [ -z "$final_path/groups" ]; then
+	# Create groups folders
+	mkdir -p "$final_path/groups"
+fi
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -63,7 +69,7 @@ ynh_abort_if_errors
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..." --weight=3
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=$app --action=stop --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -107,13 +113,6 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..." -
 ynh_add_nginx_config
 
 #=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-#ynh_script_progression --message="Upgrading dependencies..." --weight=1
-
-#ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
 # CREATE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
@@ -138,14 +137,6 @@ ynh_add_systemd_config
 # Set permissions on app files
 chown -R $app: $final_path
 chmod -R 755 $final_path
-
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-# ynh_script_progression --message="Upgrading logrotate configuration..." --time --weight=1
-
-# # Use logrotate to manage app-specific logfile(s)
-# ynh_use_logrotate --non-append
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
