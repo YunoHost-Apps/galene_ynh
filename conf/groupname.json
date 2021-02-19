@@ -4,6 +4,10 @@
 		{"username": "", "password": ""},
 		{"username": "", "password": ""}
 	],
+	"other": [
+		{"username": "", "password": ""},
+		{"username": "", "password": ""}
+	],
 	"contact": "username@domain.com",
  	"comment": "Public Conference",
  	"description": "a human-readable description of the group; this is displayed on the landing page for public groups.",
@@ -14,6 +18,8 @@
 	"allow-recording": true,
 	"allow-anonymous": true,
 	"allow-subgroups": true,
+	"autolock": false,
+	"autokick": false,
 	"redirect": "",
 	"codecs": ["vp8", "opus"]
 }
