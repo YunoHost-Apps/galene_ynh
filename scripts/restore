@@ -33,6 +33,8 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 turnserver_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_tls_port)
 turnserver_alt_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_tls_port)
+cli_port=$(ynh_app_setting_get --app=$app --key=cli_port)
+turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
 
 #=================================================
 # CHECK IF THE APP CAN BE RESTORED
@@ -129,14 +131,6 @@ ynh_script_progression --message="Reconfiguring Coturn..." --weight=23
 
 # To be sure that at the restoration the IP address in coturn config is the same as the real address we remake the coturn config
 
-# Retrieve specific settings
-turnserver_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_tls_port)
-turnserver_alt_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_tls_port)
-cli_port=$(ynh_app_setting_get --app=$app --key=cli_port)
-ynh_print_OFF
-turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
-ynh_print_ON
-
 # WARNING : these commands are used in INSTALL, UPGRADE
 # For any update do it in all files
 
@@ -153,7 +147,7 @@ coturn_config_path="/etc/$app/coturn.conf"
 # ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$coturn_config_path"
 # ynh_print_ON
 
-ynh_add_config --template="../settings/conf/coturn/turnserver.conf" --destination="$coturn_config_path"
+#ynh_add_config --template="../settings/conf/coturn/turnserver.conf" --destination="$coturn_config_path"
 
 # Get public IP and set as external IP for coturn
 # note : '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
