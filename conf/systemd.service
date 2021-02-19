@@ -8,7 +8,7 @@ Type=simple
 WorkingDirectory=__FINALPATH__/
 User=__APP__
 Group=__APP__
-ExecStart=__FINALPATH__/galene
+ExecStart=__FINALPATH__/galene -turn __PUBLIC_IP4__.1:1194
 LimitNOFILE=65536
 
 [Install]

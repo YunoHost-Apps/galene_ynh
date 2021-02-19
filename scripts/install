@@ -116,8 +116,10 @@ ynh_system_user_create --username=$app
 #=================================================
 ynh_script_progression --message="Configuring a systemd service..." --weight=1
 
+public_ip4="$(curl ip.yunohost.org)" || true
+
 # Create a dedicated systemd config
-ynh_add_systemd_config
+ynh_add_systemd_config --others_var="public_ip4"
 
 #=================================================
 # MODIFY A CONFIG FILE
@@ -173,7 +175,7 @@ yunohost service add $app --description="Videoconferencing server" --log="/var/l
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=$app --action=start --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # SETUP SSOWAT
