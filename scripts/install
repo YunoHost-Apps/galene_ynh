@@ -123,6 +123,9 @@ ynh_add_systemd_config
 # MODIFY A CONFIG FILE
 #=================================================
 
+#ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
+#ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
+
 cp ../conf/passwd $final_path/data/passwd
 ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/data/passwd"
 ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/data/passwd"
