@@ -140,20 +140,20 @@ ynh_print_ON
 # WARNING : these commands are used in INSTALL, UPGRADE
 # For any update do it in all files
 
-coturn_config_path="/etc/$app/coturn.conf"
+# coturn_config_path="/etc/$app/coturn.conf"
 
-cp ../settings/conf/coturn/turnserver.conf "$coturn_config_path"
+# cp ../settings/conf/coturn/turnserver.conf "$coturn_config_path"
 
-ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__CLI_PORT__ --replace_string=$cli_port --target_file="$coturn_config_path"
-ynh_print_OFF
-ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$coturn_config_path"
-ynh_print_ON
+# ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$coturn_config_path"
+# ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$coturn_config_path"
+# ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$coturn_config_path"
+# ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$coturn_config_path"
+# ynh_replace_string --match_string=__CLI_PORT__ --replace_string=$cli_port --target_file="$coturn_config_path"
+# ynh_print_OFF
+# ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$coturn_config_path"
+# ynh_print_ON
 
-#ynh_add_config --template="../settings/conf/coturn/turnserver.conf" --destination="/etc/$app/coturn.conf"
+ynh_add_config --template="../settings/conf/coturn/turnserver.conf" --destination="/etc/$app/coturn.conf"
 
 # Get public IP and set as external IP for coturn
 # note : '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
