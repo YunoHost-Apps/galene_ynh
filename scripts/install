@@ -27,6 +27,7 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
+email=$(ynh_user_get_info --username=$admin --key=mail)
 ynh_print_OFF
 password=$YNH_APP_ARG_PASSWORD
 ynh_print_ON
