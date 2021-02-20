@@ -33,6 +33,10 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 turnserver_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_tls_port)
 turnserver_alt_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_tls_port)
+cli_port=$(ynh_app_setting_get --app=$app --key=cli_port)
+ynh_print_OFF
+turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
+ynh_print_ON
 
 #=================================================
 # CHECK IF THE APP CAN BE RESTORED
@@ -122,48 +126,40 @@ then
     chmod 640 /etc/ssl/private/dh2048.pem
 fi
 
-#=================================================
-# RECONFIGURE THE TURNSERVER
-#=================================================
-ynh_script_progression --message="Reconfiguring Coturn..." --weight=23
+# #=================================================
+# # RECONFIGURE THE TURNSERVER
+# #=================================================
+# ynh_script_progression --message="Reconfiguring Coturn..." --weight=23
 
-# To be sure that at the restoration the IP address in coturn config is the same as the real address we remake the coturn config
+# # To be sure that at the restoration the IP address in coturn config is the same as the real address we remake the coturn config
 
-# Retrieve specific settings
-turnserver_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_tls_port)
-turnserver_alt_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_tls_port)
-cli_port=$(ynh_app_setting_get --app=$app --key=cli_port)
-ynh_print_OFF
-turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
-ynh_print_ON
+# # WARNING : these commands are used in INSTALL, UPGRADE
+# # For any update do it in all files
 
-# WARNING : these commands are used in INSTALL, UPGRADE
-# For any update do it in all files
+# coturn_config_path="/etc/$app/coturn.conf"
 
-coturn_config_path="/etc/$app/coturn.conf"
+# cp ../settings/conf/coturn/turnserver.conf "$coturn_config_path"
 
-cp ../settings/conf/coturn/turnserver.conf "$coturn_config_path"
+# ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$coturn_config_path"
+# ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$coturn_config_path"
+# ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$coturn_config_path"
+# ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$coturn_config_path"
+# ynh_replace_string --match_string=__CLI_PORT__ --replace_string=$cli_port --target_file="$coturn_config_path"
+# ynh_print_OFF
+# ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$coturn_config_path"
+# ynh_print_ON
 
-ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__CLI_PORT__ --replace_string=$cli_port --target_file="$coturn_config_path"
-ynh_print_OFF
-ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$coturn_config_path"
-ynh_print_ON
+# # Get public IP and set as external IP for coturn
+# # note : '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
+# public_ip4="$(curl ip.yunohost.org)" || true
+# public_ip6="$(curl ipv6.yunohost.org)" || true
 
-# Get public IP and set as external IP for coturn
-# note : '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
-public_ip4="$(curl ip.yunohost.org)" || true
-public_ip6="$(curl ipv6.yunohost.org)" || true
+# if ( [[ -n "$public_ip4" ]] && ynh_validate_ip4 --ip_address="$public_ip4" || [[ -n "$public_ip6" ]] && ynh_validate_ip6 --ip_address="$public_ip6" )
+# then
+#     echo "external-ip=${public_ip4}/${public_ip6}" >> "$coturn_config_path"
+# fi
 
-if ( [[ -n "$public_ip4" ]] && ynh_validate_ip4 --ip_address="$public_ip4" || [[ -n "$public_ip6" ]] && ynh_validate_ip6 --ip_address="$public_ip6" )
-then
-    echo "external-ip=${public_ip4}/${public_ip6}" >> "$coturn_config_path"
-fi
-
-ynh_store_file_checksum --file="$coturn_config_path"
+# ynh_store_file_checksum --file="$coturn_config_path"
 
 #=================================================
 # OPEN THE PORT
