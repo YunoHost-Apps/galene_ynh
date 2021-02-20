@@ -96,7 +96,7 @@ then
     mkdir -p "$data"
 
 	# Copy the admin saved settings from tmp directory to final path	
-	cp -ar "$tmpdir/groups" "$final_path/groups"
+	cp -ar "$tmpdir/groups" "$final_path"
 
 	# Remove the tmp directory securely
 	ynh_secure_remove --file="$tmpdir"
