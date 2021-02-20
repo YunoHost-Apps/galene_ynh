@@ -1,13 +1,12 @@
 {
     "op": [{"username": "__ADMIN__", "password": "__PASSWORD__"}],
-    "presenter": [
-        {"username": "", "password": ""},
-        {"username": "", "password": ""}
-    ],
-    "contact": "username@domain.com",
+    "presenter": [{}],
+    "other": [{}],
+    "contact": "__EMAIL__",
     "comment": "Public Conference",
     "description": "a human-readable description of the group; this is displayed on the landing page for public groups.",
     "autolock": true,
+    "autokick": false,
     "public": true,
     "max-clients": 20,
     "max-history-age": 14400,
