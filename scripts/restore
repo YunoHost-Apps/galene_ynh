@@ -180,7 +180,7 @@ chown -R $app:root $final_path
 chmod -R 755 $final_path
 chown -R $app:root /var/log/$app
 chown -R $app:root /etc/$app
-chown turnserver:root $coturn_config_path
+chown turnserver:root /etc/$app/coturn.conf
 chmod -R u=rwX,g=rX,o= /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app

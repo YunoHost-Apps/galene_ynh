@@ -47,20 +47,6 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
-if [ -z "$final_path/groups" ]; then
-    # Define app's groups directory
-    groups="$final_path/groups"
-    #Create groups folder
-    mkdir -p "$groups"
-fi
-
-if [ -z "$final_path/data" ]; then
-    # Define app's data directory
-    data="$final_path/data"
-    # Create data folder
-    mkdir -p "$data"
-fi
-
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -103,11 +89,25 @@ then
 
 	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 
+    groups="$final_path/groups"
+    data="$final_path/data"
+
+    mkdir -p "$groups"
+    mkdir -p "$data"
+
 	# Copy the admin saved settings from tmp directory to final path	
 	cp -ar "$tmpdir/groups" "$final_path/groups"
 
 	# Remove the tmp directory securely
 	ynh_secure_remove --file="$tmpdir"
+
+    ynh_backup_if_checksum_is_different --file="$final_path/data/passwd"
+    ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
+    ynh_store_file_checksum --file="$final_path/data/passwd"
+
+    ynh_backup_if_checksum_is_different --file="$final_path/data/ice-servers.json"
+    ynh_add_config --template="../conf/ice-servers.json" --destination="$final_path/data/ice-servers.json"
+    ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
 
 	# Recreate certificates
 	pushd "$final_path/data"
@@ -206,18 +206,6 @@ ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$
 ynh_replace_string --match_string=__IPV4__ --replace_string=$public_ip4 --target_file="$final_path/Coturn_config_rotate.sh"
 ynh_replace_string --match_string=__IPV6__ --replace_string=$public_ip6 --target_file="$final_path/Coturn_config_rotate.sh"
 chmod +x $final_path/Coturn_config_rotate.sh
-
-#=================================================
-# MODIFY A CONFIG FILE
-#=================================================
-
-ynh_backup_if_checksum_is_different --file="$final_path/data/passwd"
-ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-ynh_store_file_checksum --file="$final_path/data/passwd"
-
-ynh_backup_if_checksum_is_different --file="$final_path/data/ice-servers.json"
-ynh_add_config --template="../conf/ice-servers.json" --destination="$final_path/data/ice-servers.json"
-ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
 
 #=================================================
 # NGINX CONFIGURATION
