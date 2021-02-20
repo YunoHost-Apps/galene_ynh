@@ -48,6 +48,12 @@ if [ -z "$final_path/groups" ]; then
 	mkdir -p "$final_path/groups"
 fi
 
+# If data folder doesn't exist, create it
+if [ -z "$final_path/data" ]; then
+	# Create groups folders
+	mkdir -p "$final_path/data"
+fi
+
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -97,10 +103,10 @@ then
 	ynh_secure_remove --file="$tmpdir"
 
 	# Recreate certificates
-	pushd "$final_path"
-	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout data/key.pem -x509 -days 365 -out data/cert.pem \
+	pushd "$final_path/data"
+	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
 	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-    chmod 640 data/{key.pem,cert.pem}
+    chmod 640 {key.pem,cert.pem}
     popd
 fi
 
