@@ -10,7 +10,7 @@
 		admin="john"	(USER)
 		is_public=1	(PUBLIC|public=1|private=0)
 		password="pass"
-		group_name="public"
+		group_name="public with space"
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=0
@@ -30,4 +30,3 @@ Notification=none
 	; commit=CommitHash
 		name=Name and date of the commit.
 		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&
-
