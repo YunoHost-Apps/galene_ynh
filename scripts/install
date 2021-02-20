@@ -115,14 +115,24 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 
+
+#=================================================
+# CREATE DATA FOLDER
+#=================================================
+
+# Define app's data directory
+data="$final_path/data"
+# Create data folder
+mkdir -p "$data"
+
 #=================================================
 # CREATE A SERVER CERTIFICATE
 #=================================================
 
-pushd "$final_path"
-	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout data/key.pem -x509 -days 365 -out data/cert.pem \
+pushd "$final_path/data"
+	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
 	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-    chmod 640 data/{key.pem,cert.pem}
+    chmod 640 {key.pem,cert.pem}
 popd
 
 #=================================================
@@ -194,6 +204,15 @@ then
 fi
 
 ynh_store_file_checksum --file="$coturn_config_path"
+
+#=================================================
+# CREATE GROUPS FOLDER
+#=================================================
+
+# Define app's groups directory
+groups="$final_path/groups"
+# Create groups folder
+mkdir -p "$groups"
 
 #=================================================
 # MODIFY A CONFIG FILE
