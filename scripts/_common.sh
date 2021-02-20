@@ -29,13 +29,13 @@ ynh_detect_arch(){
         if [ -n "$(uname -m | grep arm64)" ] || [ -n "$(uname -m | grep aarch64)" ]; then
                 architecture="arm64"              
         elif [ -n "$(uname -m | grep 64)" ]; then
-                architecture="x86-64"
+                architecture="amd64"
+        elif [ -n "$(uname -m | grep 86)" ]; then
+                architecture="386"
         elif [ -n "$(uname -m | grep armv7)" ]; then
-                architecture="arm"
+                architecture="arm7"
         elif [ -n "$(uname -m | grep armv6)" ]; then
-                architecture="arm"
-        elif [ -n "$(uname -m | grep armv5)" ]; then
-                architecture="arm"
+                architecture="arm6"
         else
                 architecture="unknown"
         fi
