@@ -6,7 +6,7 @@
         "en": "Videoconferencing server that is easy to deploy",
         "fr": "Serveur de visioconférence facile à déployer"
     },
-    "version": "0.2~ynh5",
+    "version": "0.2~ynh6",
     "url": "https://galene.org/",
     "license": "MIT",
     "maintainer": {
@@ -72,10 +72,6 @@
                 "ask": {
                     "en": "Choose a name for the group you want to create",
                     "fr": "Choisissez un nom pour le groupe que vous voulez créer"
-                },
-                "help": {
-                    "en": "The name will be used as filename (do not use space, dots or / in your name group).",
-                    "fr": "Le nom sera utilisé comme nom de fichier (n'utilisez pas d'espace, de points ou / dans votre groupe de noms)."
                 },
                 "default": "public",
                 "example": "public"

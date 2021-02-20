@@ -103,8 +103,8 @@ yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=3
 
-ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
-ynh_systemd_action --service_name=coturn-$app.service --action=restart --log_path="/var/log/$app/turnserver.log"
+ynh_systemd_action --service_name=$app --action=start --log_path="/var/log/$app/$app.log"
+yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
 
 #=================================================
 # CREATE A DH FILE
