@@ -176,7 +176,7 @@ ynh_script_progression --message="Restoring permissions..." --weight=1
 
 # Restore permissions on app files
 # Set permissions on app files
-chown -R $app:root $final_path
+chown -R $app:$app $final_path
 chmod -R 755 $final_path
 chown -R $app:root /var/log/$app
 chown -R $app:root /etc/$app
