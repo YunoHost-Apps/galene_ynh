@@ -73,7 +73,7 @@
                     "en": "Choose a name for the group you want to create",
                     "fr": "Choisissez un nom pour le groupe que vous voulez créer"
                 },
-                "default": "groupname",
+                "default": "public",
                 "example": "public"
             }
         ]
