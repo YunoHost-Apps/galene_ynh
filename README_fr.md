@@ -23,6 +23,10 @@ Galène est un serveur de visioconférence facile à déployer (il suffit de cop
 
 ## Configuration
 
+### Comment créer des groupes
+
+Les groupes sont définis par des fichiers dans le répertoire `/opt/yunohost/galene/groups`. Différentes options sont disponibles (voir https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file)
+
 ### Serveur TURN
 
 Pour la VoIP et la visioconférence, un serveur TURN est également installé et configuré. Le serveur TURN écoute sur deux ports UDP et TCP. Vous pouvez les obtenir avec ces commandes :
