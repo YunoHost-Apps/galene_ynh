@@ -11,17 +11,21 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 Galène is a videoconferencing server that is easy to deploy (just copy a few files and run the binary) and that requires moderate server resources. It was originally designed for lectures and conferences (where a single speaker streams audio and video to hundreds or thousands of users), but later evolved to be useful for student practicals (where users are divided into many small groups), and meetings (where a few dozen users interact with each other). 
 
-**Shipped version:** 0.2
+**Shipped version:** 0.3
 
 ## Screenshots
 
-![](France_in_XXI_Century._School.jpg)
+![](screenshot.png)
 
 ## Demo
 
 * [Official demo](https://galene.org:8443/)
 
 ## Configuration
+
+### How to creat groups
+
+Groups are defined by files in the `/opt/yunohost/galene/groups` directory. Various options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file)
 
 ### TURN server
 

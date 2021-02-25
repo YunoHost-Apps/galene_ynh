@@ -25,7 +25,7 @@ old_config_line=$(egrep "^external-ip=.*\$" "/etc/$app/coturn.conf")
 ynh_replace_string "^external-ip=.*\$" "$external_IP_line" "/etc/$app/coturn.conf"
 new_config_line=$(egrep "^external-ip=.*\$" "/etc/$app/coturn.conf")
 
-setfacl -R -m user:turnserver:rX  /etc/$app
+setfacl -R -m user:turnserver:rX  /etc/__APP__
 
 if [ "$old_config_line" != "$new_config_line" ]
 then
