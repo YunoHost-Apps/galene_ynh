@@ -27,6 +27,7 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
+email=$(ynh_user_get_info --username=$admin --key=mail)
 ynh_print_OFF
 password=$YNH_APP_ARG_PASSWORD
 ynh_print_ON
@@ -116,13 +117,22 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 
 #=================================================
+# CREATE DATA FOLDER
+#=================================================
+
+# Define app's data directory
+data="$final_path/data"
+# Create data folder
+mkdir -p "$data"
+
+#=================================================
 # CREATE A SERVER CERTIFICATE
 #=================================================
 
-pushd "$final_path"
-	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout data/key.pem -x509 -days 365 -out data/cert.pem \
+pushd "$final_path/data"
+	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
 	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-    chmod 640 data/{key.pem,cert.pem}
+    chmod 640 {key.pem,cert.pem}
 popd
 
 #=================================================
@@ -173,15 +183,7 @@ ynh_print_ON
 
 coturn_config_path="/etc/$app/coturn.conf"
 
-cp ../conf/coturn/turnserver.conf "$coturn_config_path"
-ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$coturn_config_path"
-ynh_replace_string --match_string=__CLI_PORT__ --replace_string=$cli_port --target_file="$coturn_config_path"
-ynh_print_OFF
-ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$coturn_config_path"
-ynh_print_ON
+ynh_add_config --template="../conf/coturn/turnserver.conf" --destination="$coturn_config_path"
 
 # Get public IP and set as external IP for coturn
 # note: '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
@@ -196,33 +198,25 @@ fi
 ynh_store_file_checksum --file="$coturn_config_path"
 
 #=================================================
+# CREATE GROUPS FOLDER
+#=================================================
+
+# Define app's groups directory
+groups="$final_path/groups"
+# Create groups folder
+mkdir -p "$groups"
+
+#=================================================
 # MODIFY A CONFIG FILE
 #=================================================
 
-cp ../conf/passwd $final_path/data/passwd
-ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/data/passwd"
-ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/data/passwd"
-
-mv "../conf/groupname.json" "$final_path/groups/$group_name.json"
-ynh_replace_string --match_string=__ADMIN__ --replace_string=$admin --target_file="$final_path/groups/$group_name.json"
-ynh_replace_string --match_string=__PASSWORD__ --replace_string=$password --target_file="$final_path/groups/$group_name.json"
-
-cp ../conf/ice-servers.json $final_path/data/ice-servers.json
-ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$final_path/data/ice-servers.json"
-ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/data/ice-servers.json"
-ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$final_path/data/ice-servers.json"
-ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$final_path/data/ice-servers.json"
-ynh_print_OFF
-ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$final_path/data/ice-servers.json"
-ynh_print_ON
-
-#=================================================
-# STORE THE CONFIG FILE CHECKSUM
-#=================================================
-
-# Calculate and store the config file checksum into the app settings
+ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
 ynh_store_file_checksum --file="$final_path/data/passwd"
+
+ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
 ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
+
+ynh_add_config --template="../conf/ice-servers.json" --destination="$final_path/data/ice-servers.json"
 ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
 
 #=================================================
@@ -250,7 +244,7 @@ chmod +x $final_path/Coturn_config_rotate.sh
 #=================================================
 
 # Set permissions to app files
-chown -R $app:root $final_path
+chown -R $app:$app $final_path
 chmod -R 755 $final_path
 chown -R $app:root /var/log/$app
 chown -R $app:root /etc/$app
