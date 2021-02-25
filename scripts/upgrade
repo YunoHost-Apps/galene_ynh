@@ -19,7 +19,6 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
-is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
@@ -85,12 +84,8 @@ then
 
 	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 
-	# Define app's data and groups directory
-	data="$final_path/data"
-	groups="$final_path/groups"
 	# Create data and groups folder
-	mkdir -p "$data"
-	mkdir -p "$groups"
+	mkdir -p "$final_path/data" "$final_path/groups"
 
 	# Copy the admin saved settings from tmp directory to final path	
 	cp -ar "$tmpdir/groups" "$final_path/groups"
@@ -98,12 +93,16 @@ then
 	# Remove the tmp directory securely
 	ynh_secure_remove --file="$tmpdir"
 
+    ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
+	ynh_store_file_checksum --file="$final_path/data/passwd"
+
 	# Recreate certificates
 	pushd "$final_path/data"
-	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
-	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-    chmod 640 {key.pem,cert.pem}
+		ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
+		-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
+    	chmod 640 {key.pem,cert.pem}
     popd
+
 fi
 
 #=================================================
@@ -133,13 +132,6 @@ ynh_replace_string --match_string="__IPV4__" --replace_string="$public_ip4" --ta
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-#=================================================
-# MODIFY A CONFIG FILE
-#=================================================
-
-ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-ynh_store_file_checksum --file="$final_path/data/passwd"
 
 #=================================================
 # GENERIC FINALIZATION
