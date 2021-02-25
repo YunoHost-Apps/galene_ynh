@@ -43,18 +43,6 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
-# If groups folder doesn't exist, create it
-if [ -z "$final_path/groups" ]; then
-	# Create groups folders
-	mkdir -p "$final_path/groups"
-fi
-
-# If data folder doesn't exist, create it
-if [ -z "$final_path/data" ]; then
-	# Create groups folders
-	mkdir -p "$final_path/data"
-fi
-
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
@@ -97,6 +85,13 @@ then
 
 	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 
+	# Define app's data and groups directory
+	data="$final_path/data"
+	groups="$final_path/groups"
+	# Create data and groups folder
+	mkdir -p "$data"
+	mkdir -p "$groups"
+
 	# Copy the admin saved settings from tmp directory to final path	
 	cp -ar "$tmpdir/groups" "$final_path/groups"
 
@@ -132,8 +127,19 @@ ynh_system_user_create --username=$app
 #=================================================
 ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
 
+public_ip4="$(curl ip.yunohost.org)" || true
+
+ynh_replace_string --match_string="__IPV4__" --replace_string="$public_ip4" --target_file="../conf/systemd.service"
+
 # Create a dedicated systemd config
 ynh_add_systemd_config
+
+#=================================================
+# MODIFY A CONFIG FILE
+#=================================================
+
+ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
+ynh_store_file_checksum --file="$final_path/data/passwd"
 
 #=================================================
 # GENERIC FINALIZATION
