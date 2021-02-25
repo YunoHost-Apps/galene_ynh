@@ -18,6 +18,7 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 port=$(ynh_app_setting_get --app=$app --key=port)
+turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
 #=================================================
@@ -56,6 +57,22 @@ ynh_script_progression --message="Removing NGINX web server configuration..." --
 
 # Remove the dedicated NGINX config
 ynh_remove_nginx_config
+
+#=================================================
+# CLOSE A PORT
+#=================================================
+
+if yunohost firewall list | grep -q "\- $port$"
+then
+	ynh_script_progression --message="Closing port $port..." --weight=1
+	ynh_exec_warn_less yunohost firewall disallow TCP $port
+fi
+
+if yunohost firewall list | grep -q "\- $turn_port$"
+then
+	ynh_script_progression --message="Closing port $turn_port..." --weight=1
+	ynh_exec_warn_less yunohost firewall disallow both $turn_port
+fi
 
 #=================================================
 # GENERIC FINALIZATION

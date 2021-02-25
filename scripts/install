@@ -66,6 +66,15 @@ ynh_script_progression --message="Finding an available port..." --weight=3
 port=$(ynh_find_port --port=8443)
 ynh_app_setting_set --app=$app --key=port --value=$port
 
+# Find an available port
+turn_port=$(ynh_find_port --port=1194)
+ynh_app_setting_set --app=$app --key=port --value=$port
+
+# Open the port
+ynh_script_progression --message="Configuring firewall..." --weight=1
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
+ynh_exec_warn_less yunohost firewall allow Both $turn_port
+
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
@@ -115,6 +124,10 @@ ynh_system_user_create --username=$app
 #=================================================
 ynh_script_progression --message="Configuring a systemd service..." --weight=1
 
+public_ip4="$(curl ip.yunohost.org)" || true
+
+ynh_replace_string --match_string="__IPV4__" --replace_string="$public_ip4" --target_file="../conf/systemd.service"
+
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
@@ -152,7 +165,7 @@ chmod -R 755 $final_path
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports $turn_port
 
 #=================================================
 # START SYSTEMD SERVICE
