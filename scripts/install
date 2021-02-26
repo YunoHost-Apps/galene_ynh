@@ -52,7 +52,6 @@ ynh_script_progression --message="Storing installation settings..." --weight=4
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
-ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 ynh_app_setting_set --app=$app --key=group_name --value="$group_name"
 
 #=================================================
@@ -70,7 +69,7 @@ ynh_app_setting_set --app=$app --key=port --value=$port
 turn_port=$(ynh_find_port --port=1194)
 ynh_app_setting_set --app=$app --key=port --value=$turn_port
 
-# Open the port
+# Open the ports
 ynh_script_progression --message="Configuring firewall..." --weight=1
 ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
 ynh_exec_warn_less yunohost firewall allow Both $turn_port
