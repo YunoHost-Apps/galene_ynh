@@ -20,7 +20,6 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-password=$(ynh_app_setting_get --app=$app --key=password)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
 turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
@@ -46,7 +45,7 @@ fi
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up Galène before upgrading (may take a while)..." --weight=1
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -89,7 +88,7 @@ then
 	mkdir -p "$final_path/data" "$final_path/groups"
 
 	# Copy the admin saved settings from tmp directory to final path	
-	cp -ar "$tmpdir/groups" "$final_path"
+	cp -ar "$tmpdir/groups" "$final_path/groups"
 
 	# Remove the tmp directory securely
 	ynh_secure_remove --file="$tmpdir"
@@ -107,94 +106,6 @@ then
 fi
 
 #=================================================
-# MULTINSTANCE SUPPORT
-#=================================================
-
-if [ ! -e /etc/$app/coturn.conf ]
-then
-    ynh_script_progression --message="Creating an independant service for Coturn..." --weight=1
-
-    #=================================================
-    # CREATE AN INDEPENDANT SERVICE FOR COTURN
-    #=================================================
-
-    # Disable default config for turnserver and create a new service
-    systemctl stop coturn.service
-
-    # Set by default the system config for coturn
-    echo "" > /etc/turnserver.conf
-    ynh_replace_string --match_string="TURNSERVER_ENABLED=1" --replace_string="TURNSERVER_ENABLED=0" --target_file=/etc/default/coturn
-
-    # Set a port for each service in turnserver
-    turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
-    cli_port=$(ynh_find_port --port=5766)
-
-    ynh_app_setting_set --app=$app --key=turnserver_alt_tls_port --value=$turnserver_alt_tls_port
-    ynh_app_setting_set --app=$app --key=cli_port --value=$cli_port
-
-    yunohost firewall allow Both $turnserver_alt_tls_port > /dev/null 2>&1
-
-    #=================================================
-    # MAKE A CLEAN LOGROTATE CONFIG
-    #=================================================
-
-    ynh_use_logrotate --logfile /var/log/$app --nonappend
-fi
-
-#=================================================
-# CREATE A DH FILE
-#=================================================
-ynh_script_progression --message="Creating a dhparam file..." --weight=3
-
-# WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
-# For any update do it in all files
-
-# Make dhparam cert for Galène if it doesn't exist
-if [ ! -e /etc/ssl/private/dh2048.pem ]
-then
-    ynh_exec_warn_less openssl dhparam -out /etc/ssl/private/dh2048.pem -outform PEM -2 2048 -dsaparam
-    chown root:ssl-cert /etc/ssl/private/dh2048.pem
-    chmod 640 /etc/ssl/private/dh2048.pem
-fi
-
-#=================================================
-# SPECIFIC UPGRADE
-#=================================================
-# UPDATE COTURN CONFIG
-#=================================================
-ynh_script_progression --message="Updating Coturn config..." --weight=1
-
-# WARNING : theses command are used in INSTALL, UPGRADE
-# For any update do it in all files
-
-coturn_config_path="/etc/$app/coturn.conf"
-
-ynh_add_config --template="../conf/coturn/turnserver.conf" --destination="$coturn_config_path"
-
-# Get public IP and set as external IP for coturn
-# note : '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
-public_ip4="$(curl ip.yunohost.org)" || true
-public_ip6="$(curl ipv6.yunohost.org)" || true
-
-if ( [[ -n "$public_ip4" ]] && ynh_validate_ip4 --ip_address="$public_ip4" || [[ -n "$public_ip6" ]] && ynh_validate_ip6 --ip_address="$public_ip6" )
-then
-    echo "external-ip=${public_ip4}/${public_ip6}" >> "$coturn_config_path"
-fi
-
-ynh_store_file_checksum --file="$coturn_config_path"
-
-#=================================================
-# ADD SCRIPT FOR COTURN CRON AND APP SERVICE
-#=================================================
-
-# WARNING : theses command are used in INSTALL, UPGRADE
-# For any update do it in all files
-
-cp ../sources/Coturn_config_rotate.sh $final_path/Coturn_config_rotate.sh
-ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
-chmod +x $final_path/Coturn_config_rotate.sh
-
-#=================================================
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=3
@@ -209,7 +120,6 @@ ynh_script_progression --message="Making sure dedicated system user exists..." -
 
 # Create a dedicated user (if not existing)
 ynh_system_user_create --username=$app
-adduser turnserver ssl-cert
 
 #=================================================
 # SETUP SYSTEMD
@@ -230,20 +140,13 @@ ynh_add_systemd_config
 #=================================================
 
 # Set permissions on app files
-chown -R $app:$app $final_path
+chown -R $app: $final_path
 chmod -R 755 $final_path
-chown -R $app:root /var/log/$app
-chown -R $app:root /etc/$app
-chown turnserver:root $coturn_config_path
-chmod -R u=rwX,g=rX,o= /etc/$app
-chmod 770 $final_path/Coturn_config_rotate.sh
-setfacl -R -m user:turnserver:rX  /etc/$app
-setfacl -R -m user:turnserver:rwX  /var/log/$app
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
 yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports="$turn_port"
 
@@ -265,4 +168,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of Galène completed" --last
+ynh_script_progression --message="Upgrade of $app completed" --last
