@@ -66,15 +66,14 @@ ynh_script_progression --message="Finding an available port..." --weight=3
 port=$(ynh_find_port --port=8443)
 ynh_app_setting_set --app=$app --key=port --value=$port
 
+# Find an available port
+turn_port=$(ynh_find_port --port=1194)
+ynh_app_setting_set --app=$app --key=port --value=$turn_port
+
 # Open the port
-# ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
-
-#=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-#ynh_script_progression --message="Installing dependencies..." --time --weight=1
-
-#ynh_install_app_dependencies $pkg_dependencies
+ynh_script_progression --message="Configuring firewall..." --weight=1
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
+ynh_exec_warn_less yunohost firewall allow Both $turn_port
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -86,13 +85,22 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 
 #=================================================
+# CREATE DATA FOLDER
+#=================================================
+
+# Define app's data directory
+data="$final_path/data"
+# Create data folder
+mkdir -p "$data"
+
+#=================================================
 # CREATE A SERVER CERTIFICATE
 #=================================================
 
-pushd "$final_path"
-	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout data/key.pem -x509 -days 365 -out data/cert.pem \
+pushd "$final_path/data"
+	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
 	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-    chmod 640 data/{key.pem,cert.pem}
+    chmod 640 {key.pem,cert.pem}
 popd
 
 #=================================================
@@ -116,27 +124,30 @@ ynh_system_user_create --username=$app
 #=================================================
 ynh_script_progression --message="Configuring a systemd service..." --weight=1
 
+public_ip4="$(curl ip.yunohost.org)" || true
+
+ynh_replace_string --match_string="__IPV4__" --replace_string="$public_ip4" --target_file="../conf/systemd.service"
+
 # Create a dedicated systemd config
 ynh_add_systemd_config
+
+#=================================================
+# CREATE GROUPS FOLDER
+#=================================================
+
+# Define app's groups directory
+groups="$final_path/groups"
+# Create groups folder
+mkdir -p "$groups"
 
 #=================================================
 # MODIFY A CONFIG FILE
 #=================================================
 
-cp ../conf/passwd $final_path/data/passwd
-ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/data/passwd"
-ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/data/passwd"
-
-mv "../conf/groupname.json" "$final_path/groups/$group_name.json"
-ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$final_path/groups/$group_name.json"
-ynh_replace_string --match_string="__PASSWORD__" --replace_string="$password" --target_file="$final_path/groups/$group_name.json"
-
-#=================================================
-# STORE THE CONFIG FILE CHECKSUM
-#=================================================
-
-# Calculate and store the config file checksum into the app settings
+ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
 ynh_store_file_checksum --file="$final_path/data/passwd"
+
+ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
 ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
 
 #=================================================
@@ -150,19 +161,11 @@ chown -R $app: $final_path
 chmod -R 755 $final_path
 
 #=================================================
-# SETUP LOGROTATE
-#=================================================
-#ynh_script_progression --message="Configuring log rotation..." --weight=1
-
-# Use logrotate to manage application logfile(s)
-#ynh_use_logrotate
-
-#=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports="$turn_port"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -180,7 +183,7 @@ ynh_script_progression --message="Configuring permissions..." --weight=2
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	ynh_permission_update --permission "main" --add "visitors"
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
 #=================================================

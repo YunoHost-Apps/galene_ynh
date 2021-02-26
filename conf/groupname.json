@@ -1,19 +1,7 @@
 {
 	"op": [{"username": "__ADMIN__", "password": "__PASSWORD__"}],
-	"presenter": [
-		{"username": "", "password": ""},
-		{"username": "", "password": ""}
-	],
-	"contact": "username@domain.com",
- 	"comment": "Public Conference",
+	"presenter": [{}],
  	"description": "a human-readable description of the group; this is displayed on the landing page for public groups.",
- 	"autolock": true,
 	"public": true,
-	"max-clients": 20,
-	"max-history-age": 14400,
-	"allow-recording": true,
-	"allow-anonymous": true,
-	"allow-subgroups": true,
-	"redirect": "",
-	"codecs": ["vp8", "opus"]
+	"allow-anonymous": true
 }

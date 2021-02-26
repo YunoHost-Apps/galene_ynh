@@ -19,10 +19,10 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
-is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
+turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
 architecture=$(ynh_detect_arch)
 
 #=================================================
@@ -63,7 +63,7 @@ ynh_abort_if_errors
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..." --weight=3
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=$app --action=stop --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -84,18 +84,25 @@ then
 
 	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 
+	# Create data and groups folder
+	mkdir -p "$final_path/data" "$final_path/groups"
+
 	# Copy the admin saved settings from tmp directory to final path	
 	cp -ar "$tmpdir/groups" "$final_path/groups"
 
 	# Remove the tmp directory securely
 	ynh_secure_remove --file="$tmpdir"
 
+    ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
+	ynh_store_file_checksum --file="$final_path/data/passwd"
+
 	# Recreate certificates
-	pushd "$final_path"
-	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout data/key.pem -x509 -days 365 -out data/cert.pem \
-	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-    chmod 640 data/{key.pem,cert.pem}
+	pushd "$final_path/data"
+		ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
+		-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
+    	chmod 640 {key.pem,cert.pem}
     popd
+
 fi
 
 #=================================================
@@ -105,13 +112,6 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..." -
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-#ynh_script_progression --message="Upgrading dependencies..." --weight=1
-
-#ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # CREATE DEDICATED USER
@@ -125,6 +125,10 @@ ynh_system_user_create --username=$app
 # SETUP SYSTEMD
 #=================================================
 ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
+
+public_ip4="$(curl ip.yunohost.org)" || true
+
+ynh_replace_string --match_string="__IPV4__" --replace_string="$public_ip4" --target_file="../conf/systemd.service"
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
@@ -140,26 +144,18 @@ chown -R $app: $final_path
 chmod -R 755 $final_path
 
 #=================================================
-# SETUP LOGROTATE
-#=================================================
-# ynh_script_progression --message="Upgrading logrotate configuration..." --time --weight=1
-
-# # Use logrotate to manage app-specific logfile(s)
-# ynh_use_logrotate --non-append
-
-#=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports="$turn_port"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=$app --action=start --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # RELOAD NGINX

@@ -18,6 +18,7 @@ app=$YNH_APP_INSTANCE_NAME
 
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 port=$(ynh_app_setting_get --app=$app --key=port)
+turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 
 #=================================================
@@ -42,14 +43,6 @@ ynh_script_progression --message="Stopping and removing the systemd service..." 
 ynh_remove_systemd_config
 
 #=================================================
-# REMOVE DEPENDENCIES
-#=================================================
-#ynh_script_progression --message="Removing dependencies..." --time --weight=1
-
-# Remove metapackage and its dependencies
-#ynh_remove_app_dependencies
-
-#=================================================
 # REMOVE APP MAIN DIR
 #=================================================
 ynh_script_progression --message="Removing app main directory..." --weight=2
@@ -66,22 +59,20 @@ ynh_script_progression --message="Removing NGINX web server configuration..." --
 ynh_remove_nginx_config
 
 #=================================================
-# REMOVE LOGROTATE CONFIGURATION
-#=================================================
-#ynh_script_progression --message="Removing logrotate configuration..." --time --weight=1
-
-# Remove the app-specific logrotate config
-#ynh_remove_logrotate
-
-#=================================================
 # CLOSE A PORT
 #=================================================
 
-# if yunohost firewall list | grep -q "\- $port$"
-# then
-# 	ynh_script_progression --message="Closing port $port..." --time --weight=1
-# 	ynh_exec_warn_less yunohost firewall disallow TCP $port
-# fi
+if yunohost firewall list | grep -q "\- $port$"
+then
+	ynh_script_progression --message="Closing port $port..." --weight=1
+	ynh_exec_warn_less yunohost firewall disallow TCP $port
+fi
+
+if yunohost firewall list | grep -q "\- $turn_port$"
+then
+	ynh_script_progression --message="Closing port $turn_port..." --weight=1
+	ynh_exec_warn_less yunohost firewall disallow both $turn_port
+fi
 
 #=================================================
 # GENERIC FINALIZATION
