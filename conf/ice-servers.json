@@ -4,8 +4,8 @@
             "turn:example.com:5349",
             "turn:example.com:5349?transport=tcp"
         ],
-        "username": "galene",
-        "credential": "secret",
+        "username": "__APP__",
+        "credential": "__TURNSERVER_PWD__",
         "credentialType": "hmac-sha1"
     }
 ]

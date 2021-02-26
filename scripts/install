@@ -27,7 +27,10 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
+email=$(ynh_user_get_info --username=$admin --key=mail)
+ynh_print_OFF
 password=$YNH_APP_ARG_PASSWORD
+ynh_print_ON
 group_name=$YNH_APP_ARG_GROUP_NAME
 architecture=$(ynh_detect_arch)
 
@@ -64,6 +67,10 @@ ynh_script_progression --message="Finding an available port..." --weight=3
 
 # Find an available port
 port=$(ynh_find_port --port=8443)
+turnserver_tls_port=$(ynh_find_port --port=5349)
+turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
+cli_port=$(ynh_find_port --port=5766)
+
 ynh_app_setting_set --app=$app --key=port --value=$port
 
 # Find an available port
@@ -118,6 +125,8 @@ ynh_script_progression --message="Configuring system user..." --weight=3
 
 # Create a system user
 ynh_system_user_create --username=$app
+ynh_system_user_create --username=turnserver
+adduser turnserver ssl-cert
 
 #=================================================
 # SETUP SYSTEMD
@@ -131,9 +140,19 @@ ynh_replace_string --match_string="__IPV4__" --replace_string="$public_ip4" --ta
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
+mkdir -p /var/log/$app
+mkdir -p /etc/$app
+# Create systemd service for turnserver
+cp ../conf/coturn/default_coturn /etc/default/coturn-$app
+ynh_add_systemd_config --service=coturn-$app --template=coturn-galene.service
+
 #=================================================
 # CREATE GROUPS FOLDER
 #=================================================
+ynh_script_progression --message="Configuring Coturn..." --weight=1
+
+# WARNING: theses command are used in INSTALL, UPGRADE
+# For any update do it in all files
 
 # Define app's groups directory
 groups="$final_path/groups"
@@ -150,15 +169,26 @@ ynh_store_file_checksum --file="$final_path/data/passwd"
 ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
 ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
 
+ynh_add_config --template="../conf/ice-servers.json" --destination="$final_path/data/ice-servers.json"
+ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
+
 #=================================================
-# GENERIC FINALIZATION
+# SETUP LOGROTATE
 #=================================================
-# SECURE FILES AND DIRECTORIES
+ynh_script_progression --message="Configuring log rotation..." --weight=1
+
+ynh_use_logrotate --logfile "/var/log/$app"
+
+#=================================================
+# ADD SCRIPT FOR COTURN CRON AND APP SERVICE
 #=================================================
 
-# Set permissions to app files
-chown -R $app: $final_path
-chmod -R 755 $final_path
+# WARNING : theses command are used in INSTALL, UPGRADE
+# For any update do it in all files
+
+cp ../sources/Coturn_config_rotate.sh $final_path/Coturn_config_rotate.sh
+ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
+chmod +x $final_path/Coturn_config_rotate.sh
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -194,7 +224,24 @@ ynh_script_progression --message="Reloading NGINX web server..." --weight=2
 ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
+# SEND A README FOR THE ADMIN
+#=================================================
+
+# WARNING : theses command are used in INSTALL, RESTORE
+# For any update do it in all files
+
+echo "Galène was successfully installed :)
+
+Galène is now accesible at this adress: https://$domain
+
+Galène implements a TURN server (for VoIP), to have this fully functional please read the 'TURN server' section in the README available here: https://github.com/YunoHost-Apps/galene_ynh .
+
+If you're facing an issue or want to improve this app, please open a new issue in this project: https://github.com/YunoHost-Apps/galene_ynh" > mail_to_send
+
+ynh_send_readme_to_admin --app_message="mail_to_send" --type="install"
+
+#=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression --message="Installation of Galène completed" --last
