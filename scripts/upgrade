@@ -26,7 +26,6 @@ group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
 turnserver_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_tls_port)
 turnserver_alt_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_tls_port)
-cli_port=$(ynh_app_setting_get --app=$app --key=cli_port)
 turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
 architecture=$(ynh_detect_arch)
 
@@ -138,10 +137,8 @@ then
 
     # Set a port for each service in turnserver
     turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
-    cli_port=$(ynh_find_port --port=5766)
 
     ynh_app_setting_set --app=$app --key=turnserver_alt_tls_port --value=$turnserver_alt_tls_port
-    ynh_app_setting_set --app=$app --key=cli_port --value=$cli_port
 
     yunohost firewall allow Both $turnserver_alt_tls_port > /dev/null 2>&1
 

@@ -55,7 +55,6 @@ ynh_script_progression --message="Storing installation settings..." --weight=4
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
-ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 ynh_app_setting_set --app=$app --key=group_name --value="$group_name"
 ynh_app_setting_set --app=$app --key=password --value=$password
 
@@ -86,7 +85,6 @@ ynh_script_progression --message="Finding an available port..." --weight=3
 port=$(ynh_find_port --port=8443)
 turnserver_tls_port=$(ynh_find_port --port=5349)
 turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
-cli_port=$(ynh_find_port --port=5766)
 
 ynh_app_setting_set --app=$app --key=port --value=$port
 
@@ -98,7 +96,6 @@ ynh_exec_warn_less yunohost firewall allow Both $turnserver_alt_tls_port
 ynh_app_setting_set --app=$app --key=port --value=$port
 ynh_app_setting_set --app=$app --key=turnserver_tls_port --value=$turnserver_tls_port
 ynh_app_setting_set --app=$app --key=turnserver_alt_tls_port --value=$turnserver_alt_tls_port
-ynh_app_setting_set --app=$app --key=cli_port --value=$cli_port
 
 #=================================================
 # INSTALL DEPENDENCIES

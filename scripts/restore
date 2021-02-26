@@ -33,7 +33,6 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 turnserver_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_tls_port)
 turnserver_alt_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_tls_port)
-cli_port=$(ynh_app_setting_get --app=$app --key=cli_port)
 ynh_print_OFF
 turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
 ynh_print_ON
