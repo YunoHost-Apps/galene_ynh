@@ -67,7 +67,7 @@ ynh_app_setting_set --app=$app --key=port --value=$port
 
 # Find an available port
 turn_port=$(ynh_find_port --port=1194)
-ynh_app_setting_set --app=$app --key=port --value=$turn_port
+ynh_app_setting_set --app=$app --key=turn_port --value=$turn_port
 
 # Open the ports
 ynh_script_progression --message="Configuring firewall..." --weight=1
