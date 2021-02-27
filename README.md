@@ -33,7 +33,6 @@ For VoIP and video conferencing a TURN server is also installed and configured. 
 
 ```
 sudo yunohost app setting galene turnserver_port
-sudo yunohost app setting galene turnserver_alt_port
 ```
 
 The TURN server will also choose a port dynamically when a new call starts. The range is between 49152 - 65535.

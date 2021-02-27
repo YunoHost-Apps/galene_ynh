@@ -24,7 +24,6 @@ password=$(ynh_app_setting_get --app=$app --key=password)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
 turnserver_port=$(ynh_app_setting_get --app=$app --key=turnserver_port)
-turnserver_alt_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_port)
 turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
 architecture=$(ynh_detect_arch)
 
@@ -135,11 +134,11 @@ then
     ynh_replace_string --match_string="TURNSERVER_ENABLED=1" --replace_string="TURNSERVER_ENABLED=0" --target_file=/etc/default/coturn
 
     # Set a port for each service in turnserver
-    turnserver_alt_port=$(ynh_find_port --port=$((turnserver_port+1)))
+    turnserver_port=$(ynh_find_port --port=1194)
 
-    ynh_app_setting_set --app=$app --key=turnserver_alt_port --value=$turnserver_alt_port
+    ynh_app_setting_set --app=$app --key=turnserver_alt_port --value=$turnserver_port
 
-    yunohost firewall allow Both $turnserver_alt_port > /dev/null 2>&1
+    ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
 
     #=================================================
     # MAKE A CLEAN LOGROTATE CONFIG

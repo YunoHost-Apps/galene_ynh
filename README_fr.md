@@ -33,7 +33,6 @@ Pour la VoIP et la visioconférence, un serveur TURN est également installé et
 
 ```
 sudo yunohost app setting galene turnserver_port
-sudo yunohost app setting galene turnserver_alt_port
 ``` 
 
 Le serveur TURN choisira également un port de manière dynamique lors du démarrage d'une nouvelle visioconférence. La plage est comprise entre 49152 et 65535.

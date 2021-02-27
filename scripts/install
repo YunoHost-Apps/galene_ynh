@@ -27,10 +27,7 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
-email=$(ynh_user_get_info --username=$admin --key=mail)
-ynh_print_OFF
 password=$YNH_APP_ARG_PASSWORD
-ynh_print_ON
 group_name=$YNH_APP_ARG_GROUP_NAME
 architecture=$(ynh_detect_arch)
 
@@ -84,17 +81,14 @@ ynh_script_progression --message="Finding an available port..." --weight=3
 # Find an available port
 port=$(ynh_find_port --port=8443)
 turnserver_port=$(ynh_find_port --port=1194)
-turnserver_alt_port=$(ynh_find_port --port=$((turnserver_port+1)))
 
 # Open the ports
 ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
 ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
-ynh_exec_warn_less yunohost firewall allow Both $turnserver_alt_port
 
 # Store opened ports
 ynh_app_setting_set --app=$app --key=port --value=$port
 ynh_app_setting_set --app=$app --key=turnserver_port --value=$turnserver_port
-ynh_app_setting_set --app=$app --key=turnserver_alt_port --value=$turnserver_alt_port
 
 #=================================================
 # INSTALL DEPENDENCIES
