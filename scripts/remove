@@ -86,22 +86,20 @@ ynh_remove_logrotate
 #=================================================
 # CLOSE A PORT
 #=================================================
+ynh_script_progression --message="Closing ports..." --weight=1
 
 if yunohost firewall list | grep -q "\- $port$"
 then
-	ynh_script_progression --message="Closing port $port..." --weight=1
 	ynh_exec_warn_less yunohost firewall disallow TCP $port
 fi
 
 if yunohost firewall list | grep -q "\- $turnserver_tls_port$"
 then
-    ynh_script_progression --message="Closing port $turnserver_tls_port..." --weight=1
     ynh_exec_warn_less yunohost firewall disallow Both $turnserver_tls_port 
 fi
 
 if yunohost firewall list | grep -q "\- $turnserver_alt_tls_port$"
 then
-    ynh_script_progression --message="Closing port $turnserver_alt_tls_port..." --weight=1
     ynh_exec_warn_less yunohost firewall disallow Both $turnserver_alt_tls_port
 fi
 
