@@ -8,7 +8,7 @@ Type=simple
 WorkingDirectory=__FINALPATH__/
 User=__APP__
 Group=__APP__
-ExecStart=__FINALPATH__/galene -http __PORT__ -turn auto
+ExecStart=__FINALPATH__/galene
 LimitNOFILE=65536
 
 [Install]
