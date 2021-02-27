@@ -6,7 +6,6 @@
             "turn:__DOMAIN__:__TURNSERVER_PORT__?transport=udp"
         ],
         "username": "__APP__",
-        "credential": "__TURNSERVER_PWD__",
-        "credentialType": "hmac-sha1"
+        "credential": "__TURNSERVER_PWD__"
     }
 ]
