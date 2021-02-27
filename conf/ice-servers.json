@@ -2,11 +2,11 @@
     {
         "urls": [
             "turn:__DOMAIN__:__TURNSERVER_TLS_PORT__",
-            "turn:__DOMAIN__:__TURNSERVER_ALT_TLS_PORT__",
-            "turn:__DOMAIN__:__TURNSERVER_TLS_PORT__?transport=tcp",
-            "turn:__DOMAIN__:__TURNSERVER_ALT_TLS_PORT__?transport=tcp",
-            "turn:__DOMAIN__:__TURNSERVER_TLS_PORT__?transport=udp",
-            "turn:__DOMAIN__:__TURNSERVER_ALT_TLS_PORT__?transport=udp"
+            "turn:__DOMAIN__:__TURNSERVER_ALT_PORT__",
+            "turn:__DOMAIN__:__TURNSERVER_PORT__?transport=tcp",
+            "turn:__DOMAIN__:__TURNSERVER_ALT_PORT__?transport=tcp",
+            "turn:__DOMAIN__:__TURNSERVER_PORT__?transport=udp",
+            "turn:__DOMAIN__:__TURNSERVER_ALT_PORT__?transport=udp"
         ],
         "username": "__APP__",
         "credential": "__TURNSERVER_PWD__",
