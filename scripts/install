@@ -83,18 +83,18 @@ ynh_script_progression --message="Finding an available port..." --weight=3
 
 # Find an available port
 port=$(ynh_find_port --port=8443)
-turnserver_tls_port=$(ynh_find_port --port=5349)
-turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
+turnserver_port=$(ynh_find_port --port=1194)
+turnserver_alt_port=$(ynh_find_port --port=$((turnserver_port+1)))
 
 # Open the ports
 ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
-ynh_exec_warn_less yunohost firewall allow Both $turnserver_tls_port
-ynh_exec_warn_less yunohost firewall allow Both $turnserver_alt_tls_port
+ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
+ynh_exec_warn_less yunohost firewall allow Both $turnserver_alt_port
 
 # Store opened ports
 ynh_app_setting_set --app=$app --key=port --value=$port
-ynh_app_setting_set --app=$app --key=turnserver_tls_port --value=$turnserver_tls_port
-ynh_app_setting_set --app=$app --key=turnserver_alt_tls_port --value=$turnserver_alt_tls_port
+ynh_app_setting_set --app=$app --key=turnserver_port --value=$turnserver_port
+ynh_app_setting_set --app=$app --key=turnserver_alt_port --value=$turnserver_alt_port
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -256,7 +256,7 @@ setfacl -R -m user:turnserver:rwX  /var/log/$app
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
 yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
-yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_tls_port
+yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_port
 
 #=================================================
 # START SYSTEMD SERVICE

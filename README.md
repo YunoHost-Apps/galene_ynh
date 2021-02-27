@@ -32,16 +32,16 @@ Groups are defined by files in the `/opt/yunohost/galene/groups` directory. Vari
 For VoIP and video conferencing a TURN server is also installed and configured. The TURN server listens on two UDP and TCP ports. You can get them with these commands:
 
 ```
-sudo yunohost app setting galene turnserver_tls_port
-sudo yunohost app setting galene turnserver_alt_tls_port
+sudo yunohost app setting galene turnserver_port
+sudo yunohost app setting galene turnserver_alt_port
 ```
 
-The TURN server will also choose a port dynamically when a new call starts. The range is between 49153 - 49193.
+The TURN server will also choose a port dynamically when a new call starts. The range is between 49152 - 65535.
 
-For security reason the ports range (49153 - 49193) isn't automatically open by default. If you want to use Galène server for VoIP or conferencing you will need to open this port range manually. To do this, just run this command:
+For security reason the ports range (49152 - 65535) isn't automatically open by default. If you want to use Galène server for VoIP or conferencing you will need to open this port range manually. To do this, just run this command:
 
 ```
-sudo yunohost firewall allow Both 49153:49193
+sudo yunohost firewall allow Both 49152:65535
 ```
 
 You might also need to open these ports (if it is not automatically done) on your ISP box.

@@ -19,8 +19,8 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 port=$(ynh_app_setting_get --app=$app --key=port)
-turnserver_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_tls_port)
-turnserver_alt_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_tls_port)
+turnserver_port=$(ynh_app_setting_get --app=$app --key=turnserver_port)
+turnserver_alt_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_port)
 
 #=================================================
 # STANDARD REMOVE
@@ -93,14 +93,14 @@ then
 	ynh_exec_warn_less yunohost firewall disallow TCP $port
 fi
 
-if yunohost firewall list | grep -q "\- $turnserver_tls_port$"
+if yunohost firewall list | grep -q "\- $turnserver_port$"
 then
-    ynh_exec_warn_less yunohost firewall disallow Both $turnserver_tls_port 
+    ynh_exec_warn_less yunohost firewall disallow Both $turnserver_port 
 fi
 
-if yunohost firewall list | grep -q "\- $turnserver_alt_tls_port$"
+if yunohost firewall list | grep -q "\- $turnserver_alt_port$"
 then
-    ynh_exec_warn_less yunohost firewall disallow Both $turnserver_alt_tls_port
+    ynh_exec_warn_less yunohost firewall disallow Both $turnserver_alt_port
 fi
 
 #=================================================
