@@ -86,7 +86,7 @@ port=$(ynh_find_port --port=8443)
 turnserver_tls_port=$(ynh_find_port --port=5349)
 turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
 
-# Open the port
+# Open the ports
 ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
 ynh_exec_warn_less yunohost firewall allow Both $turnserver_tls_port
 ynh_exec_warn_less yunohost firewall allow Both $turnserver_alt_tls_port
@@ -284,23 +284,6 @@ fi
 ynh_script_progression --message="Reloading NGINX web server..." --weight=2
 
 ynh_systemd_action --service_name=nginx --action=reload
-
-#=================================================
-# SEND A README FOR THE ADMIN
-#=================================================
-
-# WARNING : theses command are used in INSTALL, RESTORE
-# For any update do it in all files
-
-echo "Galène was successfully installed :)
-
-Galène is now accesible at this adress: https://$domain
-
-Galène implements a TURN server (for VoIP), to have this fully functional please read the 'TURN server' section in the README available here: https://github.com/YunoHost-Apps/galene_ynh .
-
-If you're facing an issue or want to improve this app, please open a new issue in this project: https://github.com/YunoHost-Apps/galene_ynh" > mail_to_send
-
-ynh_send_readme_to_admin --app_message="mail_to_send" --type="install"
 
 #=================================================
 # END OF SCRIPT
