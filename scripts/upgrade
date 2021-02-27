@@ -110,8 +110,8 @@ then
 
 	# Recreate certificates
 	pushd "$final_path/data"
-	   ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
-	   -subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
+        ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
+        -subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
         chmod 640 {key.pem,cert.pem}
     popd
 fi
@@ -231,6 +231,7 @@ adduser turnserver ssl-cert
 #=================================================
 ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
 
+ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="../conf/systemd.service"
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
@@ -264,7 +265,7 @@ ynh_use_logrotate --non-append
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
 yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_tls_port
 
 #=================================================

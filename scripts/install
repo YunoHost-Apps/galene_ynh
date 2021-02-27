@@ -86,9 +86,8 @@ port=$(ynh_find_port --port=8443)
 turnserver_tls_port=$(ynh_find_port --port=5349)
 turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
 
-ynh_app_setting_set --app=$app --key=port --value=$port
-
 # Open the port
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
 ynh_exec_warn_less yunohost firewall allow Both $turnserver_tls_port
 ynh_exec_warn_less yunohost firewall allow Both $turnserver_alt_tls_port
 
@@ -155,6 +154,7 @@ adduser turnserver ssl-cert
 #=================================================
 ynh_script_progression --message="Configuring a systemd service..." --weight=1
 
+ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="../conf/systemd.service"
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
@@ -256,7 +256,7 @@ setfacl -R -m user:turnserver:rwX  /var/log/$app
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
 yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_tls_port
 
 #=================================================

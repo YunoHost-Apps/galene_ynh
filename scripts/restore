@@ -31,6 +31,7 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
+port=$(ynh_app_setting_get --app=$app --key=port)
 turnserver_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_tls_port)
 turnserver_alt_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_tls_port)
 ynh_print_OFF
@@ -98,7 +99,7 @@ systemctl enable coturn-$app.service --quiet
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
 yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_tls_port
 
 #=================================================
@@ -107,7 +108,6 @@ yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/
 ynh_script_progression --message="Starting a systemd service..." --weight=3
 
 ynh_systemd_action --service_name=$app --action=start --log_path="/var/log/$app/$app.log"
-yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
 
 #=================================================
 # CREATE A DH FILE
@@ -143,7 +143,6 @@ fi
 # ynh_replace_string --match_string=__DOMAIN__ --replace_string=$domain --target_file="$coturn_config_path"
 # ynh_replace_string --match_string=__TLS_PORT__ --replace_string=$turnserver_tls_port --target_file="$coturn_config_path"
 # ynh_replace_string --match_string=__TLS_ALT_PORT__ --replace_string=$turnserver_alt_tls_port --target_file="$coturn_config_path"
-# ynh_replace_string --match_string=__CLI_PORT__ --replace_string=$cli_port --target_file="$coturn_config_path"
 # ynh_print_OFF
 # ynh_replace_string --match_string=__TURNPWD__ --replace_string=$turnserver_pwd --target_file="$coturn_config_path"
 # ynh_print_ON
@@ -165,6 +164,7 @@ fi
 #=================================================
 
 # Ouvre le port dans le firewall
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
 ynh_exec_warn_less yunohost firewall allow Both $turnserver_tls_port
 ynh_exec_warn_less yunohost firewall allow Both $turnserver_alt_tls_port
 
