@@ -96,8 +96,8 @@ systemctl enable coturn-$app.service --quiet
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
-yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_port
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports="$port"
+yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports="$turnserver_port"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -114,7 +114,7 @@ ynh_script_progression --message="Creating a dhparam file..." --weight=3
 # WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
 # For any update do it in all files
 
-# Make dhparam cert for Galène if it doesn't exist
+# Make dhparam cert for Coturn if it doesn't exist
 if [ ! -e /etc/ssl/private/dh2048.pem ]
 then
     ynh_exec_warn_less openssl dhparam -out /etc/ssl/private/dh2048.pem -outform PEM -2 2048 -dsaparam

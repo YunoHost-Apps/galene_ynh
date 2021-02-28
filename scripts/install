@@ -238,7 +238,7 @@ chown -R $app:$app $final_path
 chmod -R 755 $final_path
 chown -R $app:root /var/log/$app
 chown -R $app:root /etc/$app
-chown turnserver:root $coturn_config_path
+chown turnserver:root /etc/$app/coturn.conf
 chmod -R u=rwX,g=rX,o= /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app
@@ -249,8 +249,8 @@ setfacl -R -m user:turnserver:rwX  /var/log/$app
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
-yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_port
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports="$port"
+yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_port="$turnserver_port"
 
 #=================================================
 # START SYSTEMD SERVICE
