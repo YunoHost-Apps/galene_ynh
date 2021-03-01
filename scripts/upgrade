@@ -136,7 +136,7 @@ then
     # Set a port for each service in turnserver
     turnserver_port=$(ynh_find_port --port=1194)
 
-    ynh_app_setting_set --app=$app --key=turnserver_alt_port --value=$turnserver_port
+    ynh_app_setting_set --app=$app --key=turnserver_port --value=$turnserver_port
 
     ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
 
@@ -222,6 +222,7 @@ ynh_script_progression --message="Making sure dedicated system user exists..." -
 
 # Create a dedicated user (if not existing)
 ynh_system_user_create --username=$app
+ynh_system_user_create --username=turnserver
 adduser turnserver ssl-cert
 
 #=================================================
