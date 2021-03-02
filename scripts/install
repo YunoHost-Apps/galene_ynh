@@ -27,10 +27,7 @@ domain=$YNH_APP_ARG_DOMAIN
 path_url="/"
 admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
-email=$(ynh_user_get_info --username=$admin --key=mail)
-ynh_print_OFF
 password=$YNH_APP_ARG_PASSWORD
-ynh_print_ON
 group_name=$YNH_APP_ARG_GROUP_NAME
 architecture=$(ynh_detect_arch)
 
@@ -55,7 +52,6 @@ ynh_script_progression --message="Storing installation settings..." --weight=4
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
-ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 ynh_app_setting_set --app=$app --key=group_name --value="$group_name"
 ynh_app_setting_set --app=$app --key=password --value=$password
 
@@ -67,7 +63,7 @@ ynh_script_progression --message="Creating a dhparam file..." --weight=3
 # WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
 # For any update do it in all files
 
-# Make dhparam cert for Galène if it doesn't exist
+# Make dhparam cert for Coturn if it doesn't exist
 if [ ! -e /etc/ssl/private/dh2048.pem ]
 then
     ynh_exec_warn_less openssl dhparam -out /etc/ssl/private/dh2048.pem -outform PEM -2 2048 -dsaparam
@@ -84,21 +80,15 @@ ynh_script_progression --message="Finding an available port..." --weight=3
 
 # Find an available port
 port=$(ynh_find_port --port=8443)
-turnserver_tls_port=$(ynh_find_port --port=5349)
-turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
-cli_port=$(ynh_find_port --port=5766)
+turnserver_port=$(ynh_find_port --port=1194)
 
-ynh_app_setting_set --app=$app --key=port --value=$port
-
-# Open the port
-ynh_exec_warn_less yunohost firewall allow Both $turnserver_tls_port
-ynh_exec_warn_less yunohost firewall allow Both $turnserver_alt_tls_port
+# Open the ports
+ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
+ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
 
 # Store opened ports
 ynh_app_setting_set --app=$app --key=port --value=$port
-ynh_app_setting_set --app=$app --key=turnserver_tls_port --value=$turnserver_tls_port
-ynh_app_setting_set --app=$app --key=turnserver_alt_tls_port --value=$turnserver_alt_tls_port
-ynh_app_setting_set --app=$app --key=cli_port --value=$cli_port
+ynh_app_setting_set --app=$app --key=turnserver_port --value=$turnserver_port
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -187,8 +177,8 @@ ynh_add_config --template="../conf/coturn/turnserver.conf" --destination="$cotur
 
 # Get public IP and set as external IP for coturn
 # note: '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
-public_ip4="$(curl ip.yunohost.org)" || true
-public_ip6="$(curl ipv6.yunohost.org)" || true
+public_ip4="$(curl -s ip.yunohost.org)" || true
+public_ip6="$(curl -s ipv6.yunohost.org)" || true
 
 if ( [[ -n "$public_ip4" ]] && ynh_validate_ip4 --ip_address="$public_ip4" || [[ -n "$public_ip6" ]] && ynh_validate_ip6 --ip_address="$public_ip6" )
 then
@@ -248,7 +238,7 @@ chown -R $app:$app $final_path
 chmod -R 755 $final_path
 chown -R $app:root /var/log/$app
 chown -R $app:root /etc/$app
-chown turnserver:root $coturn_config_path
+chown turnserver:root /etc/$app/coturn.conf
 chmod -R u=rwX,g=rX,o= /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app
@@ -259,8 +249,8 @@ setfacl -R -m user:turnserver:rwX  /var/log/$app
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
-yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
+yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_port
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -269,7 +259,7 @@ ynh_script_progression --message="Starting a systemd service..." --weight=1
 
 # Start a systemd service
 ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
-ynh_systemd_action --service_name=coturn-$app.service --action=restart
+ynh_systemd_action --service_name=coturn-$app.service --action=restart --log_path="/var/log/$app/turnserver.log"
 
 #=================================================
 # SETUP SSOWAT
@@ -288,23 +278,6 @@ fi
 ynh_script_progression --message="Reloading NGINX web server..." --weight=2
 
 ynh_systemd_action --service_name=nginx --action=reload
-
-#=================================================
-# SEND A README FOR THE ADMIN
-#=================================================
-
-# WARNING : theses command are used in INSTALL, RESTORE
-# For any update do it in all files
-
-echo "Galène was successfully installed :)
-
-Galène is now accesible at this adress: https://$domain
-
-Galène implements a TURN server (for VoIP), to have this fully functional please read the 'TURN server' section in the README available here: https://github.com/YunoHost-Apps/galene_ynh .
-
-If you're facing an issue or want to improve this app, please open a new issue in this project: https://github.com/YunoHost-Apps/galene_ynh" > mail_to_send
-
-ynh_send_readme_to_admin --app_message="mail_to_send" --type="install"
 
 #=================================================
 # END OF SCRIPT

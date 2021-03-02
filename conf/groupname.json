@@ -3,5 +3,7 @@
     "presenter": [{}],
     "description": "a human-readable description of the group; this is displayed on the landing page for public groups.",
     "public": true,
-    "allow-anonymous": true
+    "allow-anonymous": true,
+    "allow-recording": true,
+    "allow-subgroups": true
 }

@@ -4,8 +4,8 @@ source /usr/share/yunohost/helpers
 
 external_IP_line="external-ip=__IPV4__/__IPV6__"
 
-public_ip4="$(curl ip.yunohost.org)" || true
-public_ip6="$(curl ipv6.yunohost.org)" || true
+public_ip4="$(curl -s ip.yunohost.org)" || true
+public_ip6="$(curl -s ipv6.yunohost.org)" || true
 
 if [ -n "$public_ip4" ] && ynh_validate_ip4 --ip_address="$public_ip4"
 then

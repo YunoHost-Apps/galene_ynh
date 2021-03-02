@@ -11,7 +11,7 @@ Si vous n'avez pas YunoHost, consultez [le guide](https://yunohost.org/#/install
 ## Vue d'ensemble
 Galène est un serveur de visioconférence facile à déployer (il suffit de copier quelques fichiers et d'exécuter le binaire) et qui nécessite des ressources serveur modérées. Il a été conçu à l'origine pour les conférences (où un seul orateur diffuse l'audio et la vidéo à des centaines ou des milliers d'utilisateurs), mais a ensuite évolué pour être utile pour les travaux pratiques des étudiants (où les utilisateurs sont divisés en plusieurs petits groupes) et les réunions (où un quelques dizaines d'utilisateurs interagissent les uns avec les autres).
 
-**Version incluse :** 0.3
+**Version incluse :** 0.3.1
 
 ## Captures d'écran
 
@@ -32,16 +32,15 @@ Les groupes sont définis par des fichiers dans le répertoire `/opt/yunohost/ga
 Pour la VoIP et la visioconférence, un serveur TURN est également installé et configuré. Le serveur TURN écoute sur deux ports UDP et TCP. Vous pouvez les obtenir avec ces commandes :
 
 ```
-sudo yunohost app setting galene turnserver_tls_port
-sudo yunohost app setting galene turnserver_alt_tls_port
+sudo yunohost app setting galene turnserver_port
 ``` 
 
-Le serveur TURN choisira également un port de manière dynamique lors du démarrage d'une nouvelle visioconférence. La plage est comprise entre 49153 et 49193.
+Le serveur TURN choisira également un port de manière dynamique lors du démarrage d'une nouvelle visioconférence. La plage est comprise entre 49152 et 65535.
 
-Par sécurité, la plage de ports (49153 - 49193) n'est pas automatiquement ouverte par défaut. Si vous souhaitez utiliser Galène pour la VoIP ou la visioconférence, vous devrez ouvrir cette plage de ports manuellement. Pour ce faire, exécutez simplement cette commande :
+Par sécurité, la plage de ports (49152 - 65535) n'est pas automatiquement ouverte par défaut. Si vous souhaitez utiliser Galène pour la VoIP ou la visioconférence, vous devrez ouvrir cette plage de ports manuellement. Pour ce faire, exécutez simplement cette commande :
 
 ```
-sudo yunohost firewall allow Both 49153:49193
+sudo yunohost firewall allow Both 49152:65535
 ```
 
 Vous devrez peut-être également ouvrir ces ports (si ce n'est pas fait automatiquement) sur votre box.

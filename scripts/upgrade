@@ -19,14 +19,11 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
-is_public=$(ynh_app_setting_get --app=$app --key=is_public)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 password=$(ynh_app_setting_get --app=$app --key=password)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
-turnserver_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_tls_port)
-turnserver_alt_tls_port=$(ynh_app_setting_get --app=$app --key=turnserver_alt_tls_port)
-cli_port=$(ynh_app_setting_get --app=$app --key=cli_port)
+turnserver_port=$(ynh_app_setting_get --app=$app --key=turnserver_port)
 turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
 architecture=$(ynh_detect_arch)
 
@@ -45,6 +42,12 @@ ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 if [ -z "$final_path" ]; then
 	final_path=/opt/yunohost/$app
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+fi
+
+if [ -z "$turnserver_port" ]; then
+    turnserver_port=$(ynh_find_port --port=1194)
+    ynh_app_setting_set --app=$app --key=turnserver_port --value=$turnserver_port
+    ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
 fi
 
 #=================================================
@@ -111,8 +114,8 @@ then
 
 	# Recreate certificates
 	pushd "$final_path/data"
-	   ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
-	   -subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
+        ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
+        -subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
         chmod 640 {key.pem,cert.pem}
     popd
 fi
@@ -137,13 +140,9 @@ then
     ynh_replace_string --match_string="TURNSERVER_ENABLED=1" --replace_string="TURNSERVER_ENABLED=0" --target_file=/etc/default/coturn
 
     # Set a port for each service in turnserver
-    turnserver_alt_tls_port=$(ynh_find_port --port=$((turnserver_tls_port+1)))
-    cli_port=$(ynh_find_port --port=5766)
-
-    ynh_app_setting_set --app=$app --key=turnserver_alt_tls_port --value=$turnserver_alt_tls_port
-    ynh_app_setting_set --app=$app --key=cli_port --value=$cli_port
-
-    yunohost firewall allow Both $turnserver_alt_tls_port > /dev/null 2>&1
+    turnserver_port=$(ynh_find_port --port=1194)
+    ynh_app_setting_set --app=$app --key=turnserver_port --value=$turnserver_port
+    ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
 
     #=================================================
     # MAKE A CLEAN LOGROTATE CONFIG
@@ -160,7 +159,7 @@ ynh_script_progression --message="Creating a dhparam file..." --weight=3
 # WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
 # For any update do it in all files
 
-# Make dhparam cert for Galène if it doesn't exist
+# Make dhparam cert for Coturn if it doesn't exist
 if [ ! -e /etc/ssl/private/dh2048.pem ]
 then
     ynh_exec_warn_less openssl dhparam -out /etc/ssl/private/dh2048.pem -outform PEM -2 2048 -dsaparam
@@ -184,8 +183,8 @@ ynh_add_config --template="../conf/coturn/turnserver.conf" --destination="$cotur
 
 # Get public IP and set as external IP for coturn
 # note : '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
-public_ip4="$(curl ip.yunohost.org)" || true
-public_ip6="$(curl ipv6.yunohost.org)" || true
+public_ip4="$(curl -s ip.yunohost.org)" || true
+public_ip6="$(curl -s ipv6.yunohost.org)" || true
 
 if ( [[ -n "$public_ip4" ]] && ynh_validate_ip4 --ip_address="$public_ip4" || [[ -n "$public_ip6" ]] && ynh_validate_ip6 --ip_address="$public_ip6" )
 then
@@ -227,6 +226,7 @@ ynh_script_progression --message="Making sure dedicated system user exists..." -
 
 # Create a dedicated user (if not existing)
 ynh_system_user_create --username=$app
+ynh_system_user_create --username=turnserver
 adduser turnserver ssl-cert
 
 #=================================================
@@ -267,15 +267,15 @@ ynh_use_logrotate --non-append
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
-yunohost service add coturn-$app --needs_exposed_ports $turnserver_tls_port
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
+yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_port
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
-ynh_systemd_action --service_name=coturn-$app.service --action=restart
+ynh_systemd_action --service_name=coturn-$app.service --action=restart --log_path="/var/log/$app/turnserver.log"
 ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
 
 #=================================================
