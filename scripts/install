@@ -126,7 +126,7 @@ ynh_script_progression --message="Configuring a systemd service..." --weight=1
 public_ip4="$(curl -s ip.yunohost.org)" || true
 
 ynh_replace_string --match_string="__PUBLIC_IPV4__" --replace_string="$public_ip4" --target_file="../conf/systemd.service"
-
+ynh_replace_string --match_string="__TURN_PORT__" --replace_string="$turn_port" --target_file="../conf/systemd.service"
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
