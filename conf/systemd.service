@@ -8,7 +8,7 @@ Type=simple
 WorkingDirectory=__FINALPATH__/
 User=__APP__
 Group=__APP__
-ExecStart=__FINALPATH__/galene
+ExecStart=__FINALPATH__/galene -turn :__TURNSERVER_PORT__
 LimitNOFILE=65536
 
 [Install]
