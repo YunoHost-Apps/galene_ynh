@@ -6,7 +6,7 @@
         "en": "Videoconferencing server that is easy to deploy",
         "fr": "Serveur de visioconférence facile à déployer"
     },
-    "version": "0.3.2~ynh1",
+    "version": "0.3.2~ynh2",
     "url": "https://galene.org/",
     "license": "MIT",
     "maintainer": {
@@ -75,6 +75,18 @@
                 },
                 "default": "public",
                 "example": "public"
+            },
+            {
+                "name": "group_description",
+                "type": "string",
+                "ask": {
+                    "en": "Choose a description for the group you want to create",
+                    "fr": "Décrivez le groupe que vous souhaitez créer"
+                },
+                "help": {
+                    "en": "Add a human-readable description of the group; this is displayed on the landing page for public groups.",
+                    "fr": "Ajoutez une description du groupe; ceci est affiché sur la page de destination des groupes publics."
+                }
             }
         ]
     }
