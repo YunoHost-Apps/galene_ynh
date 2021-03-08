@@ -29,6 +29,7 @@ admin=$YNH_APP_ARG_ADMIN
 is_public=$YNH_APP_ARG_IS_PUBLIC
 password=$YNH_APP_ARG_PASSWORD
 group_name=$YNH_APP_ARG_GROUP_NAME
+group_description=$YNH_APP_ARG_GROUP_DESCRIPTION
 architecture=$(ynh_detect_arch)
 
 app=$YNH_APP_INSTANCE_NAME
@@ -53,6 +54,7 @@ ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=group_name --value="$group_name"
+ynh_app_setting_set --app=$app --key=group_description --value="$group_description"
 
 #=================================================
 # STANDARD MODIFICATIONS

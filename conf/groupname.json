@@ -1,7 +1,7 @@
 {
 	"op": [{"username": "__ADMIN__", "password": "__PASSWORD__"}],
 	"presenter": [{}],
- 	"description": "a human-readable description of the group; this is displayed on the landing page for public groups.",
+ 	"description": "__GROUP_DESCRIPTION__",
 	"public": true,
     "allow-anonymous": true,
     "allow-recording": true,
