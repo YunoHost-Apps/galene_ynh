@@ -151,7 +151,7 @@ adduser turnserver ssl-cert
 ynh_script_progression --message="Configuring a systemd service..." --weight=1
 
 # Create a dedicated systemd config
-ynh_add_systemd_config
+ynh_add_systemd_config --others_var="$turnserver_port"
 
 mkdir -p /var/log/$app
 mkdir -p /etc/$app
