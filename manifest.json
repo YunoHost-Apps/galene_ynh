@@ -86,9 +86,7 @@
                 "help": {
                     "en": "Add a human-readable description of the group; this is displayed on the landing page for public groups.",
                     "fr": "Ajoutez une description du groupe; ceci est affiché sur la page de destination des groupes publics."
-                },
-                "default": "public",
-                "example": "public"
+                }
             }
         ]
     }
