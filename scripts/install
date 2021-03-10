@@ -153,11 +153,23 @@ ynh_script_progression --message="Configuring a systemd service..." --weight=1
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
-mkdir -p /var/log/$app
 mkdir -p /etc/$app
 # Create systemd service for turnserver
 cp ../conf/coturn/default_coturn /etc/default/coturn-$app
 ynh_add_systemd_config --service=coturn-$app --template=coturn-galene.service
+
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Configuring log rotation..." --weight=1
+
+# Create log directory
+mkdir -p /var/log/$app
+touch /var/log/$app/$app.log
+chown $app -R /var/log/$app
+
+# Setup logrotate
+ynh_use_logrotate --logfile "/var/log/$app"
 
 #=================================================
 # SET COTURN CONFIG
@@ -212,13 +224,6 @@ ynh_add_config --template="../conf/ice-servers.json" --destination="$final_path/
 ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
 
 #=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Configuring log rotation..." --weight=1
-
-ynh_use_logrotate --logfile "/var/log/$app"
-
-#=================================================
 # ADD SCRIPT FOR COTURN CRON AND APP SERVICE
 #=================================================
 
@@ -236,9 +241,8 @@ chmod +x $final_path/Coturn_config_rotate.sh
 #=================================================
 
 # Set permissions to app files
-chown -R $app:$app $final_path
+chown -R $app: $final_path
 chmod -R 755 $final_path
-chown -R $app:root /var/log/$app
 chown -R $app:root /etc/$app
 chown turnserver:root /etc/$app/coturn.conf
 chmod -R u=rwX,g=rX,o= /etc/$app
