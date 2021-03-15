@@ -30,7 +30,7 @@ Groups are defined by files in the `/opt/yunohost/galene/groups` directory. Vari
 ## Documentation
 
  * Official documentation: https://galene.org/
- * YunoHost documentation: https://yunohost.org/#/app_galene
+ * YunoHost documentation: https://yunohost.org/en/app_galene
 
 ## YunoHost specific features
 
