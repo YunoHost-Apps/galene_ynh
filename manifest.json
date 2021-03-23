@@ -6,7 +6,7 @@
         "en": "Videoconferencing server that is easy to deploy",
         "fr": "Serveur de visioconférence facile à déployer"
     },
-    "version": "0.3.2~ynh2",
+    "version": "0.3.2~ynh3",
     "url": "https://galene.org/",
     "license": "MIT",
     "maintainer": {
@@ -14,7 +14,7 @@
         "email": ""
     },
     "requirements": {
-        "yunohost": ">= 4.0.8"
+        "yunohost": ">= 4.1.7"
     },
     "multi_instance": false,
     "services": [
@@ -25,28 +25,16 @@
             {
                 "name": "domain",
                 "type": "domain",
-                "ask": {
-                    "en": "Choose a domain name for Galène",
-                    "fr": "Choisissez un nom de domaine pour Galène"
-                },
                 "example": "example.com"
             },
             {
                 "name": "admin",
                 "type": "user",
-                "ask": {
-                    "en": "Choose an admin user",
-                    "fr": "Choisissez l'administrateur"
-                },
                 "example": "johndoe"
             },
             {
                 "name": "password",
                 "type": "password",
-                "ask": {
-                    "en": "Set the administrator password",
-                    "fr": "Définissez le mot de passe administrateur"
-                },
                 "help": {
                     "en": "Set the administrator password (between 8 and 30 characters)",
                     "fr": "Définissez le mot de passe administrateur (entre 8 et 30 caractères)"
@@ -56,10 +44,6 @@
             {
                 "name": "is_public",
                 "type": "boolean",
-                "ask": {
-                    "en": "Is it a public application?",
-                    "fr": "Est-ce une application publique ?"
-                },
                 "help": {
                     "en": "If enabled, Galène will be accessible by people who do not have an account. This can be changed later via the webadmin.",
                     "fr": "Si cette case est cochée, Galène sera accessible aux personnes n’ayant pas de compte. Vous pourrez changer ceci plus tard via la webadmin."
