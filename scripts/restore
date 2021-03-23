@@ -146,6 +146,9 @@ chmod -R u=rwX,g=rX,o= /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app
 setfacl -R -m user:turnserver:rwX  /var/log/$app
+# Set permissions on config files
+chmod 600 $final_path/data/passwd
+chmod 600 $final_path/data/ice-servers.json
 
 #=================================================
 # RESTORE THE LOGROTATE CONFIGURATION

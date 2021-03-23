@@ -215,13 +215,10 @@ mkdir -p "$groups"
 #=================================================
 
 ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-ynh_store_file_checksum --file="$final_path/data/passwd"
 
 ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
-ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
 
 ynh_add_config --template="../conf/ice-servers.json" --destination="$final_path/data/ice-servers.json"
-ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
 
 #=================================================
 # ADD SCRIPT FOR COTURN CRON AND APP SERVICE
@@ -230,8 +227,7 @@ ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
 # WARNING : theses command are used in INSTALL, UPGRADE
 # For any update do it in all files
 
-cp ../sources/Coturn_config_rotate.sh $final_path/Coturn_config_rotate.sh
-ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
+ynh_add_config --template="../sources/Coturn_config_rotate.sh" --destination="$final_path/Coturn_config_rotate.sh"
 chmod +x $final_path/Coturn_config_rotate.sh
 
 #=================================================
@@ -249,6 +245,8 @@ chmod -R u=rwX,g=rX,o= /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app
 setfacl -R -m user:turnserver:rwX  /var/log/$app
+chmod 600 $final_path/data/passwd
+chmod 600 $final_path/data/ice-servers.json
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
