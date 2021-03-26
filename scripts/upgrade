@@ -249,7 +249,6 @@ ynh_add_systemd_config
 # Set permissions on app files
 chown -R $app: $final_path
 chmod -R 755 $final_path
-chown -R $app /var/log/$app
 chown -R $app:root /etc/$app
 chown turnserver:root $coturn_config_path
 chmod -R u=rwX,g=rX,o= /etc/$app
