@@ -85,7 +85,6 @@ port=$(ynh_find_port --port=8443)
 turnserver_port=$(ynh_find_port --port=1194)
 
 # Open the ports
-ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
 ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
 
 # Store opened ports

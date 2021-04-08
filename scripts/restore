@@ -127,7 +127,6 @@ fi
 #=================================================
 
 # Ouvre le port dans le firewall
-ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
 ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
 
 #=================================================
