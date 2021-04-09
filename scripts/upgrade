@@ -37,6 +37,12 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
+# If open, close direct access to $port in firewall
+if yunohost firewall list | grep -q "\- $port$"
+then
+    ynh_exec_warn_less yunohost firewall disallow TCP $port
+fi
+
 # If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
 	final_path=/opt/yunohost/$app
