@@ -85,7 +85,6 @@ port=$(ynh_find_port --port=8443)
 turnserver_port=$(ynh_find_port --port=1194)
 
 # Open the ports
-ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
 ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
 
 # Store opened ports
@@ -215,13 +214,10 @@ mkdir -p "$groups"
 #=================================================
 
 ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-ynh_store_file_checksum --file="$final_path/data/passwd"
 
 ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
-ynh_store_file_checksum --file="$final_path/groups/$group_name.json"
 
 ynh_add_config --template="../conf/ice-servers.json" --destination="$final_path/data/ice-servers.json"
-ynh_store_file_checksum --file="$final_path/data/ice-servers.json"
 
 #=================================================
 # ADD SCRIPT FOR COTURN CRON AND APP SERVICE
@@ -249,13 +245,15 @@ chmod -R u=rwX,g=rX,o= /etc/$app
 chmod 770 $final_path/Coturn_config_rotate.sh
 setfacl -R -m user:turnserver:rX  /etc/$app
 setfacl -R -m user:turnserver:rwX  /var/log/$app
+chmod 600 $final_path/data/passwd
+chmod 600 $final_path/data/ice-servers.json
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports $port
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
 yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_port
 
 #=================================================
