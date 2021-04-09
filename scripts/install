@@ -73,7 +73,7 @@ ynh_app_setting_set --app=$app --key=turn_port --value=$turn_port
 
 # Open the ports
 ynh_script_progression --message="Configuring firewall..." --weight=1
-ynh_exec_warn_less yunohost firewall allow --no-upnp TCP $port
+
 ynh_exec_warn_less yunohost firewall allow Both $turn_port
 
 #=================================================
