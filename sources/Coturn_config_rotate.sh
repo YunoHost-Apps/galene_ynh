@@ -21,9 +21,9 @@ else
     external_IP_line="${external_IP_line/'/__IPV6__'/}"
 fi
 
-old_config_line=$(egrep "^external-ip=.*\$" "/etc/$app/coturn.conf")
-ynh_replace_string "^external-ip=.*\$" "$external_IP_line" "/etc/$app/coturn.conf"
-new_config_line=$(egrep "^external-ip=.*\$" "/etc/$app/coturn.conf")
+old_config_line=$(egrep "^external-ip=.*\$" "/etc/__APP__/coturn.conf")
+ynh_replace_string "^external-ip=.*\$" "$external_IP_line" "/etc/__APP__/coturn.conf"
+new_config_line=$(egrep "^external-ip=.*\$" "/etc/__APP__/coturn.conf")
 
 setfacl -R -m user:turnserver:rX  /etc/__APP__
 
