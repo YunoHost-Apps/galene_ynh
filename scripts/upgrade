@@ -85,6 +85,7 @@ then
 
 	# Backup the config file in the temp dir
 	cp -ar "$final_path/groups" "$tmpdir/groups"
+	cp -ar "$final_path/data/passwd" "$tmpdir/passwd"
 
 	# Remove the app directory securely
 	ynh_secure_remove --file="$final_path"
@@ -96,12 +97,12 @@ then
 
 	# Copy the admin saved settings from tmp directory to final path	
 	cp -ar "$tmpdir/groups" "$final_path/groups"
+	cp -ar "$tmpdir/passwd" "$final_path/data/passwd"
 
 	# Remove the tmp directory securely
 	ynh_secure_remove --file="$tmpdir"
 
-    ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-	ynh_store_file_checksum --file="$final_path/data/passwd"
+    #ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
 
 	# Recreate certificates
 	pushd "$final_path/data"
