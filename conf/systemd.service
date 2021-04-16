@@ -11,5 +11,34 @@ Group=__APP__
 ExecStart=__FINALPATH__/galene -turn __PUBLIC_IPV4__:__TURN_PORT__
 LimitNOFILE=65536
 
+# various hardening options
+ReadWritePaths=/opt/yunohost/galene/recordings
+CapabilityBoundingSet=
+AmbientCapabilities=
+PrivateTmp=yes
+PrivateDevices=yes
+DevicePolicy=closed
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectHostname=yes
+ProtectClock=yes
+NoNewPrivileges=yes
+MountFlags=private
+LockPersonality=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+RestrictSUIDSGID=yes
+KeyringMode=private
+MemoryDenyWriteExecute=yes
+RemoveIPC=yes
+SystemCallArchitectures=native
+SystemCallFilter=~ madvise @clock @cpu-emulation @debug @keyring @module @mount @raw-io @reboot @swap @obsolete @timer @resources @privileged @pkey @obsolete @setuid
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+UMask=0077
+
 [Install]
 WantedBy=multi-user.target
