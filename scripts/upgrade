@@ -146,7 +146,7 @@ ynh_add_systemd_config
 
 # Set permissions on app files
 chown -R $app: $final_path
-chmod -R 755 $final_path
+chmod -R 750 $final_path
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST

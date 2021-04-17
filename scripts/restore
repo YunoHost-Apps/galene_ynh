@@ -72,7 +72,7 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 
 # Restore permissions on app files
 chown -R $app: $final_path
-chmod -R 755 $final_path
+chmod -R 750 $final_path
 
 #=================================================
 # RESTORE SYSTEMD

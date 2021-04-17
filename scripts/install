@@ -154,7 +154,7 @@ ynh_add_config --template="../conf/groupname.json" --destination="$final_path/gr
 
 # Set permissions to app files
 chown -R $app: $final_path
-chmod -R 755 $final_path
+chmod -R 750 $final_path
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
