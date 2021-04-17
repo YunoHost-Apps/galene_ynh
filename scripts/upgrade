@@ -21,7 +21,6 @@ path_url=$(ynh_app_setting_get --app=$app --key=path)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
-port=$(ynh_app_setting_get --app=$app --key=port)
 turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
 architecture=$(ynh_detect_arch)
 
@@ -102,15 +101,12 @@ then
 	# Remove the tmp directory securely
 	ynh_secure_remove --file="$tmpdir"
 
-    #ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-
 	# Recreate certificates
 	pushd "$final_path/data"
 		ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
 		-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
     	chmod 640 {key.pem,cert.pem}
     popd
-
 fi
 
 #=================================================
@@ -137,6 +133,7 @@ ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
 public_ip4="$(curl -s ip.yunohost.org)" || true
 
 ynh_replace_string --match_string="__PUBLIC_IPV4__" --replace_string="$public_ip4" --target_file="../conf/systemd.service"
+ynh_replace_string --match_string="__TURN_PORT__" --replace_string="$turn_port" --target_file="../conf/systemd.service"
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
