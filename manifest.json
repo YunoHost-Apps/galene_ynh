@@ -8,13 +8,21 @@
     },
     "version": "0.3.4~ynh1",
     "url": "https://galene.org/",
+    "upstream": {
+        "license": "MIT",
+        "website": "https://galene.org/",
+        "demo": "https://galene.org:8443/",
+        "admindoc": "https://galene.org/",
+        "userdoc": "https://yunohost.org/en/app_galene",
+        "code": "https://github.com/jech/galene"
+    },
     "license": "MIT",
     "maintainer": {
         "name": "eric_G",
         "email": ""
     },
     "requirements": {
-        "yunohost": ">= 4.1.7"
+        "yunohost": ">= 4.2.4"
     },
     "multi_instance": true,
     "services": [
