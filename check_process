@@ -5,10 +5,10 @@
 
 ;; Test complet
 	; Manifest
-		domain="domain.tld"	(DOMAIN)
-		path="/path"	(PATH)
-		admin="john"	(USER)
-		is_public=1	(PUBLIC|public=1|private=0)
+		domain="domain.tld"
+		path="/path"
+		admin="john"
+		is_public=1
 		password="pass"
 		group_name="public"
 		group_description="My public group"
