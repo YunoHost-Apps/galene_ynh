@@ -1,8 +1,3 @@
-# See here for more information
-# https://github.com/YunoHost/package_check#syntax-check_process-file
-
-# Move this file from check_process.default to check_process when you have filled it.
-
 ;; Test complet
 	; Manifest
 		domain="domain.tld"
@@ -31,4 +26,3 @@ Notification=none
 	; commit=c06f6235a93587e16524fa5b124e4d9e138a8109
 		name=Allow naming groups with spaces (#21) 
 		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&
-
