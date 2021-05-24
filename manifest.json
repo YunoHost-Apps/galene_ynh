@@ -6,7 +6,7 @@
         "en": "Videoconferencing server that is easy to deploy",
         "fr": "Serveur de visioconférence facile à déployer"
     },
-    "version": "0.3.5~ynh1",
+    "version": "0.3.5~ynh2",
     "url": "https://galene.org/",
     "license": "MIT",
     "maintainer": {
@@ -14,7 +14,7 @@
         "email": ""
     },
     "requirements": {
-        "yunohost": ">= 4.2.4"
+        "yunohost": ">= 4.1.7"
     },
     "multi_instance": false,
     "services": [
