@@ -209,7 +209,8 @@ ynh_store_file_checksum --file="$coturn_config_path"
 
 # WARNING : theses command are used in INSTALL, UPGRADE
 # For any update do it in all files
-ynh_add_config --template="../sources/Coturn_config_rotate.sh" --destination="$final_path/Coturn_config_rotate.sh"
+cp ../sources/Coturn_config_rotate.sh $final_path/Coturn_config_rotate.sh
+ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
 chmod +x $final_path/Coturn_config_rotate.sh
 
 #=================================================
