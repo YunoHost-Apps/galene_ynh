@@ -7,7 +7,14 @@
         "fr": "Serveur de visioconférence facile à déployer"
     },
     "version": "0.3.5~ynh2",
-    "url": "https://galene.org/",
+    "url": "https://galene.org",
+    "upstream": {
+        "license": "free",
+        "website": "https://galene.org",
+        "demo": "https://galene.org:8443/",
+        "admindoc": "https://galene.org/",
+        "code": "https://github.com/jech/galene"
+    },
     "license": "MIT",
     "maintainer": {
         "name": "eric_G",
