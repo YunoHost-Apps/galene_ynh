@@ -83,6 +83,16 @@ ynh_script_progression --message="Removing logrotate configuration..." --weight=
 ynh_remove_logrotate
 
 #=================================================
+# REMOVE THE CRON FILE
+#=================================================
+ynh_script_progression --message="Removing the cron file..." --weight=1
+
+if [[ ! -f "/etc/cron.d/coturn_config_rotate" ]]; then
+	# If a cron job as been add by user, remove it
+	ynh_secure_remove --file="/etc/cron.d/coturn_config_rotate"
+fi
+
+#=================================================
 # CLOSE A PORT
 #=================================================
 ynh_script_progression --message="Closing ports..." --weight=1
