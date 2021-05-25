@@ -6,7 +6,7 @@
         "en": "Videoconferencing server that is easy to deploy",
         "fr": "Serveur de visioconférence facile à déployer"
     },
-    "version": "0.3.5~ynh2",
+    "version": "0.3.5~ynh1",
     "url": "https://galene.org/",
     "upstream": {
         "license": "MIT",
@@ -71,7 +71,10 @@
             {
                 "name": "group_description",
                 "type": "string",
+<<<<<<< HEAD
                 "optional": true,
+=======
+>>>>>>> parent of 4342431 (Cleaning up)
                 "ask": {
                     "en": "Choose a description for the group you want to create",
                     "fr": "Décrivez le groupe que vous souhaitez créer"
