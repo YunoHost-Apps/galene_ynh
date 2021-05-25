@@ -101,13 +101,6 @@ then
 
 	# Remove the tmp directory securely
 	ynh_secure_remove --file="$tmpdir"
-
-	# Recreate certificates
-	pushd "$final_path/data"
-		ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
-		-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-    	chmod 640 {key.pem,cert.pem}
-    popd
 fi
 
 #=================================================

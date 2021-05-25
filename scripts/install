@@ -100,16 +100,6 @@ groups="$final_path/groups"
 mkdir -p "$groups"
 
 #=================================================
-# CREATE A SERVER CERTIFICATE
-#=================================================
-
-pushd "$final_path/data"
-	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
-	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-    chmod 640 {key.pem,cert.pem}
-popd
-
-#=================================================
 # NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Configuring NGINX web server..." --weight=2
