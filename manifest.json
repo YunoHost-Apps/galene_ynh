@@ -71,10 +71,7 @@
             {
                 "name": "group_description",
                 "type": "string",
-<<<<<<< HEAD
                 "optional": true,
-=======
->>>>>>> parent of 4342431 (Cleaning up)
                 "ask": {
                     "en": "Choose a description for the group you want to create",
                     "fr": "Décrivez le groupe que vous souhaitez créer"
