@@ -1,10 +1,17 @@
 ### Comment créer des groupes
 
-Les groupes sont définis par des fichiers dans le répertoire `/opt/yunohost/galene/groups`. Différentes options sont disponibles (voir https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file)
+Les salles de réunion * Galène * sont appelées «groupes».
 
-### Configurez vos groupes
+Tout groupe est accessible sur `https://domain.tld/group/GroupName`, en tapant son nom dans le champ de recherche de la page d'accueil, ou en le sélectionnant dans la liste publique (si le groupe est configuré comme visible publiquement, voir ci-dessous ).
 
-## Configurez votre serveur TURN
+#### Configurer des groupes et en ajouter de nouveaux
+
+Les groupes sont définis par des fichiers *json* situés dans le dossier * Galène * (`/opt/yunohost/galene/groups`). Chaque groupe est représenté par un fichier `GroupName.json`.
+Pour créer un nouveau groupe, vous devez créer un fichier `GroupNameExample.json` (vous pouvez également créer un sous-dossier, et les groupes seront accessibles avec` https://domain.tld/group/subfolder/GroupName`). Différentes options sont disponibles (voir https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file)
+
+*NB: les espaces sont pris en charge dans les noms de fichiers de groupe.* 
+
+### Configurez votre serveur TURN
 
 #### Utilisation du serveur Galène Turn
 Galène est livré avec un serveur TURN intégré qui devrait fonctionner immédiatement.
@@ -27,3 +34,9 @@ Galène est livré avec un serveur TURN intégré qui devrait fonctionner imméd
     ]
 ``` 
 - définir l'option de virage `/etc/systemd/system/galene.service` sur `-turn auto` 
+
+Pour vérifier si le serveur TURN est opérationnel, tapez `/relay-test` dans la boîte de dialogue ; si le serveur TURN est correctement configuré, vous devriez voir un message indiquant que le test du relais a réussi.
+
+### Statistiques du serveur
+
+Certaines statistiques sont disponibles sous `/opt/yunohost/galene/stats.json`, avec une version lisible par l'homme sur `daomain.ltd/stats.html`. Ceci n'est disponible que pour l'administrateur du serveur. 
