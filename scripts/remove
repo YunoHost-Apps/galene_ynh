@@ -68,6 +68,11 @@ then
 	ynh_exec_warn_less yunohost firewall disallow both $turn_port
 fi
 
+if yunohost firewall list | grep -q "\- 49152:65535"
+then
+	ynh_exec_warn_less yunohost firewall disallow UDP 49152:65535
+fi
+
 #=================================================
 # GENERIC FINALIZATION
 #=================================================

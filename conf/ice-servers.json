@@ -1,8 +1,8 @@
 [
     {
         "urls": [
-            "turn:example.com:5349",
-            "turn:example.com:5349?transport=tcp"
+            "turn:turn.example.org:5349",
+            "turn:turn.example.org:5349?transport=tcp"
         ],
         "username": "galene",
         "credential": "secret",
