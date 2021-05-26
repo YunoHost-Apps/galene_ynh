@@ -33,7 +33,7 @@ Galène est livré avec un serveur TURN intégré qui devrait fonctionner imméd
         }
     ]
 ``` 
-- définir l'option de virage `/etc/systemd/system/galene.service` sur `-turn auto` 
+- définir l'option de virage `/etc/systemd/system/galene.service` sur `-turn auto` (ou `-turn ""` pour désactiver le serveur TURN intégré) 
 
 Pour vérifier si le serveur TURN est opérationnel, tapez `/relay-test` dans la boîte de dialogue ; si le serveur TURN est correctement configuré, vous devriez voir un message indiquant que le test du relais a réussi.
 

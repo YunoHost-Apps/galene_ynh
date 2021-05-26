@@ -33,7 +33,7 @@ Galène comes with build in TURN server that should work out-of-the-box.
         }
     ]
 ```
-- set `/etc/systemd/system/galene.service` turn option to `-turn auto` 
+- set `/etc/systemd/system/galene.service` turn option to `-turn auto`. (or `-turn ""` to disable the built in TURN server)
 
 To check if the TURN server is up and running, type `/relay-test` in the chat box; if the TURN server is properly configured, you should see a message saying that the relay test has been successful.
 
