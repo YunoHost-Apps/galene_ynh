@@ -8,13 +8,13 @@ Les groupes sont définis par des fichiers dans le répertoire `/opt/yunohost/ga
 
 #### Utilisation du serveur Galène Turn
 Galène est livré avec un serveur TURN intégré qui devrait fonctionner immédiatement.
-- Si votre serveur est derrière NAT, autorisez le trafic entrant vers le port TCP `8443` (ou tout ce qui est configuré avec l'option` -http` dans `/etc/systemd/system/galene.service`) et le port` 1194` (ou tout ce qui est configuré avec l'option `-turn` dans` /etc/systemd/system/galene.service`)
+- Si votre serveur est derrière NAT, autorisez le trafic entrant vers le port TCP `8443` (ou tout ce qui est configuré avec l'option `-http` dans `/etc/systemd/system/galene.service`) et le port `1194` (ou tout ce qui est configuré avec l'option `-turn` dans `/etc/systemd/system/galene.service`)
 
 #### Utilisation de votre propre serveur TURN
 - Installez [coturn_ynh] (https://github.com/YunoHost-Apps/coturn_ynh).
-- Ajoutez `data/ice-servers.json` avec ces lignes et changez `turn.example.org` et `secret`
+- Ajoutez `/opt/yunohost/galene/data/ice-servers.json` avec ces lignes et changez `turn.example.org` et `secret`
 
-``
+```
     [
         {
             "urls": [
@@ -26,4 +26,4 @@ Galène est livré avec un serveur TURN intégré qui devrait fonctionner imméd
         }
     ]
 ``` 
-- définir l'option de virage `/etc/systemd/system/galene.service` sur` -turn auto` 
+- définir l'option de virage `/etc/systemd/system/galene.service` sur `-turn auto` 

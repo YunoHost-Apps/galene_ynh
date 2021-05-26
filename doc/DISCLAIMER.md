@@ -10,7 +10,7 @@ Galène comes with build in TURN server that should work out-of-the-box.
 
 #### Using you own TURN server
 - Install [coturn_ynh](https://github.com/YunoHost-Apps/coturn_ynh).
-- Add `data/ice-servers.json` with this lines and change `turn.example.org` and `secret`
+- Add `/opt/yunohost/galene/data/ice-servers.json` with this lines and change `turn.example.org` and `secret`
 
 ```
     [
