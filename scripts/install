@@ -80,11 +80,11 @@ ynh_exec_warn_less yunohost firewall allow Both $turn_port
 ynh_exec_warn_less yunohost firewall allow UDP -4 49152:65535
 
 #=================================================
-# RECREATE THE DEDICATED USER
+# CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Recreating the dedicated system user..." --weight=2
+ynh_script_progression --message="Configuring system user..." --weight=3
 
-# Create the dedicated user (if not existing)
+# Create a system user
 ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
@@ -121,14 +121,6 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=2
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..." --weight=3
-
-# Create a system user
-ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # SETUP SYSTEMD
