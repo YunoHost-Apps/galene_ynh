@@ -8,7 +8,7 @@ Type=simple
 WorkingDirectory=__FINALPATH__/
 User=__APP__
 Group=__APP__
-ExecStart=__FINALPATH__/galene -http __PORT__ -turn __PUBLIC_IP4__:__TURN_PORT__
+ExecStart=__FINALPATH__/galene -turn __PUBLIC_IP4__:__TURN_PORT__
 #-udp-range 49152:65535
 LimitNOFILE=65536
 
