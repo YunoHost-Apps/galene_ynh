@@ -1,15 +1,13 @@
 ### Accéder à des groupes
 
-Les salles de réunion *Galène* sont appelées «groupes».
-
-Tout groupe est accessible sur `https://domain.tld/group/GroupName`, en tapant son nom dans le champ de recherche de la page d'accueil, ou en le sélectionnant dans la liste publique (si le groupe est configuré comme visible publiquement, voir ci-dessous).
+Les salles de réunion *Galène* sont appelées « groupes ». Tout groupe est accessible sur `https://domain.tld/group/GroupName`, en tapant son nom dans le champ de recherche de la page d'accueil, ou en le sélectionnant dans la liste publique (si le groupe est configuré comme visible publiquement, voir ci-dessous).
 
 #### Ajouter et configurer des groupes
 
-Les groupes sont définis par des fichiers *json* situés dans le dossier *Galène* (`/opt/yunohost/galene/groups`). Chaque groupe est représenté par un fichier `GroupName.json`.
+Les groupes sont définis par des fichiers JSON situés dans le dossier *Galène* (`/opt/yunohost/galene/groups`). Chaque groupe est représenté par un fichier `GroupName.json`.
 Pour créer un nouveau groupe, vous devez créer un fichier `GroupNameExample.json` (vous pouvez également créer un sous-dossier, et les groupes seront accessibles avec` https://domain.tld/group/subfolder/GroupName`). Différentes options sont disponibles (voir https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
 
-*NB: les espaces sont pris en charge dans les noms de fichiers de groupe.* 
+*NB : les espaces sont pris en charge dans les noms de fichiers de groupe.* 
 
 ### Configurer votre serveur TURN
 
@@ -25,8 +23,8 @@ Galène est livré avec un serveur TURN intégré qui devrait fonctionner imméd
     [
         {
             "urls": [
-                "turn:turn.example.org:443",
-                "turn:turn.example.org:443?transport=tcp"
+                "turn:turn.example.org:5349",
+                "turn:turn.example.org:5349?transport=tcp"
             ],
             "username": "galene",
             "credential": "secret"

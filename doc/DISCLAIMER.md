@@ -1,12 +1,10 @@
 ### Accessing groups
 
-*Galène* meeting rooms are called "groups".
-
-Any group is accessible at `https://domain.tld/group/GroupName`, by typing its name in the home page search field, or by selecting it in the public list (if the group is configured as publicly visible, see below).
+*Galène* meeting rooms are called "groups". Any group is accessible at `https://domain.tld/group/GroupName`, by typing its name in the home page search field, or by selecting it in the public list (if the group is configured as publicly visible, see below).
 
 #### Creating and configuring groups
 
-Groups are defined by *json* files located in the *Galène* folder (`/opt/yunohost/galene/groups`). Each group is represented by a `GroupName.json` file.
+Groups are defined by JSON files located in the *Galène* folder (`/opt/yunohost/galene/groups`). Each group is represented by a `GroupName.json` file.
 To create a new group, you need to create a `GroupNameExample.json` file (you can also make subfolder groups, and the groups will be accessible with `https://domain.tld/group/subfolder/GroupName`). Various options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
 
 *NB: spaces are supported in group file names.*
@@ -25,8 +23,8 @@ Galène comes with a built-in TURN server that should work out-of-the-box.
     [
         {
             "urls": [
-                "turn:turn.example.org:443",
-                "turn:turn.example.org:443?transport=tcp"
+                "turn:turn.example.org:5349",
+                "turn:turn.example.org:5349?transport=tcp"
             ],
             "username": "galene",
             "credential": "secret"
