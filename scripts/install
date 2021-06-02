@@ -80,6 +80,14 @@ ynh_exec_warn_less yunohost firewall allow Both $turn_port
 ynh_exec_warn_less yunohost firewall allow UDP -4 49152:65535
 
 #=================================================
+# RECREATE THE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Recreating the dedicated system user..." --weight=2
+
+# Create the dedicated user (if not existing)
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=1
@@ -87,6 +95,10 @@ ynh_script_progression --message="Setting up source files..." --weight=1
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
+
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 #=================================================
 # CREATE DATA AND GROUPS FOLDER
@@ -133,18 +145,9 @@ ynh_add_systemd_config
 #=================================================
 
 ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-
+chmod 400 "$final_path/data/passwd"
+chown $app "$final_path/data/passwd"
 ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions to app files
-chown -R $app: $final_path
-chmod -R 750 $final_path
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
