@@ -80,28 +80,32 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Upgrading source files..." --weight=2
 
-	# Create a temporary directory
-	tmpdir="$(mktemp -d)"
+	# # Create a temporary directory
+	# tmpdir="$(mktemp -d)"
 
-	# Backup the config file in the temp dir
-	cp -ar "$final_path/groups" "$tmpdir/groups"
-	cp -ar "$final_path/data/passwd" "$tmpdir/passwd"
+	# # Backup the config file in the temp dir
+	# cp -ar "$final_path/groups" "$tmpdir/groups"
+	# cp -ar "$final_path/data/passwd" "$tmpdir/passwd"
 
-	# Remove the app directory securely
-	ynh_secure_remove --file="$final_path"
+	# # Remove the app directory securely
+	# ynh_secure_remove --file="$final_path"
 
-	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
+	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture" --keep="$final_path/groups $final_path/data/passwd"
 
-	# Create data and groups folder
-	mkdir -p "$final_path/data" "$final_path/groups"
+	# # Create data and groups folder
+	# mkdir -p "$final_path/data" "$final_path/groups"
 
-	# Copy the admin saved settings from tmp directory to final path	
-	cp -ar "$tmpdir/groups" "$final_path/groups"
-	cp -ar "$tmpdir/passwd" "$final_path/data/passwd"
+	# # Copy the admin saved settings from tmp directory to final path	
+	# cp -ar "$tmpdir/groups" "$final_path/groups"
+	# cp -ar "$tmpdir/passwd" "$final_path/data/passwd"
 
-	# Remove the tmp directory securely
-	ynh_secure_remove --file="$tmpdir"
+	# # Remove the tmp directory securely
+	# ynh_secure_remove --file="$tmpdir"
 fi
+
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -128,16 +132,6 @@ public_ip4="$(curl -s ip.yunohost.org)" || true
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions on app files
-chown -R $app: $final_path
-chmod -R 750 $final_path
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
