@@ -13,7 +13,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Serveur de visioconférence facile à déployer
 
-**Version incluse :** 0.3.5~ynh2
+**Version incluse :** 0.3.5~ynh3
 
 **Démo :** https://galene.org:8443/
 

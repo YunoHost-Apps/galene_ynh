@@ -17,7 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Videoconferencing server that is easy to deploy
 
-**Shipped version:** 0.3.5~ynh2
+**Shipped version:** 0.3.5~ynh3
 
 **Demo:** https://galene.org:8443/
 
