@@ -10,6 +10,8 @@ User=__APP__
 Group=__APP__
 ExecStart=__FINALPATH__/galene
 LimitNOFILE=65536
+StandardOutput=append:/var/log/__APP__/__APP__.log
+StandardError=inherit
 
 [Install]
 WantedBy=multi-user.target
