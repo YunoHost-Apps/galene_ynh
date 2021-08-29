@@ -11,7 +11,8 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 ## Vue d'ensemble
 
-Serveur de visioconférence facile à déployer
+Galène (ou Galene) est un serveur de visioconférence (un « SFU ») facile à déployer et qui nécessite des ressources serveur modérées. Il a été conçu à l'origine pour les cours et les conférences (où un seul orateur diffuse de l'audio et de la vidéo à des centaines ou des milliers d'utilisateurs), mais a évolué par la suite pour être utile pour les travaux pratiques des étudiants (où les utilisateurs sont divisés en plusieurs petits groupes) et les réunions (où un douzaine d'utilisateurs interagissent entre eux).
+
 
 **Version incluse :** 0.3.5~ynh1
 
