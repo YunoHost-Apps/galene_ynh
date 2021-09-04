@@ -17,7 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Galène (or Galene) is a videoconference server (an “SFU”) that is easy to deploy and that requires moderate server resources. It was originally designed for lectures and conferences (where a single speaker streams audio and video to hundreds or thousands of users), but later evolved to be useful for student practicals (where users are divided into many small groups), and meetings (where a dozen users interact with each other).
 
-**Shipped version:** 0.3.5~ynh1
+**Shipped version:** 0.4.0~ynh1
 
 **Demo:** https://galene.org:8443/
 
