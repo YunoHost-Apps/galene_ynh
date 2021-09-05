@@ -101,15 +101,11 @@ chown -R $app:www-data "$final_path"
 # CREATE DATA AND GROUPS FOLDER
 #=================================================
 
-# Define app's data directory
-data="$final_path/data"
 # Create data folder
-mkdir -p "$data"
-
-# # Define app's groups directory
-# groups="$final_path/groups"
-# # Create groups folder
-# mkdir -p "$groups"
+mkdir -p "$final_path/data"
+echo '$admin:$password' > "$final_path/data/passwd"
+#chmod 400 "$final_path/data/passwd"
+#chown $app: "$final_path/data/passwd"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -147,11 +143,7 @@ ynh_add_systemd_config
 # MODIFY A CONFIG FILE
 #=================================================
 
-#echo "${admin}:${password}" >> $final_path/data/passwd
-
-ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-chmod 400 "$final_path/data/passwd"
-chown $app: "$final_path/data/passwd"
+#ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
 ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
 
 #=================================================
