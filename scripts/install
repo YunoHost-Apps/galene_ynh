@@ -147,9 +147,9 @@ ynh_add_systemd_config
 # MODIFY A CONFIG FILE
 #=================================================
 
-echo "${admin}:${password}" >> $final_path/data/passwd
+#echo "${admin}:${password}" >> $final_path/data/passwd
 
-#ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
+ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
 chmod 400 "$final_path/data/passwd"
 chown $app: "$final_path/data/passwd"
 ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
