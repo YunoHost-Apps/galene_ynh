@@ -150,7 +150,7 @@ ynh_add_systemd_config
 ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
 chmod 400 "$final_path/data/passwd"
 chown $app "$final_path/data/passwd"
-ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
+ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
