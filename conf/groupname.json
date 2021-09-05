@@ -1,8 +1,8 @@
 {
-    "op": [{"username": "__ADMIN__", "password": "__PASSWORD__"}],
-    "presenter": [{}],
-    "description": "__GROUP_DESCRIPTION__",
-    "public": true,
+	"op": [{"username": "__ADMIN__", "password": "__PASSWORD__"}],
+	"presenter": [{}],
+ 	"description": "__GROUP_DESCRIPTION__",
+	"public": true,
     "allow-anonymous": true,
     "allow-recording": true,
     "allow-subgroups": true

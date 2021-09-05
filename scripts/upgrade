@@ -20,10 +20,9 @@ domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-password=$(ynh_app_setting_get --app=$app --key=password)
+group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
-turnserver_port=$(ynh_app_setting_get --app=$app --key=turnserver_port)
-turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
+turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
 architecture=$(ynh_detect_arch)
 
 #=================================================
@@ -49,23 +48,17 @@ if [ -z "$final_path" ]; then
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 fi
 
-if [ -z "$turnserver_port" ]; then
-    turnserver_port=$(ynh_find_port --port=1194)
-    ynh_app_setting_set --app=$app --key=turnserver_port --value=$turnserver_port
-    ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
-fi
-
 # Cleaning legacy permissions
 if ynh_legacy_permissions_exists; then
-    ynh_legacy_permissions_delete_all
+	ynh_legacy_permissions_delete_all
 
-    ynh_app_setting_delete --app=$app --key=is_public
+	ynh_app_setting_delete --app=$app --key=is_public
 fi
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up Galène before upgrading (may take a while)..." --weight=1
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
 
 # Backup the current version of the app
 ynh_backup_before_upgrade
@@ -93,125 +86,32 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Upgrading source files..." --weight=2
 
-	# Create a temporary directory
-	tmpdir="$(mktemp -d)"
+	# # Create a temporary directory
+	# tmpdir="$(mktemp -d)"
 
-	# Backup the config file in the temp dir
-	cp -ar "$final_path/groups" "$tmpdir/groups"
+	# # Backup the config file in the temp dir
+	# cp -ar "$final_path/groups" "$tmpdir/groups"
+	# cp -ar "$final_path/data/passwd" "$tmpdir/passwd"
 
-	# Remove the app directory securely
-	ynh_secure_remove --file="$final_path"
+	# # Remove the app directory securely
+	# ynh_secure_remove --file="$final_path"
 
-	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
+	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture" --keep="$final_path/groups $final_path/data/passwd"
 
-    groups="$final_path/groups"
-    data="$final_path/data"
+	# # Create data and groups folder
+	# mkdir -p "$final_path/data" "$final_path/groups"
 
-    mkdir -p "$groups"
-    mkdir -p "$data"
+	# # Copy the admin saved settings from tmp directory to final path	
+	# cp -ar "$tmpdir/groups" "$final_path/groups"
+	# cp -ar "$tmpdir/passwd" "$final_path/data/passwd"
 
-	# Copy the admin saved settings from tmp directory to final path	
-	cp -ar "$tmpdir/groups" "$final_path"
-
-	# Remove the tmp directory securely
-	ynh_secure_remove --file="$tmpdir"
-
-    ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-    chmod 600 $final_path/data/passwd
-
-    ynh_add_config --template="../conf/ice-servers.json" --destination="$final_path/data/ice-servers.json"
-    chmod 600 $final_path/data/ice-servers.json
-
-	# Recreate certificates
-	pushd "$final_path/data"
-        ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
-        -subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-        chmod 640 {key.pem,cert.pem}
-    popd
+	# # Remove the tmp directory securely
+	# ynh_secure_remove --file="$tmpdir"
 fi
 
-#=================================================
-# MULTINSTANCE SUPPORT
-#=================================================
-
-if [ ! -e /etc/$app/coturn.conf ]
-then
-    ynh_script_progression --message="Creating an independant service for Coturn..." --weight=1
-
-    #=================================================
-    # CREATE AN INDEPENDANT SERVICE FOR COTURN
-    #=================================================
-
-    # Disable default config for turnserver and create a new service
-    systemctl stop coturn.service
-
-    # Set by default the system config for coturn
-    echo "" > /etc/turnserver.conf
-    ynh_replace_string --match_string="TURNSERVER_ENABLED=1" --replace_string="TURNSERVER_ENABLED=0" --target_file=/etc/default/coturn
-
-    # Set a port for each service in turnserver
-    turnserver_port=$(ynh_find_port --port=1194)
-    ynh_app_setting_set --app=$app --key=turnserver_port --value=$turnserver_port
-    ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
-
-    #=================================================
-    # MAKE A CLEAN LOGROTATE CONFIG
-    #=================================================
-
-    ynh_use_logrotate --logfile /var/log/$app --nonappend
-fi
-
-#=================================================
-# CREATE A DH FILE
-#=================================================
-ynh_script_progression --message="Creating a dhparam file..." --weight=3
-
-# WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
-# For any update do it in all files
-
-# Make dhparam cert for Coturn if it doesn't exist
-if [ ! -e /etc/ssl/private/dh2048.pem ]
-then
-    ynh_exec_warn_less openssl dhparam -out /etc/ssl/private/dh2048.pem -outform PEM -2 2048 -dsaparam
-    chown root:ssl-cert /etc/ssl/private/dh2048.pem
-    chmod 640 /etc/ssl/private/dh2048.pem
-fi
-
-#=================================================
-# SPECIFIC UPGRADE
-#=================================================
-# UPDATE COTURN CONFIG
-#=================================================
-ynh_script_progression --message="Updating Coturn config..." --weight=1
-
-# WARNING : theses command are used in INSTALL, UPGRADE
-# For any update do it in all files
-
-coturn_config_path="/etc/$app/coturn.conf"
-
-ynh_add_config --template="../conf/coturn/turnserver.conf" --destination="$coturn_config_path"
-
-# Get public IP and set as external IP for coturn
-# note : '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
-public_ip4="$(curl -s ip.yunohost.org)" || true
-public_ip6="$(curl -s ipv6.yunohost.org)" || true
-
-if ( [[ -n "$public_ip4" ]] && ynh_validate_ip4 --ip_address="$public_ip4" || [[ -n "$public_ip6" ]] && ynh_validate_ip6 --ip_address="$public_ip6" )
-then
-    echo "external-ip=${public_ip4}/${public_ip6}" >> "$coturn_config_path"
-fi
-
-ynh_store_file_checksum --file="$coturn_config_path"
-
-#=================================================
-# ADD SCRIPT FOR COTURN CRON AND APP SERVICE
-#=================================================
-
-# WARNING : theses command are used in INSTALL, UPGRADE
-# For any update do it in all files
-cp ../sources/Coturn_config_rotate.sh $final_path/Coturn_config_rotate.sh
-ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
-chmod +x $final_path/Coturn_config_rotate.sh
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -222,69 +122,36 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..." -
 ynh_add_nginx_config
 
 #=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=1
-
-ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
 # CREATE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
-ynh_system_user_create --username=turnserver
-adduser turnserver ssl-cert
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # SETUP SYSTEMD
 #=================================================
 ynh_script_progression --message="Upgrading systemd configuration..." --weight=1
 
+public_ip4="$(curl -s ip.yunohost.org)" || true
+
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
 #=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions on app files
-chown -R $app: $final_path
-chmod -R 755 $final_path
-chown -R $app:root /etc/$app
-chown turnserver:root $coturn_config_path
-chmod -R u=rwX,g=rX,o= /etc/$app
-chmod 770 $final_path/Coturn_config_rotate.sh
-setfacl -R -m user:turnserver:rX  /etc/$app
-setfacl -R -m user:turnserver:rwX  /var/log/$app
-
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
-
-# # Use logrotate to manage app-specific logfile(s)
-ynh_use_logrotate --non-append
-
-#=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
-ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
+ynh_script_progression --message="Integrating service in YunoHost..." --weight=1
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
-yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_port
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports="$turn_port"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
-ynh_systemd_action --service_name=coturn-$app.service --action=restart --log_path="/var/log/$app/turnserver.log"
-ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=$app --action=start --log_path="/var/log/$app/$app.log"
 
 #=================================================
 # RELOAD NGINX
@@ -297,4 +164,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of Galène completed" --last
+ynh_script_progression --message="Upgrade of $app completed" --last

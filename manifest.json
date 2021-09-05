@@ -1,18 +1,19 @@
 {
-    "name": "Galene",
+    "name": "Galène",
     "id": "galene",
     "packaging_format": 1,
     "description": {
         "en": "Videoconferencing server that is easy to deploy",
         "fr": "Serveur de visioconférence facile à déployer"
     },
-    "version": "0.3.5~ynh3",
-    "url": "https://galene.org",
+    "version": "0.4.0~ynh1",
+    "url": "https://galene.org/",
     "upstream": {
-        "license": "free",
-        "website": "https://galene.org",
+        "license": "MIT",
+        "website": "https://galene.org/",
         "demo": "https://galene.org:8443/",
         "admindoc": "https://galene.org/",
+        "userdoc": "https://yunohost.org/en/app_galene",
         "code": "https://github.com/jech/galene"
     },
     "license": "MIT",
@@ -21,7 +22,7 @@
         "email": ""
     },
     "requirements": {
-        "yunohost": ">= 4.1.7"
+        "yunohost": ">= 4.2.4"
     },
     "multi_instance": false,
     "services": [
@@ -70,6 +71,7 @@
             {
                 "name": "group_description",
                 "type": "string",
+                "optional": true,
                 "ask": {
                     "en": "Choose a description for the group you want to create",
                     "fr": "Décrivez le groupe que vous souhaitez créer"
