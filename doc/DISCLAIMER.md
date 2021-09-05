@@ -4,7 +4,7 @@
 
 #### Creating and configuring groups
 
-Groups are defined by JSON files located in the *Galène* folder (`/opt/yunohost/galene/groups`). Each group is represented by a `GroupName.json` file.
+Groups are defined by JSON files located in the *Galène* folder (`/home/yunohost.app/galene/groups`). Each group is represented by a `GroupName.json` file.
 To create a new group, you need to create a `GroupNameExample.json` file (you can also make subfolder groups, and the groups will be accessible with `https://domain.tld/group/subfolder/GroupName`). Various configuration options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
 
 *NB: spaces are supported in group file names.*
@@ -38,3 +38,8 @@ To check if the TURN server is up and running, type `/relay-test` in the chat bo
 ### Server Statistics page
 
 Some statistics are available under `/opt/yunohost/galene/stats.json`, with a human-readable version at `domain.ltd/stats.html`. This is only available to the server administrator.
+
+### How do I record my lecture?
+
+Make sure allow-recording is set in your group configuration. Log-in as an operator, then say `/record` before you start your lecture. Don't forget to say `/unrecord` at the end. You will find your recordings under `https://server.example.com/recordings/groupname/`. The video recordings are stored in `/home/yunohost.app/galene/recordings` folder.
+
