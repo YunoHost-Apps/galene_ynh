@@ -71,7 +71,7 @@ Some statistics are available under `/opt/yunohost/galene/stats.json`, with a hu
 ## Documentation and resources
 
 * Official app website: https://galene.org/
-* Official user documentation: https://yunohost.org/en/app_galene
+* Official user documentation: https://galene.org/faq.html
 * Official admin documentation: https://galene.org/
 * Upstream app code repository: https://github.com/jech/galene
 * YunoHost documentation for this app: https://yunohost.org/app_galene
