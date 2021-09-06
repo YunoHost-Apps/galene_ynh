@@ -103,7 +103,7 @@ chown -R $app:www-data "$final_path"
 
 # Create data folder
 mkdir -p "$final_path/data"
-echo '$admin:$password' > "$final_path/data/passwd"
+echo $admin:$password > "$final_path/data/passwd"
 chmod 400 "$final_path/data/passwd"
 chown $app: "$final_path/data/passwd"
 
