@@ -55,6 +55,8 @@ ynh_secure_remove --file="$final_path"
 # REMOVE DATA DIR
 #=================================================
 
+YNH_APP_PURGE=1
+
 # Remove the app data directory with the command `yunohost app remove --purge`
 if [ "${YNH_APP_PURGE:-0}" -eq 1 ]
 then
