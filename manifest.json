@@ -13,7 +13,7 @@
         "website": "https://galene.org/",
         "demo": "https://galene.org:8443/",
         "admindoc": "https://galene.org/",
-        "userdoc": "https://yunohost.org/en/app_galene",
+        "userdoc": "https://galene.org/faq.html",
         "code": "https://github.com/jech/galene"
     },
     "license": "MIT",

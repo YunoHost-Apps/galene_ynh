@@ -6,6 +6,7 @@
 		is_public=1
 		password="password"
 		group_name="public with space"
+		group_description="My public space"
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=0

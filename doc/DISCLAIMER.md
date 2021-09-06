@@ -4,14 +4,14 @@
 
 #### Creating and configuring groups
 
-Groups are defined by JSON files located in the *Galène* folder (`/opt/yunohost/galene/groups`). Each group is represented by a `GroupName.json` file.
+Groups are defined by JSON files located in the folder `/home/yunohost.app/galene/groups`. Each group is represented by a `GroupName.json` file.
 To create a new group, you need to create a `GroupNameExample.json` file (you can also make subfolder groups, and the groups will be accessible with `https://domain.tld/group/subfolder/GroupName`). Various configuration options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
 
-*NB: spaces are supported in group file names.*
+*NB: Spaces are supported in group file names.*
 
 ### Configuring your TURN server
 
-#### Using *Galène*'s TURN server
+#### Using *Galène*'s internal TURN server
 Galène comes with a built-in TURN server that should work out-of-the-box.
 - If your server is behind NAT, allow incoming traffic to TCP port `8443` (or whatever is configured with the `-http` option in `/etc/systemd/system/galene.service`) and TCP/UDP port `1194` (or whatever is configured with the `-turn` option in `/etc/systemd/system/galene.service`)
 
@@ -35,6 +35,13 @@ Galène comes with a built-in TURN server that should work out-of-the-box.
 
 To check if the TURN server is up and running, type `/relay-test` in the chat box. If the TURN server is properly configured, you should see a message saying that the relay test has been successful.
 
+You can also install Galène with an external TURN server with this branch: https://github.com/YunoHost-Apps/galene_ynh/tree/galene+turn 
+
 ### Server Statistics page
 
-Some statistics are available under `/opt/yunohost/galene/stats.json`, with a human-readable version at `domain.ltd/stats.html`. This is only available to the server administrator.
+Statistics are available under `/var/www/galene/stats.json`, with a human-readable version at `domain.ltd/stats.html`. This is only available to the server administrator.
+
+### How do I record my lecture?
+
+Make sure allow-recording is set in your group configuration. Log-in as an operator, then say `/record` before you start your lecture. Don't forget to say `/unrecord` at the end. You will find your recordings under `https://server.example.com/recordings/groupname/`. The video recordings are stored in `/home/yunohost.app/galene/recordings` folder.
+

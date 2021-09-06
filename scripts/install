@@ -101,15 +101,11 @@ chown -R $app:www-data "$final_path"
 # CREATE DATA AND GROUPS FOLDER
 #=================================================
 
-# Define app's data directory
-data="$final_path/data"
 # Create data folder
-mkdir -p "$data"
-
-# Define app's groups directory
-groups="$final_path/groups"
-# Create groups folder
-mkdir -p "$groups"
+mkdir -p "$final_path/data"
+echo '$admin:$password' > "$final_path/data/passwd"
+chmod 400 "$final_path/data/passwd"
+chown $app: "$final_path/data/passwd"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -118,6 +114,20 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=2
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
+
+#=================================================
+# CREATE DATA DIRECTORY
+#=================================================
+ynh_script_progression --message="Creating a data directory..." --weight=1
+
+datadir=/home/yunohost.app/$app
+ynh_app_setting_set --app=$app --key=datadir --value=$datadir
+
+mkdir -p $datadir/{groups,recordings}
+
+chmod 750 "$datadir"
+chmod -R o-rwx "$datadir"
+chown -R $app:www-data "$datadir"
 
 #=================================================
 # SETUP SYSTEMD
@@ -133,11 +143,8 @@ ynh_add_systemd_config
 # MODIFY A CONFIG FILES
 #=================================================
 
-ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-
-chmod 400 "$final_path/data/passwd"
-chown $app "$final_path/data/passwd"
-ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
+# Create a group name config
+ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -152,7 +159,7 @@ yunohost service add $app --description="Videoconferencing server" --log="/var/l
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action=start --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=$app --action=start --log_path="systemd"
 
 #=================================================
 # SETUP SSOWAT
