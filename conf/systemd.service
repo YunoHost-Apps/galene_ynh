@@ -11,35 +11,34 @@ Group=__APP__
 ExecStart=__FINALPATH__/galene -turn __PUBLIC_IP4__:__TURN_PORT__ -udp-range 49152-65535 -groups /home/yunohost.app/__APP__/groups -recordings /home/yunohost.app/__APP__/recordings
 LimitNOFILE=65536
 
-# Sandboxing options to harden security
-# Depending on specificities of your service/app, you may need to tweak these 
-# .. but this should be a good baseline
-# Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
-NoNewPrivileges=yes
+# various hardening options
+ReadWritePaths=/home/yunohost.app/__APP__/recordings
+CapabilityBoundingSet=
+AmbientCapabilities=
 PrivateTmp=yes
 PrivateDevices=yes
-RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
-RestrictNamespaces=yes
-RestrictRealtime=yes
 DevicePolicy=closed
-ProtectSystem=full
-ProtectControlGroups=yes
+ProtectSystem=strict
+ProtectHome=yes
 ProtectKernelModules=yes
 ProtectKernelTunables=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectHostname=yes
+ProtectClock=yes
+NoNewPrivileges=yes
+MountFlags=private
 LockPersonality=yes
-SystemCallFilter=~@clock @debug @module @mount @obsolete @reboot @setuid @swap
-
-# Denying access to capabilities that should not be relevant for webapps
-# Doc: https://man7.org/linux/man-pages/man7/capabilities.7.html
-CapabilityBoundingSet=~CAP_RAWIO CAP_MKNOD
-CapabilityBoundingSet=~CAP_AUDIT_CONTROL CAP_AUDIT_READ CAP_AUDIT_WRITE
-CapabilityBoundingSet=~CAP_SYS_BOOT CAP_SYS_TIME CAP_SYS_MODULE CAP_SYS_PACCT
-CapabilityBoundingSet=~CAP_LEASE CAP_LINUX_IMMUTABLE CAP_IPC_LOCK
-CapabilityBoundingSet=~CAP_BLOCK_SUSPEND CAP_WAKE_ALARM
-CapabilityBoundingSet=~CAP_SYS_TTY_CONFIG
-CapabilityBoundingSet=~CAP_MAC_ADMIN CAP_MAC_OVERRIDE
-CapabilityBoundingSet=~CAP_NET_ADMIN CAP_NET_BROADCAST CAP_NET_RAW
-CapabilityBoundingSet=~CAP_SYS_ADMIN CAP_SYS_PTRACE CAP_SYSLOG 
+RestrictRealtime=yes
+RestrictNamespaces=yes
+RestrictSUIDSGID=yes
+KeyringMode=private
+MemoryDenyWriteExecute=yes
+RemoveIPC=yes
+SystemCallArchitectures=native
+SystemCallFilter=~ @clock @cpu-emulation @debug @keyring @module @mount @raw-io @reboot @swap @obsolete @timer @resources @privileged @pkey @obsolete @setuid
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+UMask=0077
 
 [Install]
 WantedBy=multi-user.target
