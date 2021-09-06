@@ -36,7 +36,7 @@ app=$YNH_APP_INSTANCE_NAME
 #=================================================
 ynh_script_progression --message="Validating installation parameters..." --weight=1
 
-final_path=/opt/yunohost/$app
+final_path=/var/www/$app
 test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
 # Register (book) web path
@@ -104,8 +104,8 @@ chown -R $app:www-data "$final_path"
 # Create data folder
 mkdir -p "$final_path/data"
 echo '$admin:$password' > "$final_path/data/passwd"
-#chmod 400 "$final_path/data/passwd"
-#chown $app: "$final_path/data/passwd"
+chmod 400 "$final_path/data/passwd"
+chown $app: "$final_path/data/passwd"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -143,7 +143,7 @@ ynh_add_systemd_config
 # MODIFY A CONFIG FILE
 #=================================================
 
-#ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
+# Create a group name config
 ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
 
 #=================================================

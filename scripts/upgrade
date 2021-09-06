@@ -92,7 +92,6 @@ then
 	# tmpdir="$(mktemp -d)"
 
 	# # Backup the config file in the temp dir
-	# cp -ar "$final_path/groups" "$tmpdir/groups"
 	# cp -ar "$final_path/data/passwd" "$tmpdir/passwd"
 
 	# # Remove the app directory securely
@@ -100,11 +99,7 @@ then
 
 	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture" --keep="$final_path/data/passwd"
 
-	# # Create data and groups folder
-	# mkdir -p "$final_path/data" "$final_path/groups"
-
 	# # Copy the admin saved settings from tmp directory to final path	
-	# cp -ar "$tmpdir/groups" "$final_path/groups"
 	# cp -ar "$tmpdir/passwd" "$final_path/data/passwd"
 
 	# # Remove the tmp directory securely
