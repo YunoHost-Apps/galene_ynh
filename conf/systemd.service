@@ -10,6 +10,8 @@ User=__APP__
 Group=__APP__
 ExecStart=__FINALPATH__/galene -turn __PUBLIC_IP4__:__TURN_PORT__ -udp-range 49152-65535 -groups /home/yunohost.app/__APP__/groups -recordings /home/yunohost.app/__APP__/recordings
 LimitNOFILE=65536
+StandardOutput=append:/var/log/__APP__/__APP__.log
+StandardError=inherit
 
 # various hardening options
 ReadWritePaths=/home/yunohost.app/__APP__/recordings
