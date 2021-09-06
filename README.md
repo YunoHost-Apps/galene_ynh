@@ -17,14 +17,15 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Galène is a videoconference server (an “SFU”) that is easy to deploy and that requires moderate server resources. It was originally designed for lectures and conferences (where a single speaker streams audio and video to hundreds or thousands of users), but later evolved to be useful for student practicals (where users are divided into many small groups), and meetings (where a dozen users interact with each other).
 
-### Client features
+### Client features:
 
-- multiparty audio and video;
-- text chat;
-- reasonably good support for mobile (Android and iPhone/iPad);
-- screen and window sharing, including sharing multiple windows simultaneously (not on mobile);
-- streaming video and audio from disk;
-- activity detection. 
+- multiparty audio and video
+- text chat
+- reasonably good support for mobile (Android and iPhone/iPad)
+- screen and window sharing, including sharing multiple windows simultaneously (not on mobile)
+- streaming video and audio from disk
+- activity detection
+
 
 **Shipped version:** 0.4.0~ynh1
 
@@ -42,14 +43,14 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 
 #### Creating and configuring groups
 
-Groups are defined by JSON files located in the *Galène* folder (`/home/yunohost.app/galene/groups`). Each group is represented by a `GroupName.json` file.
+Groups are defined by JSON files located in the folder `/home/yunohost.app/galene/groups`. Each group is represented by a `GroupName.json` file.
 To create a new group, you need to create a `GroupNameExample.json` file (you can also make subfolder groups, and the groups will be accessible with `https://domain.tld/group/subfolder/GroupName`). Various configuration options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
 
-*NB: spaces are supported in group file names.*
+*NB: Spaces are supported in group file names.*
 
 ### Configuring your TURN server
 
-#### Using *Galène*'s TURN server
+#### Using *Galène*'s internal TURN server
 Galène comes with a built-in TURN server that should work out-of-the-box.
 - If your server is behind NAT, allow incoming traffic to TCP port `8443` (or whatever is configured with the `-http` option in `/etc/systemd/system/galene.service`) and TCP/UDP port `1194` (or whatever is configured with the `-turn` option in `/etc/systemd/system/galene.service`)
 
@@ -73,9 +74,11 @@ Galène comes with a built-in TURN server that should work out-of-the-box.
 
 To check if the TURN server is up and running, type `/relay-test` in the chat box. If the TURN server is properly configured, you should see a message saying that the relay test has been successful.
 
+You can also install Galène with an external TURN server with this branch: https://github.com/YunoHost-Apps/galene_ynh/tree/galene+turn 
+
 ### Server Statistics page
 
-Some statistics are available under `/opt/yunohost/galene/stats.json`, with a human-readable version at `domain.ltd/stats.html`. This is only available to the server administrator.
+Statistics are available under `/var/www/galene/stats.json`, with a human-readable version at `domain.ltd/stats.html`. This is only available to the server administrator.
 
 ### How do I record my lecture?
 
