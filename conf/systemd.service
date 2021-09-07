@@ -11,26 +11,6 @@ Group=__APP__
 ExecStart=__FINALPATH__/galene -turn __PUBLIC_IP4__:__TURN_PORT__ -udp-range 49152-65535 -groups /home/yunohost.app/__APP__/groups -recordings /home/yunohost.app/__APP__/recordings
 LimitNOFILE=65536
 
-; Sandboxing
-ProtectSystem=full
-ProtectHome=true
-RestrictNamespaces=true
-RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
-PrivateTmp=true
-PrivateDevices=true
-ProtectClock=true
-ProtectControlGroups=true
-ProtectKernelTunables=true
-ProtectKernelLogs=true
-ProtectKernelModules=true
-LockPersonality=true
-RestrictSUIDSGID=true
-RemoveIPC=true
-RestrictRealtime=true
-SystemCallFilter=@system-service
-SystemCallArchitectures=native
-MemoryDenyWriteExecute=true
-
 # Sandboxing options to harden security
 # Depending on specificities of your service/app, you may need to tweak these 
 # .. but this should be a good baseline
