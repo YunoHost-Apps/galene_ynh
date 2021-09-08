@@ -13,9 +13,6 @@ source /usr/share/yunohost/helpers
 # MANAGE SCRIPT FAILURE
 #=================================================
 
-ynh_clean_setup () {
-	ynh_clean_check_starting
-}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
@@ -55,23 +52,6 @@ ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=group_name --value="$group_name"
 ynh_app_setting_set --app=$app --key=group_description --value="$group_description"
-ynh_app_setting_set --app=$app --key=password --value=$password
-
-#=================================================
-# CREATE A DH FILE
-#=================================================
-ynh_script_progression --message="Creating a dhparam file..." --weight=3
-
-# WARNING : theses command are used in INSTALL, UPGRADE, RESTORE
-# For any update do it in all files
-
-# Make dhparam cert for Coturn if it doesn't exist
-if [ ! -e /etc/ssl/private/dh2048.pem ]
-then
-    ynh_exec_warn_less openssl dhparam -out /etc/ssl/private/dh2048.pem -outform PEM -2 2048 -dsaparam
-    chown root:ssl-cert /etc/ssl/private/dh2048.pem
-    chmod 640 /etc/ssl/private/dh2048.pem
-fi
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -85,20 +65,24 @@ port=$(ynh_find_port --port=8443)
 ynh_app_setting_set --app=$app --key=port --value=$port
 
 # Find an available port for TURN
-turnserver_port=$(ynh_find_port --port=1194)
-ynh_app_setting_set --app=$app --key=turnserver_port --value=$turnserver_port
+turn_port=$(ynh_find_port --port=1194)
+ynh_app_setting_set --app=$app --key=turn_port --value=$turn_port
 
 # Open TURN port
 ynh_script_progression --message="Configuring firewall..." --weight=1
 
-ynh_exec_warn_less yunohost firewall allow Both $turnserver_port
+ynh_exec_warn_less yunohost firewall allow Both $turn_port
+
+# Reserve UDP Port range 49152:65535
+ynh_exec_warn_less yunohost firewall allow UDP -4 49152:65535
 
 #=================================================
-# INSTALL DEPENDENCIES
+# CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Installing dependencies..." --weight=5
+ynh_script_progression --message="Configuring system user..." --weight=3
 
-ynh_install_app_dependencies $pkg_dependencies
+# Create a system user
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -109,24 +93,19 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
 #=================================================
-# CREATE DATA FOLDER
+# CREATE DATA AND GROUPS FOLDER
 #=================================================
 
-# Define app's data directory
-data="$final_path/data"
 # Create data folder
-mkdir -p "$data"
-
-#=================================================
-# CREATE A SERVER CERTIFICATE
-#=================================================
-
-pushd "$final_path/data"
-	ynh_exec_warn_less openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out cert.pem \
-	-subj "/C=/ST=/L=/O=/OU=/CN=/emailAddress="
-    chmod 640 {key.pem,cert.pem}
-popd
+mkdir -p "$final_path/data"
+echo $admin:$password > "$final_path/data/passwd"
+chmod 400 "$final_path/data/passwd"
+chown $app: "$final_path/data/passwd"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -137,125 +116,42 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=2
 ynh_add_nginx_config
 
 #=================================================
-# CREATE DEDICATED USER
+# CREATE DATA DIRECTORY
 #=================================================
-ynh_script_progression --message="Configuring system user..." --weight=3
+ynh_script_progression --message="Creating a data directory..." --weight=1
 
-# Create a system user
-ynh_system_user_create --username=$app
-ynh_system_user_create --username=turnserver
-adduser turnserver ssl-cert
+datadir=/home/yunohost.app/$app
+ynh_app_setting_set --app=$app --key=datadir --value=$datadir
+
+mkdir -p $datadir/{groups,recordings}
+
+chmod 750 "$datadir"
+chmod -R o-rwx "$datadir"
+chown -R $app:www-data "$datadir"
 
 #=================================================
 # SETUP SYSTEMD
 #=================================================
 ynh_script_progression --message="Configuring a systemd service..." --weight=1
 
+public_ip4="$(curl -s ip.yunohost.org)" || true
+
 # Create a dedicated systemd config
 ynh_add_systemd_config
-
-mkdir -p /etc/$app
-# Create systemd service for turnserver
-cp ../conf/coturn/default_coturn /etc/default/coturn-$app
-ynh_add_systemd_config --service=coturn-$app --template=coturn-galene.service
-
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Configuring log rotation..." --weight=1
-
-# Create log directory
-mkdir -p /var/log/$app
-touch /var/log/$app/$app.log
-chown $app -R /var/log/$app
-
-# Setup logrotate
-ynh_use_logrotate --logfile "/var/log/$app"
-
-#=================================================
-# SET COTURN CONFIG
-#=================================================
-ynh_script_progression --message="Configuring Coturn..." --weight=1
-
-# WARNING: theses command are used in INSTALL, UPGRADE
-# For any update do it in all files
-
-# Find password for turnserver
-ynh_print_OFF
-turnserver_pwd=$(ynh_string_random --length=30)
-ynh_app_setting_set --app=$app --key=turnserver_pwd --value=$turnserver_pwd
-ynh_print_ON
-
-coturn_config_path="/etc/$app/coturn.conf"
-
-ynh_add_config --template="../conf/coturn/turnserver.conf" --destination="$coturn_config_path"
-
-# Get public IP and set as external IP for coturn
-# note: '|| true' is used to ignore the errors if we can't get the public ipv4 or ipv6
-public_ip4="$(curl -s ip.yunohost.org)" || true
-public_ip6="$(curl -s ipv6.yunohost.org)" || true
-
-if ( [[ -n "$public_ip4" ]] && ynh_validate_ip4 --ip_address="$public_ip4" || [[ -n "$public_ip6" ]] && ynh_validate_ip6 --ip_address="$public_ip6" )
-then
-    echo "external-ip=${public_ip4}/${public_ip6}" >> "$coturn_config_path"
-fi
-
-ynh_store_file_checksum --file="$coturn_config_path"
-
-#=================================================
-# CREATE GROUPS FOLDER
-#=================================================
-
-# Define app's groups directory
-groups="$final_path/groups"
-# Create groups folder
-mkdir -p "$groups"
 
 #=================================================
 # MODIFY A CONFIG FILES
 #=================================================
 
-ynh_add_config --template="../conf/passwd" --destination="$final_path/data/passwd"
-
-ynh_add_config --template="../conf/groupname.json" --destination="$final_path/groups/$group_name.json"
-
-ynh_add_config --template="../conf/ice-servers.json" --destination="$final_path/data/ice-servers.json"
-
-#=================================================
-# ADD SCRIPT FOR COTURN CRON AND APP SERVICE
-#=================================================
-
-# WARNING : theses command are used in INSTALL, UPGRADE
-# For any update do it in all files
-cp ../sources/Coturn_config_rotate.sh $final_path/Coturn_config_rotate.sh
-ynh_replace_string --match_string=__APP__ --replace_string=$app --target_file="$final_path/Coturn_config_rotate.sh"
-chmod +x $final_path/Coturn_config_rotate.sh
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions to app files
-chown -R $app: $final_path
-chmod -R 755 $final_path
-chown -R $app:root /etc/$app
-chown turnserver:root /etc/$app/coturn.conf
-chmod -R u=rwX,g=rX,o= /etc/$app
-chmod 770 $final_path/Coturn_config_rotate.sh
-setfacl -R -m user:turnserver:rX  /etc/$app
-setfacl -R -m user:turnserver:rwX  /var/log/$app
-chmod 600 $final_path/data/passwd
-chmod 600 $final_path/data/ice-servers.json
+# Create a group name config
+ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log"
-yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/log/$app/turnserver.log" --needs_exposed_ports $turnserver_port
+yunohost service add $app --description="Videoconferencing server" --log="/var/log/$app/$app.log" --needs_exposed_ports="$turn_port"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -263,8 +159,7 @@ yunohost service add coturn-$app --description="Coturn TURN server" --log="/var/
 ynh_script_progression --message="Starting a systemd service..." --weight=1
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action=restart --log_path="/var/log/$app/$app.log"
-ynh_systemd_action --service_name=coturn-$app.service --action=restart --log_path="/var/log/$app/turnserver.log"
+ynh_systemd_action --service_name=$app --action=start --log_path="systemd"
 
 #=================================================
 # SETUP SSOWAT
@@ -288,4 +183,4 @@ ynh_systemd_action --service_name=nginx --action=reload
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of Galène completed" --last
+ynh_script_progression --message="Installation of $app completed" --last

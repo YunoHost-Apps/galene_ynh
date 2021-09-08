@@ -1,77 +1,93 @@
-# Galene pour YunoHost
+# Galène pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/galene.svg)](https://dash.yunohost.org/appci/app/galene) ![](https://ci-apps.yunohost.org/ci/badges/galene.status.svg)  ![](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)
-[![Installer galene avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=galene)
+[![Niveau d'intégration](https://dash.yunohost.org/integration/galene.svg)](https://dash.yunohost.org/appci/app/galene) ![](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)  
+[![Installer Galène avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=galene)
 
 *[Read this readme in english.](./README.md)*
 *[Lire ce readme en français.](./README_fr.md)*
 
-> *This package allows you to install galene quickly and simply on a YunoHost server.
-If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
+> *Ce package vous permet d'installer Galène rapidement et simplement sur un serveur YunoHost.
+Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
 
 ## Vue d'ensemble
 
-Serveur de visioconférence facile à déployer
+Galène est un serveur de visioconférence (un « SFU ») facile à déployer et qui nécessite des ressources serveur modérées. Il a été conçu à l'origine pour les cours et les conférences (où un seul orateur diffuse de l'audio et de la vidéo à des centaines ou des milliers d'utilisateurs), mais a évolué par la suite pour être utile pour les travaux pratiques des étudiants (où les utilisateurs sont divisés en plusieurs petits groupes) et les réunions (où un douzaine d'utilisateurs interagissent entre eux).
 
-**Version incluse:** 0.3.5~ynh2
+### Fonctionnalités client :
 
-**Démo:** https://galene.org:8443/
+- audio et vidéo multipartites
+- chat textuel
+- assez bonne prise en charge pour mobile (Android et iPhone/iPad)
+- partage d'écran et de fenêtre, y compris le partage de plusieurs fenêtres simultanément (pas sur mobile)
+- streaming vidéo et audio à partir du disque
+- détection d'activité
 
+
+**Version incluse :** 0.4.0~ynh1
+
+**Démo :** https://galene.org:8443/
 
 ## Captures d'écran
 
-
-   ![](./doc/screenshots/screenshot.png)
-
-
-
+![](./doc/screenshots/screenshot.png)
 
 ## Avertissements / informations importantes
 
-## Configuration
+### Accéder à des groupes
 
-### Comment créer des groupes
+Les salles de réunion *Galène* sont appelées « groupes ». Tout groupe est accessible sur `https://domain.tld/group/GroupName`, en tapant son nom dans le champ de recherche de la page d'accueil, ou en le sélectionnant dans la liste publique (si le groupe est configuré comme visible publiquement, voir ci-dessous).
 
-Les groupes sont définis par des fichiers dans le répertoire `/opt/yunohost/galene/groups`. Différentes options sont disponibles (voir https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file)
+#### Ajouter et configurer des groupes
 
-### Serveur TURN
+Les groupes sont définis par des fichiers JSON situés dans le dossier `/home/yunohost.app/galene/groups`. Chaque groupe est représenté par un fichier `GroupName.json`.
+Pour créer un nouveau groupe, vous devez créer un fichier `GroupNameExample.json` (vous pouvez également créer un sous-dossier, et les groupes seront accessibles avec` https://domain.tld/group/subfolder/GroupName`). Différentes options de configurations sont disponibles (voir https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
 
-Pour la VoIP et la visioconférence, un serveur TURN est également installé et configuré. Le serveur TURN écoute sur deux ports UDP et TCP. Vous pouvez les obtenir avec ces commandes :
+*NB : les espaces sont pris en charge dans les noms de fichiers de groupe.* 
+
+### Configurer votre serveur TURN
+
+#### Utilisation du serveur TURN de *Galène*
+Galène est livré avec un serveur TURN intégré qui devrait fonctionner immédiatement.
+- Si votre serveur est derrière NAT, autorisez le trafic entrant vers le port TCP `8443` (ou tout ce qui est configuré avec l'option `-http` dans `/etc/systemd/system/galene.service`) et le port TCP/UDP `1194` (ou tout ce qui est configuré avec l'option `-turn` dans `/etc/systemd/system/galene.service`)
+
+#### Utilisation de votre propre serveur TURN
+- Installez [coturn_ynh](https://github.com/YunoHost-Apps/coturn_ynh).
+- Ajoutez `/var/www/galene/data/ice-servers.json` avec ces lignes et changez `turn.example.org` et `secret`
 
 ```
-sudo yunohost app setting galene turnserver_port
+    [
+        {
+            "urls": [
+                "turn:turn.example.org:5349",
+                "turn:turn.example.org:5349?transport=tcp"
+            ],
+            "username": "galene",
+            "credential": "secret"
+        }
+    ]
 ``` 
+- Dans `/etc/systemd/system/galene.service` changer l'option `-turn auto` (ou `-turn ""` pour désactiver le serveur TURN intégré). 
 
-Le serveur TURN choisira également un port de manière dynamique lors du démarrage d'une nouvelle visioconférence. La plage est comprise entre 49152 et 65535.
+Pour vérifier si le serveur TURN est opérationnel, tapez `/relay-test` dans la boîte de dialogue du chat de *Galène* ; si le serveur TURN est correctement configuré, vous devriez voir un message indiquant que le test du relai a réussi.
 
-Par sécurité, la plage de ports (49152 - 65535) n'est pas automatiquement ouverte par défaut. Si vous souhaitez utiliser Galène pour la VoIP ou la visioconférence, vous devrez ouvrir cette plage de ports manuellement. Pour ce faire, exécutez simplement cette commande :
+Vous pouvez également installer *Galène* avec un serveur TURN externe avec cette branch : https://github.com/YunoHost-Apps/galene_ynh/tree/galene+turn
 
-```
-sudo yunohost firewall allow Both 49152:65535
-```
+### Statistiques du serveur
 
-Vous devrez peut-être également ouvrir ces ports (si ce n'est pas fait automatiquement) sur votre box.
+Les statistiques sont disponibles sous `/var/www/galene/stats.json`, avec une version lisible sur `domain.ltd/stats.html`. Cette page n'est disponible que pour l'administrateur du serveur.
 
-Pour éviter la situation où le serveur est derrière un NAT, l'adresse IP publique est écrite dans la configuration du serveur TURN. De cette manière, le serveur TURN peut envoyer sa véritable adresse IP publique au client. Pour plus d'informations, consultez [le fichier de configuration d'exemple Coturn](https://github.com/coturn/coturn/blob/master/examples/etc/turnserver.conf#L56-L62). Donc, si votre adresse IP change, vous pouvez exécuter le script `/opt/yunohost/galene/Coturn_config_rotate.sh` pour mettre à jour votre configuration.
+### Comment enregistrer ma conférence ?
 
-Si vous avez une adresse IP dynamique, vous devrez peut-être également mettre à jour cette configuration automatiquement. Pour ce faire, éditez simplement un fichier nommé `/etc/cron.d/coturn_config_rotate` et ajoutez le contenu suivant.
-
-```
-* / 15 * * * * root bash /opt/yunohost/galene/Coturn_config_rotate.sh;
-```
-
-Pour vérifier si Galène peut se connecter au serveur TURN, connectez-vous à Galène en tant qu'opérateur et tapez `/relay-test` dans la boîte de dialogue chat; si le serveur TURN est correctement configuré, vous devriez voir un message indiquant que le test du relais a réussi.
-
-
+Assurez-vous que l'autorisation d'enregistrement est définie dans la configuration de votre groupe. Connectez-vous en tant qu'opérateur, puis dites `/record` dans la fenêtre de chat avant de commencer la visio. N'oubliez pas de dire `/unrecord` à la fin. Vous trouverez vos enregistrements sous `https://server.example.com/recordings/groupname/`. Les enregistrements vidéo sont stockés dans le dossier `/home/yunohost.app/galene/recordings`. 
 
 ## Documentations et ressources
 
-* Site official de l'app : https://galene.org
-
-* Documentation officielle de l'admin: https://galene.org/
-* Dépôt de code officiel de l'app:  https://github.com/jech/galene
-* Documentation YunoHost pour cette app: https://yunohost.org/app_galene
-* Signaler un bug: https://github.com/YunoHost-Apps/galene_ynh/issues
+* Site officiel de l'app : https://galene.org/
+* Documentation officielle utilisateur : https://galene.org/faq.html
+* Documentation officielle de l'admin : https://galene.org/
+* Dépôt de code officiel de l'app : https://github.com/jech/galene
+* Documentation YunoHost pour cette app : https://yunohost.org/app_galene
+* Signaler un bug : https://github.com/YunoHost-Apps/galene_ynh/issues
 
 ## Informations pour les développeurs
 
@@ -80,8 +96,8 @@ Merci de faire vos pull request sur la [branche testing](https://github.com/Yuno
 Pour essayer la branche testing, procédez comme suit.
 ```
 sudo yunohost app install https://github.com/YunoHost-Apps/galene_ynh/tree/testing --debug
-or
+ou
 sudo yunohost app upgrade galene -u https://github.com/YunoHost-Apps/galene_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications:** https://yunohost.org/packaging_apps
+**Plus d'infos sur le packaging d'applications :** https://yunohost.org/packaging_apps

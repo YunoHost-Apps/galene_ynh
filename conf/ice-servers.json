@@ -1,10 +1,11 @@
 [
     {
         "urls": [
-            "turn:__DOMAIN__:__TURNSERVER_PORT__",
-            "turn:__DOMAIN__:__TURNSERVER_PORT__?transport=tcp"
+            "turn:turn.example.org:5349",
+            "turn:turn.example.org:5349?transport=tcp"
         ],
-        "username": "__APP__",
-        "credential": "__TURNSERVER_PWD__"
+        "username": "galene",
+        "credential": "secret",
+        "credentialType": "hmac-sha1"
     }
 ]
