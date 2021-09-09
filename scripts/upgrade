@@ -27,7 +27,7 @@ architecture=$(ynh_detect_arch)
 
 if ynh_compare_current_package_version --comparison le --version 0.3.5~ynh3
 then
-    ynh_die --message="Please need to remove the app and reinstall it"
+    ynh_die --message="Please, you need to remove the app and reinstall it"
 fi
 
 #=================================================
