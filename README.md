@@ -27,7 +27,7 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 - activity detection
 
 
-**Shipped version:** 0.4.0~ynh1
+**Shipped version:** 0.4.0~ynh2
 
 **Demo:** https://galene.org:8443/
 
@@ -78,7 +78,7 @@ You can also install Galène with an external TURN server with this branch: http
 
 ### Server Statistics page
 
-Statistics are available under `/var/www/galene/stats.json`, with a human-readable version at `domain.ltd/stats.html`. This is only available to the server administrator.
+Statistics are available under `/opt/yunohost/galene/stats.json`, with a human-readable version at `domain.ltd/stats.html`. This is only available to the server administrator.
 
 ### How do I record my lecture?
 

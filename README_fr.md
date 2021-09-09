@@ -23,7 +23,7 @@ Galène est un serveur de visioconférence (un « SFU ») facile à déployer et
 - détection d'activité
 
 
-**Version incluse :** 0.4.0~ynh1
+**Version incluse :** 0.4.0~ynh2
 
 **Démo :** https://galene.org:8443/
 
@@ -74,7 +74,7 @@ Vous pouvez également installer *Galène* avec un serveur TURN externe avec cet
 
 ### Statistiques du serveur
 
-Les statistiques sont disponibles sous `/var/www/galene/stats.json`, avec une version lisible sur `domain.ltd/stats.html`. Cette page n'est disponible que pour l'administrateur du serveur.
+Les statistiques sont disponibles sous `/opt/yunohost/galene/stats.json`, avec une version lisible sur `domain.ltd/stats.html`. Cette page n'est disponible que pour l'administrateur du serveur.
 
 ### Comment enregistrer ma conférence ?
 
