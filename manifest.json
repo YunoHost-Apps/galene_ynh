@@ -32,13 +32,11 @@
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
-                "example": "example.com"
+                "type": "domain"
             },
             {
                 "name": "admin",
-                "type": "user",
-                "example": "johndoe"
+                "type": "user"
             },
             {
                 "name": "password",
@@ -46,8 +44,7 @@
                 "help": {
                     "en": "Set the administrator password (between 8 and 30 characters)",
                     "fr": "Définissez le mot de passe administrateur (entre 8 et 30 caractères)"
-                },
-                "example": "Choose a password"
+                }
             },
             {
                 "name": "is_public",
