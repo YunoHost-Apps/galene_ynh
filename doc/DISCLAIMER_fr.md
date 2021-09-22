@@ -5,7 +5,7 @@ Les salles de réunion *Galène* sont appelées « groupes ». Tout groupe est a
 #### Ajouter et configurer des groupes
 
 Les groupes sont définis par des fichiers JSON situés dans le dossier `/home/yunohost.app/galene/groups`. Chaque groupe est représenté par un fichier `GroupName.json`.
-Pour créer un nouveau groupe, vous devez créer un fichier `GroupNameExample.json` (vous pouvez également créer un sous-dossier, et les groupes seront accessibles avec` https://domain.tld/group/subfolder/GroupName`). Différentes options de configurations sont disponibles (voir https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
+Pour créer un nouveau groupe, vous devez créer un fichier `GroupNameExample.json` et redémarrer le service Galène (vous pouvez également créer un sous-dossier, et les groupes seront accessibles avec` https://domain.tld/group/subfolder/GroupName`). Différentes options de configurations sont disponibles (voir https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
 
 *NB : les espaces sont pris en charge dans les noms de fichiers de groupe.* 
 
