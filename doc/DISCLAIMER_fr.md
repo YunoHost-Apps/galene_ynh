@@ -39,7 +39,7 @@ Vous pouvez également installer *Galène* avec un serveur TURN externe avec cet
 
 ### Statistiques du serveur
 
-Les statistiques sont disponibles sous `/opt/yunohost/galene/stats.json`, avec une version lisible sur `domain.ltd/stats.html`. Cette page n'est disponible que pour l'administrateur du serveur.
+Les statistiques sont disponibles sous `/opt/yunohost/galene/stats.json`, avec une version lisible sur `domain.ltd/stats.html`. Cette page n'est disponible que pour l'administrateur du serveur (le mot de passe et l'administrateur sont définis dans le fichier `config.json` : `/opt/yunohost/galene/data/config.json`).
 
 ### Comment enregistrer ma conférence ?
 
