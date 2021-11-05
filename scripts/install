@@ -105,7 +105,7 @@ chown -R $app:www-data "$final_path"
 # Create data folder
 mkdir -p "$final_path/data"
 
-ynh_add_config --template="../config.json" --destination="$final_path/data/config.json"
+ynh_add_config --template="../conf/config.json" --destination="$final_path/data/config.json"
 
 chmod 400 "$final_path/data/config.json"
 chown $app:$app "$final_path/data/config.json"
