@@ -55,6 +55,11 @@ ynh_secure_remove --file="$final_path"
 # REMOVE DATA DIR
 #=================================================
 
+if [ ${PACKAGE_CHECK_EXEC:-0} -eq 1 ]; then
+	$YNH_APP_PURGE -eq 1 
+fi
+
+
 # Remove the app data directory with the command `yunohost app remove galene --purge`
 if [ "${YNH_APP_PURGE:-0}" -eq 1 ]
 then
