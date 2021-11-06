@@ -7,7 +7,7 @@
 Groups are defined by JSON files located in the folder `/home/yunohost.app/galene/groups`. Each group is represented by a `GroupName.json` file.
 To create a new group, you need to create a `GroupNameExample.json` file and restart Galène service (you can also make subfolder groups, and the groups will be accessible with `https://domain.tld/group/subfolder/GroupName`). Various configuration options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
 
-When Galène is removed, the data directory (`/home/yunohost.app/galene/`) is preserved. If you want to remove it along with Galène, use the `--purge option`: `sudo yunohost app remove galene --purge`.
+When Galène is removed, the data directory (`/home/yunohost.app/galene/`) is preserved. If you want to remove it along with Galène, use the `--purge` option: `sudo yunohost app remove galene --purge`.
 
 *NB: Spaces are supported in group file names.*
 
