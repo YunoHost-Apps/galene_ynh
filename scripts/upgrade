@@ -19,6 +19,7 @@ app=$YNH_APP_INSTANCE_NAME
 domain=$(ynh_app_setting_get --app=$app --key=domain)
 path_url=$(ynh_app_setting_get --app=$app --key=path)
 admin=$(ynh_app_setting_get --app=$app --key=admin)
+password=$(ynh_app_setting_get --app=$app --key=password)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
@@ -99,12 +100,30 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Upgrading source files..." --weight=2
 
-	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture" --keep="$final_path/data/passwd"
+	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture" #--keep="$final_path/data/config.json"
 fi
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
+
+#=================================================
+# UPGRADING CONFIGURATION FILE
+#=================================================
+ynh_script_progression --message="Upgrading configuration file..." --weight=2
+
+# Create data folder
+mkdir -p "$final_path/data"
+
+# We remove the old admin/password file if present
+if [ -f "$final_path/data/passwd" ] ; then
+    ynh_secure_remove --file="$final_path/data/passwd"
+fi
+
+ynh_add_config --template="../conf/config.json" --destination="$final_path/data/config.json"
+
+chmod 400 "$final_path/data/config.json"
+chown $app:$app "$final_path/data/config.json"
 
 #=================================================
 # NGINX CONFIGURATION

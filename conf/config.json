@@ -1,0 +1,4 @@
+{
+	"canonicalHost": "__DOMAIN__",
+	"admin":[{"username":"__ADMIN__","password":"__PASSWORD__"}]
+}

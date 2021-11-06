@@ -29,6 +29,8 @@ ynh_script_progression --message="Loading installation settings..." --weight=1
 # Needed for helper "ynh_add_nginx_config"
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 port=$(ynh_app_setting_get --app=$app --key=port)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
+password=$(ynh_app_setting_get --app=$app --key=password)
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -100,6 +102,17 @@ then
 	# Store file checksum for the new config file location
 	ynh_store_file_checksum --file="/etc/nginx/conf.d/$new_domain.d/$app.conf"
 fi
+
+#=================================================
+# CREATE DATA AND GROUPS FOLDER
+#=================================================
+ynh_script_progression --message="Updating configuration file..." --weight=2
+
+domain="$new_domain"
+ynh_add_config --template="../conf/config.json" --destination="$final_path/data/config.json"
+
+chmod 400 "$final_path/data/config.json"
+chown $app:$app "$final_path/data/config.json"
 
 #=================================================
 # GENERIC FINALISATION

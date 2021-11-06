@@ -50,6 +50,7 @@ ynh_script_progression --message="Storing installation settings..." --weight=4
 ynh_app_setting_set --app=$app --key=domain --value=$domain
 ynh_app_setting_set --app=$app --key=path --value=$path_url
 ynh_app_setting_set --app=$app --key=admin --value=$admin
+ynh_app_setting_set --app=$app --key=password --value=$password
 ynh_app_setting_set --app=$app --key=group_name --value="$group_name"
 ynh_app_setting_set --app=$app --key=group_description --value="$group_description"
 
@@ -103,9 +104,11 @@ chown -R $app:www-data "$final_path"
 
 # Create data folder
 mkdir -p "$final_path/data"
-echo $admin:$password > "$final_path/data/passwd"
-chmod 400 "$final_path/data/passwd"
-chown $app: "$final_path/data/passwd"
+
+ynh_add_config --template="../conf/config.json" --destination="$final_path/data/config.json"
+
+chmod 400 "$final_path/data/config.json"
+chown $app:$app "$final_path/data/config.json"
 
 #=================================================
 # NGINX CONFIGURATION

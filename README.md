@@ -27,7 +27,7 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 - activity detection
 
 
-**Shipped version:** 0.4.0~ynh3
+**Shipped version:** 0.4.1~ynh1
 
 **Demo:** https://galene.org:8443/
 
@@ -44,7 +44,9 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 #### Creating and configuring groups
 
 Groups are defined by JSON files located in the folder `/home/yunohost.app/galene/groups`. Each group is represented by a `GroupName.json` file.
-To create a new group, you need to create a `GroupNameExample.json` file (you can also make subfolder groups, and the groups will be accessible with `https://domain.tld/group/subfolder/GroupName`). Various configuration options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
+To create a new group, you need to create a `GroupNameExample.json` file and restart Galène service (you can also make subfolder groups, and the groups will be accessible with `https://domain.tld/group/subfolder/GroupName`). Various configuration options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
+
+When Galène is removed, the data directory (`/home/yunohost.app/galene/`) is preserved. If you want to remove it along with Galène, use the `--purge` option: `sudo yunohost app remove galene --purge`.
 
 *NB: Spaces are supported in group file names.*
 
@@ -78,7 +80,7 @@ You can also install Galène with an external TURN server with this branch: http
 
 ### Server Statistics page
 
-Statistics are available under `/opt/yunohost/galene/stats.json`, with a human-readable version at `domain.ltd/stats.html`. This is only available to the server administrator.
+Statistics are available under `/opt/yunohost/galene/stats.json`, with a human-readable version at `domain.ltd/stats.html`. This is only available to the server administrator (the admin/password is set in the `config.json` file: `/opt/yunohost/galene/data/config.json`).
 
 ### How do I record my lecture?
 
