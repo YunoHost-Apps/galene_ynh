@@ -110,6 +110,7 @@ chown -R $app:www-data "$final_path"
 #=================================================
 # CREATE DATA FOLDER
 #=================================================
+ynh_script_progression --message="Upgrading configuration file..." --weight=2
 
 # Create data folder
 mkdir -p "$final_path/data"
