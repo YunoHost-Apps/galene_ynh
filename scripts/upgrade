@@ -108,7 +108,7 @@ chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
 
 #=================================================
-# CREATE DATA FOLDER
+# UPGRADING CONFIGURATION FILE
 #=================================================
 ynh_script_progression --message="Upgrading configuration file..." --weight=2
 
