@@ -62,7 +62,7 @@ then
     ynh_exec_warn_less yunohost firewall disallow TCP $port
 fi
 
-# If final_path doesn't exist, create it
+# If architecture doesn't exist, create it
 if [ -z "$architecture" ]; then
 	architecture="dpkg --print-architecture"
 	architecture=$(ynh_app_setting_get --app=$app --key=architecture)
