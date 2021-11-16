@@ -53,6 +53,7 @@ ynh_app_setting_set --app=$app --key=admin --value=$admin
 ynh_app_setting_set --app=$app --key=password --value=$password
 ynh_app_setting_set --app=$app --key=group_name --value="$group_name"
 ynh_app_setting_set --app=$app --key=group_description --value="$group_description"
+ynh_app_setting_set --app=$app --key=architecture --value=$architecture
 
 #=================================================
 # STANDARD MODIFICATIONS
@@ -148,6 +149,14 @@ ynh_add_systemd_config
 
 # Create a group name config
 ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
+
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Configuring log rotation..." --weight=1
+
+# Use logrotate to manage application logfile(s)
+ynh_use_logrotate
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST

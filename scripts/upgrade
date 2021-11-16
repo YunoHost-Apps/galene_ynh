@@ -24,7 +24,7 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
 turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
-architecture=$(ynh_detect_arch)
+architecture=$(ynh_app_setting_get --app=$app --key=architecture)
 
 if ynh_compare_current_package_version --comparison le --version 0.3.5~ynh3
 then
@@ -142,6 +142,14 @@ public_ip4="$(curl -s ip.yunohost.org)" || true
 
 # Create a dedicated systemd config
 ynh_add_systemd_config
+
+#=================================================
+# SETUP LOGROTATE
+#=================================================
+ynh_script_progression --message="Upgrading logrotate configuration..." --weight=1
+
+# Use logrotate to manage app-specific logfile(s)
+ynh_use_logrotate --non-append
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
