@@ -63,6 +63,12 @@ then
 fi
 
 # If final_path doesn't exist, create it
+if [ -z "$architecture" ]; then
+	architecture="dpkg --print-architecture"
+	architecture=$(ynh_app_setting_get --app=$app --key=architecture)
+fi
+
+# If final_path doesn't exist, create it
 if [ -z "$final_path" ]; then
 	final_path=/opt/yunohost/$app
 	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
