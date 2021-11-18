@@ -64,7 +64,7 @@ fi
 
 # If architecture doesn't exist, create it
 if [ -z "$architecture" ]; then
-	architecture="dpkg --print-architecture"
+	architecture=$(dpkg --print-architecture)
 	architecture=$(ynh_app_setting_get --app=$app --key=architecture)
 fi
 
