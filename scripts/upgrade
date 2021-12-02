@@ -24,7 +24,7 @@ password=$(ynh_app_setting_get --app=$app --key=password)
 port=$(ynh_app_setting_get --app=$app --key=port)
 turnserver_port=$(ynh_app_setting_get --app=$app --key=turnserver_port)
 turnserver_pwd=$(ynh_app_setting_get --app=$app --key=turnserver_pwd)
-architecture=$(ynh_detect_arch)
+architecture=$YNH_ARCH
 
 #=================================================
 # CHECK VERSION
