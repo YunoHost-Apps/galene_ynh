@@ -23,7 +23,7 @@ Galène est un serveur de visioconférence (un « SFU ») facile à déployer et
 - détection d'activité
 
 
-**Version incluse :** 0.4.2~ynh1
+**Version incluse :** 0.4.3~ynh1
 
 **Démo :** https://galene.org:8443/
 
@@ -50,7 +50,7 @@ Lorsque Galène est supprimé, le répertoire de données (`/home/yunohost.app/g
 
 #### Utilisation du serveur TURN de *Galène*
 Galène est livré avec un serveur TURN intégré qui devrait fonctionner immédiatement.
-- Si votre serveur est derrière NAT, autorisez le trafic entrant vers le port TCP `8443` (ou tout ce qui est configuré avec l'option `-http` dans `/etc/systemd/system/galene.service`) et le port TCP/UDP `1194` (ou tout ce qui est configuré avec l'option `-turn` dans `/etc/systemd/system/galene.service`)
+- Si votre serveur est derrière NAT, autorisez le trafic entrant vers le port TCP/UDP `1194` (ou tout ce qui est configuré avec l'option `-turn` dans `/etc/systemd/system/galene.service`)
 
 #### Utilisation de votre propre serveur TURN
 - Installez [coturn_ynh](https://github.com/YunoHost-Apps/coturn_ynh).
