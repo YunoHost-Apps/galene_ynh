@@ -13,7 +13,7 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 
 ### Server features
 
--redistribution of arbitrary numbers of audio and video streams;
+- redistribution of arbitrary numbers of audio and video streams;
 - text chat;
 - recording to disk;
 - user statuses ("raise hand", etc.);
