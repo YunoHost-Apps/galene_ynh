@@ -24,7 +24,6 @@ final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
 turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
-architecture=$YNH_ARCH
 
 if ynh_compare_current_package_version --comparison le --version 0.3.5~ynh3
 then
@@ -103,7 +102,7 @@ then
 	# Remove the app directory securely
 	ynh_secure_remove --file=$final_path
 
-	ynh_setup_source --dest_dir="$final_path" --source_id="$architecture" #--keep="$final_path/data/config.json"
+	ynh_setup_source --dest_dir="$final_path" --source_id=$YNH_ARCH #--keep="$final_path/data/config.json"
 fi
 
 chmod 750 "$final_path"
