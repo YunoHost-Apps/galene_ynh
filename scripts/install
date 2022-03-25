@@ -27,7 +27,6 @@ is_public=$YNH_APP_ARG_IS_PUBLIC
 password=$YNH_APP_ARG_PASSWORD
 group_name=$YNH_APP_ARG_GROUP_NAME
 group_description=$YNH_APP_ARG_GROUP_DESCRIPTION
-architecture=$YNH_ARCH
 
 app=$YNH_APP_INSTANCE_NAME
 
@@ -92,7 +91,7 @@ ynh_script_progression --message="Setting up source files..." --weight=1
 
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir="$final_path" --source_id="$architecture"
+ynh_setup_source --dest_dir="$final_path" --source_id=$YNH_ARCH
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
