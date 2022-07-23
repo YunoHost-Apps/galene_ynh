@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/YunoHost-Apps/galene_ynh/releases/download/v0.5.4/galene_0.5.4_Linux_arm7.tar.gz
-SOURCE_SUM=8484ed3ef3c43f599fcaae0a176ae53daba588004ee73f39155ef4489c100c8d
+SOURCE_URL=https://github.com/YunoHost-Apps/galene_ynh/releases/download/v0.5.5/galene_0.5.5_Linux_arm7.tar.gz
+SOURCE_SUM=aef5381f2d858efe5f34f038866cab17d71ed0fb0611a413f23fa44e270420e7
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
