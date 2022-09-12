@@ -44,7 +44,8 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 - built-in TURN server.
 
 
-**Shipped version:** 0.5.5~ynh1
+**Shipped version:** 0.6~ynh1
+
 
 **Demo:** https://galene.org:8443/
 
