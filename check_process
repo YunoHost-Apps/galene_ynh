@@ -2,8 +2,8 @@
 	; Manifest
 		domain="domain.tld"
 		path="/path"
-		admin="john"
 		is_public=1
+		admin="john"
 		password="password"
 		group_name="public with space"
 		group_description="My public space"
@@ -18,6 +18,7 @@
 		upgrade=1	from_commit=aaae7fbe83ce001fabd40509882e765a5d8da2c1
 		backup_restore=1
 		multi_instance=0
+		port_already_use=0
 		change_url=1
 ;;; Options
 Email=

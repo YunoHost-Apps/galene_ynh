@@ -1,11 +1,11 @@
 [
-    {
-        "urls": [
-            "turn:turn.example.org:5349",
-            "turn:turn.example.org:5349?transport=tcp"
-        ],
-        "username": "galene",
-        "credential": "secret",
-        "credentialType": "hmac-sha1"
-    }
+	{
+		"urls": [
+			"turn:turn.example.org:5349",
+			"turn:turn.example.org:5349?transport=tcp"
+		],
+		"username": "galene",
+		"credential": "secret",
+		"credentialType": "hmac-sha1"
+	}
 ]

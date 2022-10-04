@@ -1,6 +1,0 @@
-SOURCE_URL=https://github.com/YunoHost-Apps/galene_ynh/releases/download/v0.6/galene_0.6_Linux_i386.tar.gz
-SOURCE_SUM=898c8a01c17aa012457d39b6e918fb70dc5263df7a893b814241f8b9c236177f
-SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=tar.gz
-SOURCE_IN_SUBDIR=true
-SOURCE_EXTRACT=true

@@ -1,0 +1,15 @@
+[Unit]
+Description=Galène: LDAP integration for the videoconferencing server
+Documentation=https://galene.org
+After=network.target
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+WorkingDirectory=__FINALPATH__/live_ldap/
+ExecStart=__FINALPATH__/live_ldap/galene-ldap -data __FINALPATH__/live_ldap/data/
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
