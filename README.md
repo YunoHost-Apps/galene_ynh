@@ -58,6 +58,7 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 ### Accessing groups
 
 *Galène* meeting rooms are called "groups". Any group is accessible at `https://domain.tld/group/GroupName`, by typing its name in the home page search field, or by selecting it in the public list (if the group is configured as publicly visible, see below).
+During install a group is created with YunoHost LDAP authentication, accessible at `https://domain.tld/group/YunoHost_Users`.
 
 #### Creating and configuring groups
 
