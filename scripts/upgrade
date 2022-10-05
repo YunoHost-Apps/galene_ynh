@@ -23,6 +23,7 @@ admin=$(ynh_app_setting_get --app=$app --key=admin)
 password=$(ynh_app_setting_get --app=$app --key=password)
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
+group_description=$(ynh_app_setting_get --app=$app --key=group_description)
 port=$(ynh_app_setting_get --app=$app --key=port)
 ldap_port=$(ynh_app_setting_get --app=$app --key=ldap_port)
 key=$(ynh_app_setting_get --app=$app --key=key)
@@ -99,6 +100,18 @@ fi
 # We remove the old admin/password file if present
 if [ -f "$final_path/data/passwd" ] ; then
     ynh_secure_remove --file="$final_path/data/passwd"
+fi
+
+# For version 0.6~ynh1 and before
+if [[ ! -d "$final_path/live" ]]
+then
+    tempdir="$(mktemp -d)"
+    mv $final_path $tempdir
+    mkdir -p "$final_path/live"
+    mv $tempdir/$app/galene "$final_path/live/"
+    mv $tempdir/$app/data/ "$final_path/live/"
+    mv $tempdir/$app/static/ "$final_path/live/"
+    ynh_secure_remove --file="$tempdir"
 fi
 
 #=================================================

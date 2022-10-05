@@ -16,6 +16,8 @@
 		setup_public=1
 		upgrade=1
 		upgrade=1	from_commit=aaae7fbe83ce001fabd40509882e765a5d8da2c1
+		# 0.6~ynh1
+		upgrade=1	from_commit=c5cc50f1b1f326080f4f657b7805f2c27c1c3f20
 		backup_restore=1
 		multi_instance=0
 		port_already_use=0
