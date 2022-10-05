@@ -3,7 +3,7 @@
 	"presenter": [{}],
  	"description": "__GROUP_DESCRIPTION__",
 	"public": true,
-    "allow-anonymous": true,
-    "allow-recording": true,
-    "allow-subgroups": true
+	"allow-anonymous": true,
+	"allow-recording": true,
+	"allow-subgroups": true
 }

@@ -1,0 +1,8 @@
+{
+ 	"description": "YunoHost User Group",
+	"public": true,
+	"authServer": "https://__DOMAIN__/auth/",
+	"authKeys": [
+		__KEY__
+	]
+}
