@@ -137,7 +137,7 @@ pushd $final_path/build/
 	ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $final_path/live/
 popd
 pushd $final_path/build_ldap/
-	ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $final_path/live_ldap/
+	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $final_path/live_ldap/
 popd
 ynh_remove_go
 ynh_secure_remove --file="$final_path/build/"
