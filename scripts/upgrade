@@ -27,6 +27,7 @@ port=$(ynh_app_setting_get --app=$app --key=port)
 ldap_port=$(ynh_app_setting_get --app=$app --key=ldap_port)
 key=$(ynh_app_setting_get --app=$app --key=key)
 turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
+datadir=$(ynh_app_setting_get --app=$app --key=datadir)
 
 if ynh_compare_current_package_version --comparison le --version 0.3.5~ynh3
 then
@@ -153,7 +154,7 @@ ynh_script_progression --message="Building app..." --weight=1
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-	ynh_install_go --go_version=$go_version
+	ynh_exec_warn_less ynh_install_go --go_version=$go_version
 	ynh_use_go
 	pushd $final_path/build/
 		ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $final_path/live/

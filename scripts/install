@@ -131,7 +131,7 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Building app..." --weight=1
 
-ynh_install_go --go_version=$go_version
+ynh_exec_warn_less ynh_install_go --go_version=$go_version
 ynh_use_go
 pushd $final_path/build/
 	ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $final_path/live/

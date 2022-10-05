@@ -36,6 +36,7 @@ group_name=$(ynh_app_setting_get --app=$app --key=group_name)
 port=$(ynh_app_setting_get --app=$app --key=port)
 ldap_port=$(ynh_app_setting_get --app=$app --key=ldap_port)
 key=$(ynh_app_setting_get --app=$app --key=key)
+datadir=$(ynh_app_setting_get --app=$app --key=datadir)
 
 #=================================================
 # BACKUP BEFORE CHANGE URL THEN ACTIVE TRAP
