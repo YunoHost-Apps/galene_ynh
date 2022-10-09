@@ -1,4 +1,4 @@
-SOURCE_URL=https://github.com/jech/galene/archive/refs/tags/galene-0.6.tar.gz
+SOURCE_URL=https://github.com/jech/galene/archive/refs/tags/galene-0.6.1.tar.gz
 SOURCE_SUM=672645e6d888e5a0c3b843355c85801e21bfea6f054fd6bafda5a0e9aebc589e
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz

@@ -165,12 +165,12 @@ chown -R $app:www-data "$datadir"
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=1
 
-# Configure Galene
+# Configure Galène
 ynh_add_config --template="../conf/config.json" --destination="$final_path/live/data/config.json"
 chmod 400 "$final_path/live/data/config.json"
 chown $app:$app "$final_path/live/data/config.json"
 
-# Configure Galene LDAP
+# Configure Galène LDAP
 key=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
 ynh_app_setting_set --app=$app --key=key --value="$key"
 ynh_add_config --template="../conf/galene-ldap.json" --destination="$final_path/live_ldap/data/galene-ldap.json"
