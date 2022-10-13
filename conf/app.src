@@ -1,5 +1,5 @@
 SOURCE_URL=https://github.com/jech/galene/archive/refs/tags/galene-0.6.1.tar.gz
-SOURCE_SUM=672645e6d888e5a0c3b843355c85801e21bfea6f054fd6bafda5a0e9aebc589e
+SOURCE_SUM=ea7ac0d0c5cff685e1d2a2e077d7197588fb570adfab1a1a924c87271f682f29
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
