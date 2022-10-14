@@ -28,12 +28,18 @@ ynh_script_progression --message="Loading installation settings..." --weight=1
 
 # Needed for helper "ynh_add_nginx_config"
 final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-port=$(ynh_app_setting_get --app=$app --key=port)
+
+# Add settings here as needed by your application
 admin=$(ynh_app_setting_get --app=$app --key=admin)
 password=$(ynh_app_setting_get --app=$app --key=password)
+group_name=$(ynh_app_setting_get --app=$app --key=group_name)
+port=$(ynh_app_setting_get --app=$app --key=port)
+ldap_port=$(ynh_app_setting_get --app=$app --key=ldap_port)
+key=$(ynh_app_setting_get --app=$app --key=key)
+datadir=$(ynh_app_setting_get --app=$app --key=datadir)
 
 #=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+# BACKUP BEFORE CHANGE URL THEN ACTIVE TRAP
 #=================================================
 ynh_script_progression --message="Backing up the app before changing its URL (may take a while)..." --weight=1
 
@@ -72,7 +78,8 @@ fi
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action=stop --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=$app --action="stop" --log_path="systemd"
+ynh_systemd_action --service_name=${app}_ldap --action="stop" --log_path="systemd"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
@@ -104,15 +111,32 @@ then
 fi
 
 #=================================================
-# CREATE DATA AND GROUPS FOLDER
+# SPECIFIC MODIFICATIONS
 #=================================================
-ynh_script_progression --message="Updating configuration file..." --weight=2
+# UPDATE A CONFIG FILE
+#=================================================
+ynh_script_progression --message="Updating a configuration file..." --weight=2
 
 domain="$new_domain"
-ynh_add_config --template="../conf/config.json" --destination="$final_path/data/config.json"
+# Configure Galene
+ynh_add_config --template="../conf/config.json" --destination="$final_path/live/data/config.json"
+chmod 400 "$final_path/live/data/config.json"
+chown $app:$app "$final_path/live/data/config.json"
 
-chmod 400 "$final_path/data/config.json"
-chown $app:$app "$final_path/data/config.json"
+# Configure Galene LDAP
+ynh_add_config --template="../conf/galene-ldap.json" --destination="$final_path/live_ldap/data/galene-ldap.json"
+chmod 400 "$final_path/live_ldap/data/galene-ldap.json"
+chown $app:$app "$final_path/live_ldap/data/galene-ldap.json"
+
+# Create a group name config
+ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
+chmod 400 "$datadir/groups/$group_name.json"
+chown $app:$app "$datadir/groups/$group_name.json"
+
+# Create a group name authenticated on LDAP
+ynh_add_config --template="../conf/groupname-ldap.json" --destination="$datadir/groups/YunoHost_Users.json"
+chmod 400 "$datadir/groups/YunoHost_Users.json"
+chown $app:$app "$datadir/groups/YunoHost_Users.json"
 
 #=================================================
 # GENERIC FINALISATION
@@ -121,7 +145,9 @@ chown $app:$app "$final_path/data/config.json"
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=3
 
-ynh_systemd_action --service_name=$app --action=start --log_path="systemd"
+# Start a systemd service
+ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
+ynh_systemd_action --service_name=${app}_ldap --action="start" --log_path="systemd"
 
 #=================================================
 # RELOAD NGINX

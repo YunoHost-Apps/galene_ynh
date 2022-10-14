@@ -1,0 +1,8 @@
+{
+	"httpAddress": "127.0.0.1:__LDAP_PORT__",
+	"ldapServer": "ldap://localhost:389",
+	"ldapBase": "ou=users,dc=yunohost,dc=org",
+	"key": __KEY__,
+	"groups": ["YunoHost_Users"],
+	"insecure": true
+}

@@ -27,7 +27,7 @@ Galène est un serveur de visioconférence (un « SFU ») facile à déployer et
 - détection d'activité
 
 
-**Version incluse :** 0.6.1~ynh1
+**Version incluse :** 0.6.1~ynh2
 
 **Démo :** https://galene.org:8443/
 
@@ -40,6 +40,7 @@ Galène est un serveur de visioconférence (un « SFU ») facile à déployer et
 ### Accéder à des groupes
 
 Les salles de réunion *Galène* sont appelées « groupes ». Tout groupe est accessible sur `https://domain.tld/group/GroupName`, en tapant son nom dans le champ de recherche de la page d'accueil, ou en le sélectionnant dans la liste publique (si le groupe est configuré comme visible publiquement, voir ci-dessous).
+Pendant l'installation, un groupe est créé avec l'authentification LDAP de YunoHost, accessible à `https://domain.tld/group/YunoHost_Users`.
 
 #### Ajouter et configurer des groupes
 
