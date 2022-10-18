@@ -123,7 +123,7 @@ ynh_install_go () {
             fi
         popd
     else
-        ynh_print_info --message="Installing goenv with Git..."
+        #ynh_print_info --message="Installing goenv with Git..."
         mkdir -p $goenv_install_dir
         pushd $goenv_install_dir
             git init -q
@@ -144,7 +144,7 @@ ynh_install_go () {
             fi
         popd
     else
-        ynh_print_info --message="Installing xxenv-latest with Git..."
+        #ynh_print_info --message="Installing xxenv-latest with Git..."
         mkdir -p "${goenv_install_dir}/plugins"
         git clone -q https://github.com/momo-lab/xxenv-latest.git "${goenv_install_dir}/plugins/xxenv-latest"
     fi
@@ -163,7 +163,7 @@ ynh_install_go () {
 
     # Install the requested version of Go
     local final_go_version=$(goenv latest --print $go_version)
-    ynh_print_info --message="Installation of Go-$final_go_version"
+    #ynh_print_info --message="Installation of Go-$final_go_version"
     goenv install --skip-existing $final_go_version
 
     # Store go_version into the config of this app
@@ -231,7 +231,7 @@ ynh_cleanup_go () {
     do
         if ! `echo ${required_go_versions} | grep "${installed_go_version}" 1>/dev/null 2>&1`
         then
-            ynh_print_info --message="Removing of Go-$installed_go_version"
+            #ynh_print_info --message="Removing of Go-$installed_go_version"
             $goenv_install_dir/bin/goenv uninstall --force $installed_go_version
         fi
     done
@@ -240,7 +240,7 @@ ynh_cleanup_go () {
     if [[ ! $required_go_versions ]]
     then
         # Remove goenv environment configuration
-        ynh_print_info --message="Removing of goenv"
+        #ynh_print_info --message="Removing of goenv"
         ynh_secure_remove --file="$goenv_install_dir"
         ynh_secure_remove --file="/etc/profile.d/goenv.sh"
     fi
