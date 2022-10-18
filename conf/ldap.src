@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/jech/galene-ldap/archive/d0ffa0eadcf17150450d0222c07a2f8cf4e28d7e.tar.gz
-SOURCE_SUM=e779ee173770799e3e0f398461a24f24576d87b1c8918712a8ee70702b74d4c9
+SOURCE_URL=https://github.com/jech/galene-ldap/archive/33b8a930372388b2b8b506d2564516fb3eaf895a.tar.gz
+SOURCE_SUM=00247712e4e7944fed42026f056f48eb59a95cf476c3ff1cb6e24c54469ce070
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
