@@ -13,22 +13,22 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
+#REMOVEME? ynh_script_progression --message="Loading installation settings..." --weight=1
 
-app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-path_url=$(ynh_app_setting_get --app=$app --key=path)
-admin=$(ynh_app_setting_get --app=$app --key=admin)
-password=$(ynh_app_setting_get --app=$app --key=password)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-group_name=$(ynh_app_setting_get --app=$app --key=group_name)
-group_description=$(ynh_app_setting_get --app=$app --key=group_description)
-port=$(ynh_app_setting_get --app=$app --key=port)
-ldap_port=$(ynh_app_setting_get --app=$app --key=ldap_port)
-key=$(ynh_app_setting_get --app=$app --key=key)
-turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
-datadir=$(ynh_app_setting_get --app=$app --key=datadir)
+#REMOVEME? domain=$(ynh_app_setting_get --app=$app --key=domain)
+#REMOVEME? path=$(ynh_app_setting_get --app=$app --key=path)
+#REMOVEME? admin=$(ynh_app_setting_get --app=$app --key=admin)
+#REMOVEME? password=$(ynh_app_setting_get --app=$app --key=password)
+#REMOVEME? #REMOVEME? install_dir=$(ynh_app_setting_get --app=$app --key=install_dir)
+#REMOVEME? group_name=$(ynh_app_setting_get --app=$app --key=group_name)
+#REMOVEME? group_description=$(ynh_app_setting_get --app=$app --key=group_description)
+#REMOVEME? port=$(ynh_app_setting_get --app=$app --key=port)
+#REMOVEME? ldap_port=$(ynh_app_setting_get --app=$app --key=ldap_port)
+#REMOVEME? key=$(ynh_app_setting_get --app=$app --key=key)
+#REMOVEME? turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
+#REMOVEME? data_dir=$(ynh_app_setting_get --app=$app --key=data_dir)
 
 if ynh_compare_current_package_version --comparison le --version 0.3.5~ynh3
 then
@@ -45,16 +45,16 @@ upgrade_type=$(ynh_check_app_version_changed)
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
-ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
+#REMOVEME? ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=1
 
 # Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
+#REMOVEME? ynh_backup_before_upgrade
+#REMOVEME? ynh_clean_setup () {
 	# Restore it if the upgrade fails
-	ynh_restore_upgradebackup
+#REMOVEME? 	ynh_restore_upgradebackup
 }
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -77,50 +77,50 @@ then
     ynh_exec_warn_less yunohost firewall disallow TCP $port
 fi
 
-# If final_path doesn't exist, create it
-if [ -z "$final_path" ]; then
-	final_path=/var/www/$app
-	mkdir -p $final_path
-	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+# If install_dir doesn't exist, create it
+if [ -z "$install_dir" ]; then
+#REMOVEME? 	install_dir=/var/www/$app
+	mkdir -p $install_dir
+#REMOVEME? 	ynh_app_setting_set --app=$app --key=install_dir --value=$install_dir
 fi
 
 # If ldap_port doesn't exist, create it
 if [ -z "$ldap_port" ]; then
-	ldap_port=$(ynh_find_port --port=$(($port + 1)))
-	ynh_app_setting_set --app=$app --key=port --value=$ldap_port
+#REMOVEME? 	ldap_port=$(ynh_find_port --port=$(($port + 1)))
+#REMOVEME? 	ynh_app_setting_set --app=$app --key=port --value=$ldap_port
 fi
 
 # Cleaning legacy permissions
-if ynh_legacy_permissions_exists; then
-	ynh_legacy_permissions_delete_all
+#REMOVEME? if ynh_legacy_permissions_exists; then
+#REMOVEME? 	ynh_legacy_permissions_delete_all
 
 	ynh_app_setting_delete --app=$app --key=is_public
 fi
 
 # We remove the old admin/password file if present
-if [ -f "$final_path/data/passwd" ] ; then
-    ynh_secure_remove --file="$final_path/data/passwd"
+if [ -f "$install_dir/data/passwd" ] ; then
+#REMOVEME?     ynh_secure_remove --file="$install_dir/data/passwd"
 fi
 
 # For version 0.6~ynh1 and before
-if [[ ! -d "$final_path/live" ]]
+if [[ ! -d "$install_dir/live" ]]
 then
     tempdir="$(mktemp -d)"
-    mv $final_path $tempdir
-    mkdir -p "$final_path/live"
-    mv $tempdir/$app/galene "$final_path/live/"
-    mv $tempdir/$app/data/ "$final_path/live/"
-    mv $tempdir/$app/static/ "$final_path/live/"
+    mv $install_dir $tempdir
+    mkdir -p "$install_dir/live"
+    mv $tempdir/$app/galene "$install_dir/live/"
+    mv $tempdir/$app/data/ "$install_dir/live/"
+    mv $tempdir/$app/static/ "$install_dir/live/"
     ynh_secure_remove --file="$tempdir"
 fi
 
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
-ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
+#REMOVEME? ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app --home_dir="$final_path"
+#REMOVEME? ynh_system_user_create --username=$app --home_dir="$install_dir"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -128,24 +128,24 @@ ynh_system_user_create --username=$app --home_dir="$final_path"
 
 ynh_script_progression --message="Upgrading source files..." --weight=2
 
-ynh_setup_source --dest_dir="$final_path/build"
-ynh_setup_source --dest_dir="$final_path/build_ldap" --source_id="ldap"
-mkdir -p "$final_path/live/data"
-mkdir -p "$final_path/live_ldap/data"
-ynh_secure_remove --file="$final_path/live/static/"
-cp -r "$final_path/build/static/" "$final_path/live/"
-ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" --replace_string="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --target_file="$final_path/live/static/galene.html"
+ynh_setup_source --dest_dir="$install_dir/build"
+ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
+mkdir -p "$install_dir/live/data"
+mkdir -p "$install_dir/live_ldap/data"
+#REMOVEME? ynh_secure_remove --file="$install_dir/live/static/"
+cp -r "$install_dir/build/static/" "$install_dir/live/"
+ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" --replace_string="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --target_file="$install_dir/live/static/galene.html"
 
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
+chmod 750 "$install_dir"
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=1
+#REMOVEME? ynh_script_progression --message="Upgrading dependencies..." --weight=1
 
-ynh_install_app_dependencies $pkg_dependencies
+#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # NGINX CONFIGURATION
@@ -166,18 +166,18 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_exec_warn_less ynh_install_go --go_version=$go_version
 	ynh_use_go
-	pushd $final_path/build/
-		ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $final_path/live/
+	pushd $install_dir/build/
+		ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live/
 	popd
-	pushd $final_path/build_ldap/
-		ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $final_path/live_ldap/
+	pushd $install_dir/build_ldap/
+		ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live_ldap/
 	popd
 	ynh_remove_go
-	ynh_secure_remove --file="$final_path/build/"
-	ynh_secure_remove --file="$final_path/build_ldap/"
-	ynh_secure_remove --file="$final_path/.cache/"
-	ynh_secure_remove --file="$final_path/go/"
-	ynh_secure_remove --file="$final_path/.go-version"
+#REMOVEME? 	ynh_secure_remove --file="$install_dir/build/"
+#REMOVEME? 	ynh_secure_remove --file="$install_dir/build_ldap/"
+#REMOVEME? 	ynh_secure_remove --file="$install_dir/.cache/"
+#REMOVEME? 	ynh_secure_remove --file="$install_dir/go/"
+#REMOVEME? 	ynh_secure_remove --file="$install_dir/.go-version"
 fi
 
 #=================================================
@@ -186,9 +186,9 @@ fi
 ynh_script_progression --message="Updating a configuration file..." --weight=2
 
 # Configure Galène
-ynh_add_config --template="../conf/config.json" --destination="$final_path/live/data/config.json"
-chmod 400 "$final_path/live/data/config.json"
-chown $app:$app "$final_path/live/data/config.json"
+ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
+chmod 400 "$install_dir/live/data/config.json"
+chown $app:$app "$install_dir/live/data/config.json"
 
 # Configure Galène LDAP
 # If key doesn't exist, create it
@@ -196,19 +196,19 @@ if [ -z "$key" ]; then
 	key=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
 	ynh_app_setting_set --app=$app --key=key --value=$key
 fi
-ynh_add_config --template="../conf/galene-ldap.json" --destination="$final_path/live_ldap/data/galene-ldap.json"
-chmod 400 "$final_path/live_ldap/data/galene-ldap.json"
-chown $app:$app "$final_path/live_ldap/data/galene-ldap.json"
+ynh_add_config --template="../conf/galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
+chmod 400 "$install_dir/live_ldap/data/galene-ldap.json"
+chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
 
 # Create a group name config
-ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
-chmod 400 "$datadir/groups/$group_name.json"
-chown $app:$app "$datadir/groups/$group_name.json"
+ynh_add_config --template="../conf/groupname.json" --destination="$data_dir/groups/$group_name.json"
+chmod 400 "$data_dir/groups/$group_name.json"
+chown $app:$app "$data_dir/groups/$group_name.json"
 
 # Create a group name authenticated on LDAP
-ynh_add_config --template="../conf/groupname-ldap.json" --destination="$datadir/groups/YunoHost_Users.json"
-chmod 400 "$datadir/groups/YunoHost_Users.json"
-chown $app:$app "$datadir/groups/YunoHost_Users.json"
+ynh_add_config --template="../conf/groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"
+chmod 400 "$data_dir/groups/YunoHost_Users.json"
+chown $app:$app "$data_dir/groups/YunoHost_Users.json"
 
 #=================================================
 # SETUP SYSTEMD
