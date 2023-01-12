@@ -15,11 +15,6 @@
 		setup_private=1
 		setup_public=1
 		upgrade=1
-		upgrade=1	from_commit=aaae7fbe83ce001fabd40509882e765a5d8da2c1
-		# 0.6~ynh1
-		upgrade=1	from_commit=c5cc50f1b1f326080f4f657b7805f2c27c1c3f20
-		# 0.6.1~ynh1
-		upgrade=1	from_commit=f55a3d1990a0fb2fe17eb9b70aefb13337c2b623
 		# 0.6.1~ynh2
 		upgrade=1	from_commit=ed1506fa3eb56358fecb06d832c9684acbf682d9
 		backup_restore=1
@@ -30,6 +25,6 @@
 Email=
 Notification=none
 ;;; Upgrade options
-	; commit=aaae7fbe83ce001fabd40509882e765a5d8da2c1
-		name=Testing (#62) 
+	; commit=ed1506fa3eb56358fecb06d832c9684acbf682d9
+		name=0.6.1~ynh2
 		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&language=fr&is_public=1&password=pass&port=666&

@@ -27,24 +27,10 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 - screen and window sharing, including sharing multiple windows simultaneously (not on mobile)
 - streaming video and audio from disk
 - activity detection
-
-### Server features
-
-- redistribution of arbitrary numbers of audio and video streams;
-- text chat;
-- recording to disk;
-- user statuses ("raise hand", etc.);
-- choice of audio and video codecs (full functionality for VP8, VP9, and H.264, preliminary support for AV1);
-- Simulcast;
-- Scalable Video Coding (SVC) for VP8 and VP9;
-- automatic restarting of failed flows (on ICE failure);
-- congestion control in the server → client direction (both loss-based and using REMB indications);
-- congestion control in the client → server direction (loss-based, partial REMB support);
-- dynamic tuning of buffer sizes depending on the clients' RTT;
-- built-in TURN server.
+- LDAP support
 
 
-**Shipped version:** 0.6.1~ynh4
+**Shipped version:** 0.6.2~ynh1
 
 **Demo:** https://galene.org:8443/
 
