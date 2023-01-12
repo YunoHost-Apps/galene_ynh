@@ -30,7 +30,7 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 - LDAP support
 
 
-**Shipped version:** 0.6.2~ynh1
+**Shipped version:** galene-0.6.2~ynh1
 
 **Demo:** https://galene.org:8443/
 
