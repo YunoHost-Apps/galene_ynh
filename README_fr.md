@@ -5,15 +5,15 @@ It shall NOT be edited by hand.
 
 # Galène pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/galene.svg)](https://dash.yunohost.org/appci/app/galene) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/galene.svg)](https://dash.yunohost.org/appci/app/galene) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)
 [![Installer Galène avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=galene)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Galène rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Galène rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 Galène est un serveur de visioconférence (un « SFU ») facile à déployer et qui nécessite des ressources serveur modérées. Il a été conçu à l'origine pour les cours et les conférences (où un seul orateur diffuse de l'audio et de la vidéo à des centaines ou des milliers d'utilisateurs), mais a évolué par la suite pour être utile pour les travaux pratiques des étudiants (où les utilisateurs sont divisés en plusieurs petits groupes) et les réunions (où un douzaine d'utilisateurs interagissent entre eux).
 
@@ -32,9 +32,9 @@ Galène est un serveur de visioconférence (un « SFU ») facile à déployer et
 
 **Démo :** https://galene.org:8443/
 
-## Captures d'écran
+## Captures d’écran
 
-![Capture d'écran de Galène](./doc/screenshots/screenshot.png)
+![Capture d’écran de Galène](./doc/screenshots/screenshot.png)
 
 ## Avertissements / informations importantes
 
@@ -90,10 +90,10 @@ Assurez-vous que l'autorisation d'enregistrement est définie dans la configurat
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <https://galene.org/>
+* Site officiel de l’app : <https://galene.org/>
 * Documentation officielle utilisateur : <https://galene.org/faq.html>
-* Documentation officielle de l'admin : <https://galene.org/>
-* Dépôt de code officiel de l'app : <https://github.com/jech/galene>
+* Documentation officielle de l’admin : <https://galene.org/>
+* Dépôt de code officiel de l’app : <https://github.com/jech/galene>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_galene>
 * Signaler un bug : <https://github.com/YunoHost-Apps/galene_ynh/issues>
 
@@ -109,4 +109,4 @@ ou
 sudo yunohost app upgrade galene -u https://github.com/YunoHost-Apps/galene_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
