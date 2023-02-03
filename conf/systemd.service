@@ -8,7 +8,7 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/live/
-ExecStart=__INSTALL_DIR__/live/galene -http "127.0.0.1:__PORT__" -insecure -turn __PUBLIC_IP4__:__TURN_PORT__ -udp-range 49152-65535 -groups __DATA_DIR__/groups -recordings __DATA_DIR__/recordings  -data __INSTALL_DIR__/live/data/
+ExecStart=__INSTALL_DIR__/live/galene -http "127.0.0.1:__PORT__" -insecure -turn __PUBLIC_IP4__:__PORT_TURN__ -udp-range 49152-65535 -groups __DATA_DIR__/groups -recordings __DATA_DIR__/recordings  -data __INSTALL_DIR__/live/data/
 LimitNOFILE=65536
 
 [Install]

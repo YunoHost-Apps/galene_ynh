@@ -1,5 +1,5 @@
 {
-	"httpAddress": "127.0.0.1:__LDAP_PORT__",
+	"httpAddress": "127.0.0.1:__PORT_LDAP__",
 	"ldapServer": "ldap://localhost:389",
 	"ldapBase": "ou=users,dc=yunohost,dc=org",
 	"key": __KEY__,

@@ -71,7 +71,11 @@ ram.runtime = "50M"
     [resources.permissions]
     main.url = "/"
 
-    [resources.ports]
+    [resources.port]
+    main.default = 8095
+    ldap.default = 8096
+    turn.default = 1194
+    turn.exposed = "Both"
 
     [resources.apt]
     packages = "jose"
