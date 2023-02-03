@@ -28,9 +28,6 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 - streaming video and audio from disk
 - activity detection
 - LDAP support
-
-### Server features
-
 - redistribution of arbitrary numbers of audio and video streams;
 - text chat;
 - recording to disk;
