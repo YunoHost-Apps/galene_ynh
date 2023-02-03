@@ -71,7 +71,7 @@ ram.runtime = "50M"
     [resources.permissions]
     main.url = "/"
 
-    [resources.port]
+    [resources.ports]
     main.default = 8095
     ldap.default = 8096
     turn.default = 1194
