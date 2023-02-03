@@ -11,6 +11,14 @@ source ynh_install_go
 source /usr/share/yunohost/helpers
 
 #=================================================
+# LOAD SETTINGS
+#=================================================
+ynh_script_progression --message="Loading installation settings..." --weight=1
+
+group_name=$(ynh_app_setting_get --app=$app --key=group_name)
+group_description=$(ynh_app_setting_get --app=$app --key=group_description)
+
+#=================================================
 # CHECK VERSION
 #=================================================
 
