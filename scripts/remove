@@ -38,17 +38,6 @@ ynh_remove_systemd_config
 ynh_remove_systemd_config --service=${app}_ldap
 
 #=================================================
-# REMOVE DATA DIR
-#=================================================
-
-# Remove the data directory if --purge option is used
-if [ "${YNH_APP_PURGE:-0}" -eq 1 ]
-then
-	ynh_script_progression --message="Removing app data directory..." --weight=1
-#REMOVEME? 	ynh_secure_remove --file="$data_dir"
-fi
-
-#=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Removing NGINX web server configuration..." --weight=1
@@ -57,21 +46,13 @@ ynh_script_progression --message="Removing NGINX web server configuration..." --
 ynh_remove_nginx_config
 
 #=================================================
-# REMOVE DEPENDENCIES
-#=================================================
-#REMOVEME? ynh_script_progression --message="Removing dependencies..." --weight=1
-
-# Remove metapackage and its dependencies
-#REMOVEME? ynh_remove_app_dependencies
-
-#=================================================
 # CLOSE A PORT
 #=================================================
 
-if yunohost firewall list | grep -q "\- $turn_port$"
+if yunohost firewall list | grep -q "\- $port_turn$"
 then
-	ynh_script_progression --message="Closing port $turn_port..." --weight=1
-	ynh_exec_warn_less yunohost firewall disallow both $turn_port
+	ynh_script_progression --message="Closing port $port_turn..." --weight=1
+	ynh_exec_warn_less yunohost firewall disallow both $port_turn
 fi
 
 if yunohost firewall list | grep -q "\- 49152:65535"
