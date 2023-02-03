@@ -12,8 +12,8 @@ test_format = 1.0
     # Default args to use for install
     # -------------------------------
 
-    group_name = "public with space"
-    group_description = "My public space"
+    args.group_name = "public with space"
+    args.group_description = "My public space"
 
     # -------------------------------
     # Commits to test upgrade from
