@@ -11,6 +11,13 @@ source ynh_install_go
 source /usr/share/yunohost/helpers
 
 #=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
+
+group_name=$YNH_APP_ARG_GROUP_NAME
+group_description=$YNH_APP_ARG_GROUP_DESCRIPTION
+
+#=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
 ynh_script_progression --message="Storing installation settings..." --weight=4
