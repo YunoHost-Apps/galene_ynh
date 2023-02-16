@@ -24,17 +24,11 @@ new_path="/"
 #=================================================
 ynh_script_progression --message="Loading installation settings..." --weight=1
 
-# Needed for helper "ynh_add_nginx_config"
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-
 # Add settings here as needed by your application
-admin=$(ynh_app_setting_get --app=$app --key=admin)
 password=$(ynh_app_setting_get --app=$app --key=password)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
-port=$(ynh_app_setting_get --app=$app --key=port)
 ldap_port=$(ynh_app_setting_get --app=$app --key=ldap_port)
 key=$(ynh_app_setting_get --app=$app --key=key)
-datadir=$(ynh_app_setting_get --app=$app --key=datadir)
 
 #=================================================
 # BACKUP BEFORE CHANGE URL THEN ACTIVE TRAP
