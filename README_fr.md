@@ -6,6 +6,7 @@ It shall NOT be edited by hand.
 # Galène pour YunoHost
 
 [![Niveau d’intégration](https://dash.yunohost.org/integration/galene.svg)](https://dash.yunohost.org/appci/app/galene) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)
+
 [![Installer Galène avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=galene)
 
 *[Read this readme in english.](./README.md)*
