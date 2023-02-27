@@ -5,7 +5,7 @@ name = "Galène"
 description.en = "Videoconferencing server that is easy to deploy"
 description.fr = "Serveur de visioconférence facile à déployer"
 
-version = "0.6.2~ynh1"
+version = "0.6.2~ynh2"
 
 maintainers = ["eric_G"]
 
