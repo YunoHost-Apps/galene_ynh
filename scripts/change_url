@@ -10,16 +10,6 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# RETRIEVE ARGUMENTS
-#=================================================
-
-old_domain=$YNH_APP_OLD_DOMAIN
-old_path=$YNH_APP_OLD_PATH
-
-new_domain=$YNH_APP_NEW_DOMAIN
-new_path="/"
-
-#=================================================
 # LOAD SETTINGS
 #=================================================
 ynh_script_progression --message="Loading installation settings..." --weight=1
@@ -56,24 +46,24 @@ ynh_script_progression --message="Updating a configuration file..." --weight=2
 
 domain="$new_domain"
 # Configure Galene
-ynh_add_config --template="../conf/config.json" --destination="$final_path/live/data/config.json"
-chmod 400 "$final_path/live/data/config.json"
-chown $app:$app "$final_path/live/data/config.json"
+ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
+chmod 400 "$install_dir/live/data/config.json"
+chown $app:$app "$install_dir/live/data/config.json"
 
 # Configure Galene LDAP
-ynh_add_config --template="../conf/galene-ldap.json" --destination="$final_path/live_ldap/data/galene-ldap.json"
-chmod 400 "$final_path/live_ldap/data/galene-ldap.json"
-chown $app:$app "$final_path/live_ldap/data/galene-ldap.json"
+ynh_add_config --template="../conf/galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
+chmod 400 "$install_dir/live_ldap/data/galene-ldap.json"
+chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
 
 # Create a group name config
-ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
-chmod 400 "$datadir/groups/$group_name.json"
-chown $app:$app "$datadir/groups/$group_name.json"
+ynh_add_config --template="../conf/groupname.json" --destination="$data_dir/groups/$group_name.json"
+chmod 400 "$data_dir/groups/$group_name.json"
+chown $app:$app "$data_dir/groups/$group_name.json"
 
 # Create a group name authenticated on LDAP
-ynh_add_config --template="../conf/groupname-ldap.json" --destination="$datadir/groups/YunoHost_Users.json"
-chmod 400 "$datadir/groups/YunoHost_Users.json"
-chown $app:$app "$datadir/groups/YunoHost_Users.json"
+ynh_add_config --template="../conf/groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"
+chmod 400 "$data_dir/groups/YunoHost_Users.json"
+chown $app:$app "$data_dir/groups/YunoHost_Users.json"
 
 #=================================================
 # GENERIC FINALISATION
@@ -85,13 +75,6 @@ ynh_script_progression --message="Starting a systemd service..." --weight=3
 # Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
 ynh_systemd_action --service_name=${app}_ldap --action="start" --log_path="systemd"
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=1
-
-ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT
