@@ -33,8 +33,8 @@ ram.runtime = "50M"
     full_domain = true
 
     [install.init_main_permission]
-    help.en = "If enabled, Galène will be accessible by people who do not have an account. This can be changed later via the webadmin."
-    help.fr = "Si cette case est cochée, Galène sera accessible aux personnes n’ayant pas de compte. Vous pourrez changer ceci plus tard via la webadmin."
+    help.en = "If Visitors enabled, Galène will be accessible by people who do not have an account. This can be changed later via the webadmin."
+    help.fr = "Si la permission Visiteurs est cochée, Galène sera accessible aux personnes n’ayant pas de compte. Vous pourrez changer ceci plus tard via la webadmin."
     type = "group"
     default = "visitors"
 
