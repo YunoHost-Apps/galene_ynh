@@ -11,12 +11,6 @@ source ynh_install_go
 source /usr/share/yunohost/helpers
 
 #=================================================
-# RETRIEVE ARGUMENTS FROM THE MANIFEST
-#=================================================
-
-password=$YNH_APP_ARG_PASSWORD
-
-#=================================================
 # LOAD SETTINGS
 #=================================================
 ynh_script_progression --message="Loading installation settings..." --weight=1
