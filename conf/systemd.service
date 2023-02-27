@@ -12,7 +12,7 @@ ExecStart=__INSTALL_DIR__/live/galene -http "127.0.0.1:__PORT__" -insecure -turn
 LimitNOFILE=65536
 
 # various hardening options
-ReadWritePaths=/var/lib/galene/recordings
+ReadWritePaths=__DATA_DIR__/recordings
 CapabilityBoundingSet=
 AmbientCapabilities=
 PrivateTmp=yes
