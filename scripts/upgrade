@@ -101,10 +101,10 @@ then
 	ynh_exec_warn_less ynh_install_go --go_version=$go_version
 	ynh_use_go
 	pushd $install_dir/build/
-		ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live/
+		ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live/
 	popd
 	pushd $install_dir/build_ldap/
-		ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live_ldap/
+		ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live_ldap/
 	popd
 	ynh_remove_go
 	ynh_secure_remove --file="$install_dir/build/"
