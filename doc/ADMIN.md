@@ -1,16 +1,16 @@
 ### Accessing groups
 
-*Galène* meeting rooms are called "groups". Any group is accessible at `https://domain.tld/group/GroupName`, by typing its name in the home page search field, or by selecting it in the public list (if the group is configured as publicly visible, see below).
-During install a group is created with YunoHost LDAP authentication, accessible at `https://domain.tld/group/YunoHost_Users`.
+*Galène* meeting rooms are called "groups". Any group is accessible at `https://__DOMAIN__/group/GroupName`, by typing its name in the home page search field, or by selecting it in the public list (if the group is configured as publicly visible, see below).
+During install a group is created with YunoHost LDAP authentication, accessible at `https://__DOMAIN__/group/YunoHost_Users`.
 
 #### Creating and configuring groups
 
-Groups are defined by JSON files located in the folder `/home/yunohost.app/galene/groups`. Each group is represented by a `GroupName.json` file.
-To create a new group, you need to create a `GroupNameExample.json` file and restart Galène service (you can also make subfolder groups, and the groups will be accessible with `https://domain.tld/group/subfolder/GroupName/`). Various configuration options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
+Groups are defined by JSON files located in the folder `__DATA_DIR__/groups`. Each group is represented by a `GroupName.json` file.
+To create a new group, you need to create a `GroupNameExample.json` file and restart Galène service (you can also make subfolder groups, and the groups will be accessible with `https://__DOMAIN__/group/subfolder/GroupName/`). Various configuration options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
 
 *NB: Spaces are supported in group file names.*
 
-When Galène is removed, the data directory (`/home/yunohost.app/galene/`) is preserved. If you want to remove it along with Galène, use the `--purge` option: `sudo yunohost app remove galene --purge`.
+When Galène is removed, the data directory (`__DATA_DIR__`) is preserved. If you want to remove it along with Galène, use the `--purge` option: `sudo yunohost app remove galene --purge`.
 
 ### Configuring your TURN server
 
@@ -46,4 +46,4 @@ Statistics are available under `/opt/yunohost/galene/stats.json`, with a human-r
 
 ### How do I record my lecture?
 
-Make sure allow-recording is set in your group configuration. Log-in as an operator, then say `/record` before you start your lecture. Don't forget to say `/unrecord` at the end. You will find your recordings under `https://server.example.com/recordings/groupname/`. The video recordings are stored in `/home/yunohost.app/galene/recordings` folder.
+Make sure allow-recording is set in your group configuration. Log-in as an operator, then say `/record` before you start your lecture. Don't forget to say `/unrecord` at the end. You will find your recordings under `https://__DOMAIN__/recordings/groupname/`. The video recordings are stored in `__DATA_DIR__/recordings` folder.

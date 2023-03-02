@@ -1,16 +1,16 @@
 ### Accéder à des groupes
 
-Les salles de réunion *Galène* sont appelées « groupes ». Tout groupe est accessible sur `https://domain.tld/group/GroupName`, en tapant son nom dans le champ de recherche de la page d'accueil, ou en le sélectionnant dans la liste publique (si le groupe est configuré comme visible publiquement, voir ci-dessous).
-Pendant l'installation, un groupe est créé avec l'authentification LDAP de YunoHost, accessible à `https://domain.tld/group/YunoHost_Users`.
+Les salles de réunion *Galène* sont appelées « groupes ». Tout groupe est accessible sur `https://__DOMAIN__/group/GroupName`, en tapant son nom dans le champ de recherche de la page d'accueil, ou en le sélectionnant dans la liste publique (si le groupe est configuré comme visible publiquement, voir ci-dessous).
+Pendant l'installation, un groupe est créé avec l'authentification LDAP de YunoHost, accessible à `https://__DOMAIN__/group/YunoHost_Users`.
 
 #### Ajouter et configurer des groupes
 
-Les groupes sont définis par des fichiers JSON situés dans le dossier `/home/yunohost.app/galene/groups`. Chaque groupe est représenté par un fichier `GroupName.json`.
-Pour créer un nouveau groupe, vous devez créer un fichier `GroupNameExample.json` et redémarrer le service Galène (vous pouvez également créer un sous-dossier, et les groupes seront accessibles avec` https://domain.tld/group/subfolder/GroupName/`). Différentes options de configurations sont disponibles (voir https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
+Les groupes sont définis par des fichiers JSON situés dans le dossier `__DATA_DIR__/groups`. Chaque groupe est représenté par un fichier `GroupName.json`.
+Pour créer un nouveau groupe, vous devez créer un fichier `GroupNameExample.json` et redémarrer le service Galène (vous pouvez également créer un sous-dossier, et les groupes seront accessibles avec` https://__DOMAIN__/group/subfolder/GroupName/`). Différentes options de configurations sont disponibles (voir https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
 
 *NB : Les espaces sont pris en charge dans les noms de fichiers de groupe.* 
 
-Lorsque Galène est supprimé, le répertoire de données (`/home/yunohost.app/galene/`) est conservé. Si vous souhaitez le supprimer avec Galène, utilisez l'option `--purge` : `sudo yunohost app remove galene --purge`. 
+Lorsque Galène est supprimé, le répertoire de données (`__DATA_DIR__`) est conservé. Si vous souhaitez le supprimer avec Galène, utilisez l'option `--purge` : `sudo yunohost app remove galene --purge`. 
 
 ### Configurer votre serveur TURN
 
@@ -46,4 +46,4 @@ Les statistiques sont disponibles sous `/opt/yunohost/galene/stats.json`, avec u
 
 ### Comment enregistrer ma conférence ?
 
-Assurez-vous que l'autorisation d'enregistrement est définie dans la configuration de votre groupe. Connectez-vous en tant qu'opérateur, puis dites `/record` dans la fenêtre de chat avant de commencer la visio. N'oubliez pas de dire `/unrecord` à la fin. Vous trouverez vos enregistrements sous `https://server.example.com/recordings/groupname/`. Les enregistrements vidéo sont stockés dans le dossier `/home/yunohost.app/galene/recordings`. 
+Assurez-vous que l'autorisation d'enregistrement est définie dans la configuration de votre groupe. Connectez-vous en tant qu'opérateur, puis dites `/record` dans la fenêtre de chat avant de commencer la visio. N'oubliez pas de dire `/unrecord` à la fin. Vous trouverez vos enregistrements sous `https://__DOMAIN__/recordings/groupname/`. Les enregistrements vidéo sont stockés dans le dossier `__DATA_DIR__/recordings`. 
