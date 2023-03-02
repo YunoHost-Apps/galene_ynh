@@ -36,7 +36,6 @@ Galène est un serveur de visioconférence (un « SFU ») facile à déployer et
 ## Captures d’écran
 
 ![Capture d’écran de Galène](./doc/screenshots/screenshot.png)
-![Capture d’écran de Galène](./doc/screenshots/POST_INSTALL.md)
 
 ## Documentations et ressources
 
