@@ -1,3 +1,2 @@
-#### Utilisation du serveur TURN interne de *Galène*
 Galène est livré avec un serveur TURN intégré qui devrait fonctionner immédiatement.
 - Si votre serveur est derrière NAT, autorisez le trafic entrant vers le port TCP/UDP `1194` (ou tout ce qui est configuré avec l'option `-turn` dans `/etc/systemd/system/galene.service`)
