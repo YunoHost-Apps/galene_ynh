@@ -36,6 +36,7 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 ## Screenshots
 
 ![Screenshot of Galène](./doc/screenshots/screenshot.png)
+![Screenshot of Galène](./doc/screenshots/POST_INSTALL.md)
 
 ## Documentation and resources
 
