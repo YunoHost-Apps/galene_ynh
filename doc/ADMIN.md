@@ -10,7 +10,7 @@ To create a new group, you need to create a `GroupNameExample.json` file and res
 
 *NB: Spaces are supported in group file names.*
 
-When Galène is removed, the data directory (`__DATA_DIR__`) is preserved. If you want to remove it along with Galène, use the `--purge` option: `sudo yunohost app remove galene --purge`.
+When Galène is removed, the data directory (`__DATA_DIR__`) is preserved. If you want to remove it along with Galène app, use the `--purge` option: `sudo yunohost app remove galene --purge`.
 
 ### Configuring your TURN server
 
@@ -37,8 +37,6 @@ Galène comes with a built-in TURN server that should work out-of-the-box.
 - set `/etc/systemd/system/galene.service` `-turn` option to `-turn auto` (or `-turn ""` to disable the built-in TURN server).
 
 To check if the TURN server is up and running, type `/relay-test` in the chat box. If the TURN server is properly configured, you should see a message saying that the relay test has been successful.
-
-You can also install Galène with an external TURN server with this branch: https://github.com/YunoHost-Apps/galene_ynh/tree/galene+turn 
 
 ### Server Statistics page
 
