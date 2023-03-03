@@ -17,7 +17,7 @@ ynh_script_progression --message="Loading installation settings..." --weight=1
 # Add settings here as needed by your application
 password=$(ynh_app_setting_get --app=$app --key=password)
 group_name=$(ynh_app_setting_get --app=$app --key=group_name)
-ldap_port=$(ynh_app_setting_get --app=$app --key=ldap_port)
+port_ldap=$(ynh_app_setting_get --app=$app --key=ldap_port)
 key=$(ynh_app_setting_get --app=$app --key=key)
 
 #=================================================
