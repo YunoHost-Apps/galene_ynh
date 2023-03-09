@@ -85,5 +85,7 @@ ram.runtime = "50M"
     url = "https://github.com/jech/galene/archive/refs/tags/galene-0.6.2.tar.gz"
     sha256 = "7caedc1b2cb8cfeee0136e02c006d13d7b2b3cb9908685654c8cec020265428d"
  
-    ldap.url = "https://github.com/jech/galene-ldap/archive/33b8a930372388b2b8b506d2564516fb3eaf895a.tar.gz"
-    ldap.sha256 = "00247712e4e7944fed42026f056f48eb59a95cf476c3ff1cb6e24c54469ce070"
+ [resources.sources]
+    [resources.sources.ldap]
+    url = "https://github.com/jech/galene-ldap/archive/33b8a930372388b2b8b506d2564516fb3eaf895a.tar.gz"
+    sha256 = "00247712e4e7944fed42026f056f48eb59a95cf476c3ff1cb6e24c54469ce070"
