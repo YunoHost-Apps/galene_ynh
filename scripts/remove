@@ -10,18 +10,6 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
-
-app=$YNH_APP_INSTANCE_NAME
-
-domain=$(ynh_app_setting_get --app=$app --key=domain)
-turn_port=$(ynh_app_setting_get --app=$app --key=turn_port)
-final_path=$(ynh_app_setting_get --app=$app --key=final_path)
-datadir=$(ynh_app_setting_get --app=$app --key=datadir)
-
-#=================================================
 # STANDARD REMOVE
 #=================================================
 # REMOVE SERVICE INTEGRATION IN YUNOHOST
@@ -50,25 +38,6 @@ ynh_remove_systemd_config
 ynh_remove_systemd_config --service=${app}_ldap
 
 #=================================================
-# REMOVE APP MAIN DIR
-#=================================================
-ynh_script_progression --message="Removing app main directory..." --weight=2
-
-# Remove the app directory securely
-ynh_secure_remove --file="$final_path"
-
-#=================================================
-# REMOVE DATA DIR
-#=================================================
-
-# Remove the data directory if --purge option is used
-if [ "${YNH_APP_PURGE:-0}" -eq 1 ]
-then
-	ynh_script_progression --message="Removing app data directory..." --weight=1
-	ynh_secure_remove --file="$datadir"
-fi
-
-#=================================================
 # REMOVE NGINX CONFIGURATION
 #=================================================
 ynh_script_progression --message="Removing NGINX web server configuration..." --weight=1
@@ -77,21 +46,13 @@ ynh_script_progression --message="Removing NGINX web server configuration..." --
 ynh_remove_nginx_config
 
 #=================================================
-# REMOVE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Removing dependencies..." --weight=1
-
-# Remove metapackage and its dependencies
-ynh_remove_app_dependencies
-
-#=================================================
 # CLOSE A PORT
 #=================================================
 
-if yunohost firewall list | grep -q "\- $turn_port$"
+if yunohost firewall list | grep -q "\- $port_turn$"
 then
-	ynh_script_progression --message="Closing port $turn_port..." --weight=1
-	ynh_exec_warn_less yunohost firewall disallow both $turn_port
+	ynh_script_progression --message="Closing port $port_turn..." --weight=1
+	ynh_exec_warn_less yunohost firewall disallow both $port_turn
 fi
 
 if yunohost firewall list | grep -q "\- 49152:65535"
@@ -99,18 +60,6 @@ then
 	ynh_script_progression --message="Closing UDP ports..." --weight=1
 	ynh_exec_warn_less yunohost firewall disallow UDP 49152:65535
 fi
-
-#=================================================
-# SPECIFIC REMOVE
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# REMOVE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Removing the dedicated system user..." --weight=1
-
-# Delete a system user
-ynh_system_user_delete --username=$app
 
 #=================================================
 # END OF SCRIPT

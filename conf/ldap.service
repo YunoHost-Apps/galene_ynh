@@ -7,8 +7,8 @@ After=network.target
 Type=simple
 User=__APP__
 Group=__APP__
-WorkingDirectory=__FINALPATH__/live_ldap/
-ExecStart=__FINALPATH__/live_ldap/galene-ldap -data __FINALPATH__/live_ldap/data/
+WorkingDirectory=__INSTALL_DIR__/live_ldap/
+ExecStart=__INSTALL_DIR__/live_ldap/galene-ldap -data __INSTALL_DIR__/live_ldap/data/
 LimitNOFILE=65536
 
 [Install]

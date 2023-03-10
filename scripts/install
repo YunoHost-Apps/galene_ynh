@@ -11,110 +11,48 @@ source ynh_install_go
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-ynh_clean_setup () {
-	true
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-domain=$YNH_APP_ARG_DOMAIN
-path_url="/"
-is_public=$YNH_APP_ARG_IS_PUBLIC
-admin=$YNH_APP_ARG_ADMIN
-password=$YNH_APP_ARG_PASSWORD
 group_name=$YNH_APP_ARG_GROUP_NAME
 group_description=$YNH_APP_ARG_GROUP_DESCRIPTION
-
-app=$YNH_APP_INSTANCE_NAME
-
-#=================================================
-# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
-#=================================================
-ynh_script_progression --message="Validating installation parameters..." --weight=1
-
-final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
-
-# Register (book) web path
-ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
+password=$YNH_APP_ARG_PASSWORD
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
 ynh_script_progression --message="Storing installation settings..." --weight=4
 
-ynh_app_setting_set --app=$app --key=domain --value=$domain
-ynh_app_setting_set --app=$app --key=path --value=$path_url
-ynh_app_setting_set --app=$app --key=admin --value=$admin
-ynh_app_setting_set --app=$app --key=password --value="$password"
 ynh_app_setting_set --app=$app --key=group_name --value="$group_name"
 ynh_app_setting_set --app=$app --key=group_description --value="$group_description"
+ynh_app_setting_set --app=$app --key=password --value="$password"
 
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
-ynh_script_progression --message="Finding an available port..." --weight=3
-
-# Find an available port
-port=$(ynh_find_port --port=8095)
-ynh_app_setting_set --app=$app --key=port --value=$port
-
-ldap_port=$(ynh_find_port --port=$(($port + 1)))
-ynh_app_setting_set --app=$app --key=port --value=$ldap_port
-
-# Find an available port for TURN
-turn_port=$(ynh_find_port --port=1194)
-ynh_app_setting_set --app=$app --key=turn_port --value=$turn_port
-
-# Open TURN port
 ynh_script_progression --message="Configuring firewall..." --weight=1
-
-ynh_exec_warn_less yunohost firewall allow Both $turn_port
 
 # Reserve UDP Port range 49152:65535
 ynh_exec_warn_less yunohost firewall allow UDP -4 49152:65535
-
-#=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Installing dependencies..." --weight=1
-
-ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..." --weight=3
-
-# Create a system user
-ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=1
 
-ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir="$final_path/build"
-ynh_setup_source --dest_dir="$final_path/build_ldap" --source_id="ldap"
+ynh_setup_source --dest_dir="$install_dir/build"
+ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
 
-mkdir -p "$final_path/live/data"
-mkdir -p "$final_path/live_ldap/data"
-cp -r "$final_path/build/static/" "$final_path/live/"
-ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" --replace_string="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --target_file="$final_path/live/static/galene.html"
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
+mkdir -p "$install_dir/live/data"
+mkdir -p "$install_dir/live_ldap/data"
+cp -r "$install_dir/build/static/" "$install_dir/live/"
+ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" --replace_string="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --target_file="$install_dir/live/static/galene.html"
+
+chmod -R o-rwx "$install_dir"
+chown -R $app:www-data "$install_dir"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -133,32 +71,29 @@ ynh_script_progression --message="Building app..." --weight=1
 
 ynh_exec_warn_less ynh_install_go --go_version=$go_version
 ynh_use_go
-pushd $final_path/build/
-	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $final_path/live/
+pushd $install_dir/build/
+	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live/
 popd
-pushd $final_path/build_ldap/
-	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $final_path/live_ldap/
+pushd $install_dir/build_ldap/
+	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live_ldap/
 popd
 ynh_remove_go
-ynh_secure_remove --file="$final_path/build/"
-ynh_secure_remove --file="$final_path/build_ldap/"
-ynh_secure_remove --file="$final_path/.cache/"
-ynh_secure_remove --file="$final_path/go/"
-ynh_secure_remove --file="$final_path/.go-version"
+ynh_secure_remove --file="$install_dir/build/"
+ynh_secure_remove --file="$install_dir/build_ldap/"
+ynh_secure_remove --file="$install_dir/.cache/"
+ynh_secure_remove --file="$install_dir/go/"
+ynh_secure_remove --file="$install_dir/.go-version"
 
 #=================================================
 # CREATE DATA DIRECTORY
 #=================================================
 ynh_script_progression --message="Creating a data directory..." --weight=1
 
-datadir=/home/yunohost.app/$app
-ynh_app_setting_set --app=$app --key=datadir --value=$datadir
+mkdir -p $data_dir/{groups,recordings}
 
-mkdir -p $datadir/{groups,recordings}
-
-chmod 750 "$datadir"
-chmod -R o-rwx "$datadir"
-chown -R $app:www-data "$datadir"
+chmod 750 "$data_dir"
+chmod -R o-rwx "$data_dir"
+chown -R $app:www-data "$data_dir"
 
 #=================================================
 # ADD A CONFIGURATION
@@ -166,26 +101,26 @@ chown -R $app:www-data "$datadir"
 ynh_script_progression --message="Adding a configuration file..." --weight=1
 
 # Configure Galène
-ynh_add_config --template="../conf/config.json" --destination="$final_path/live/data/config.json"
-chmod 400 "$final_path/live/data/config.json"
-chown $app:$app "$final_path/live/data/config.json"
+ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
+chmod 400 "$install_dir/live/data/config.json"
+chown $app:$app "$install_dir/live/data/config.json"
 
 # Configure Galène LDAP
 key=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
 ynh_app_setting_set --app=$app --key=key --value="$key"
-ynh_add_config --template="../conf/galene-ldap.json" --destination="$final_path/live_ldap/data/galene-ldap.json"
-chmod 400 "$final_path/live_ldap/data/galene-ldap.json"
-chown $app:$app "$final_path/live_ldap/data/galene-ldap.json"
+ynh_add_config --template="../conf/galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
+chmod 400 "$install_dir/live_ldap/data/galene-ldap.json"
+chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
 
 # Create a group name config
-ynh_add_config --template="../conf/groupname.json" --destination="$datadir/groups/$group_name.json"
-chmod 400 "$datadir/groups/$group_name.json"
-chown $app:$app "$datadir/groups/$group_name.json"
+ynh_add_config --template="../conf/groupname.json" --destination="$data_dir/groups/$group_name.json"
+chmod 400 "$data_dir/groups/$group_name.json"
+chown $app:$app "$data_dir/groups/$group_name.json"
 
 # Create a group name authenticated on LDAP
-ynh_add_config --template="../conf/groupname-ldap.json" --destination="$datadir/groups/YunoHost_Users.json"
-chmod 400 "$datadir/groups/YunoHost_Users.json"
-chown $app:$app "$datadir/groups/YunoHost_Users.json"
+ynh_add_config --template="../conf/groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"
+chmod 400 "$data_dir/groups/YunoHost_Users.json"
+chown $app:$app "$data_dir/groups/YunoHost_Users.json"
 
 #=================================================
 # SETUP SYSTEMD
@@ -205,7 +140,7 @@ ynh_add_systemd_config --service=${app}_ldap --template="ldap.service"
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..." --weight=2
 
-yunohost service add $app --description="Videoconferencing server" --needs_exposed_ports="$turn_port"
+yunohost service add $app --description="Videoconferencing server" --needs_exposed_ports="$port_turn"
 yunohost service add ${app}_ldap --description="LDAP integration for the videoconferencing server"
 
 #=================================================
@@ -216,26 +151,6 @@ ynh_script_progression --message="Starting a systemd service..." --weight=1
 # Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
 ynh_systemd_action --service_name=${app}_ldap --action="start" --log_path="systemd"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Configuring permissions..." --weight=2
-
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	# Everyone can access the app.
-	# The "main" permission is automatically created before the install script.
-	ynh_permission_update --permission="main" --add="visitors"
-fi
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..." --weight=2
-
-ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # END OF SCRIPT

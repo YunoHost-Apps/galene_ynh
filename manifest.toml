@@ -1,0 +1,90 @@
+packaging_format = 2
+
+id = "galene"
+name = "Galène"
+description.en = "Videoconferencing server that is easy to deploy"
+description.fr = "Serveur de visioconférence facile à déployer"
+
+version = "0.6.2~ynh2"
+
+maintainers = ["eric_G"]
+
+[upstream]
+license = "MIT"
+website = "https://galene.org/"
+demo = "https://galene.org:8443/"
+admindoc = "https://galene.org/"
+userdoc = "https://galene.org/faq.html"
+code = "https://github.com/jech/galene"
+
+[integration]
+yunohost = ">= 11.1.14"
+architectures = "all"
+multi_instance = false
+ldap = true
+sso = "not_relevant"
+disk = "50M"
+ram.build = "400M"
+ram.runtime = "50M"
+
+[install]
+    [install.domain]
+    type = "domain"
+    full_domain = true
+
+    [install.init_main_permission]
+    help.en = "If Visitors enabled, Galène will be accessible by people who do not have an account. This can be changed later via the webadmin."
+    help.fr = "Si la permission Visiteurs est cochée, Galène sera accessible aux personnes n’ayant pas de compte. Vous pourrez changer ceci plus tard via la webadmin."
+    type = "group"
+    default = "visitors"
+
+    [install.admin]
+    type = "user"
+
+    [install.password]
+    help.en = "Set the administrator password (between 8 and 30 characters)"
+    help.fr = "Définissez le mot de passe administrateur (entre 8 et 30 caractères)"
+    type = "password"
+
+    [install.group_name]
+    ask.en = "Choose a name for the group you want to create"
+    ask.fr = "Choisissez un nom pour le groupe que vous voulez créer"
+    type = "string"
+    default = "public"
+    example = "public"
+
+    [install.group_description]
+    ask.en = "Choose a description for the group you want to create"
+    ask.fr = "Décrivez le groupe que vous souhaitez créer"
+    help.en = "Add a human-readable description of the group; this is displayed on the landing page for public groups."
+    help.fr = "Ajoutez une description du groupe; ceci est affiché sur la page de destination des groupes publics."
+    type = "string"
+    optional = true
+
+[resources]
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.data_dir]
+
+    [resources.permissions]
+    main.url = "/"
+
+    [resources.ports]
+    main.default = 8095
+    ldap.default = 8096
+    turn.default = 1194
+    turn.exposed = "Both"
+
+    [resources.apt]
+    packages = "jose"
+
+[resources.sources]
+    [resources.sources.main]
+    url = "https://github.com/jech/galene/archive/refs/tags/galene-0.6.2.tar.gz"
+    sha256 = "7caedc1b2cb8cfeee0136e02c006d13d7b2b3cb9908685654c8cec020265428d"
+ 
+    [resources.sources.ldap]
+    url = "https://github.com/jech/galene-ldap/archive/33b8a930372388b2b8b506d2564516fb3eaf895a.tar.gz"
+    sha256 = "00247712e4e7944fed42026f056f48eb59a95cf476c3ff1cb6e24c54469ce070"
