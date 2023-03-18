@@ -53,7 +53,6 @@ ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" -
 
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
-chmod +x "$install_dir/galene-password-generator"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -87,6 +86,8 @@ ynh_secure_remove --file="$install_dir/build_ldap/"
 ynh_secure_remove --file="$install_dir/.cache/"
 ynh_secure_remove --file="$install_dir/go/"
 ynh_secure_remove --file="$install_dir/.go-version"
+
+chmod +x "$install_dir/galene-password-generator"
 
 #=================================================
 # CREATE DATA DIRECTORY
