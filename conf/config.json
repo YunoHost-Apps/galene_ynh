@@ -1,4 +1,5 @@
 {
 	"canonicalHost": "__DOMAIN__",
-	"admin":[{"username":"__ADMIN__","password":"__PASSWORD__"}]
+	"admin":[{"username":"__ADMIN__",
+	"password":__PASSWORD_HASH__}]
 }

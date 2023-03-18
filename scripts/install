@@ -45,6 +45,7 @@ ynh_script_progression --message="Setting up source files..." --weight=1
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
+ynh_setup_source --dest_dir="$install_dir/build" --source_id="generator"
 
 mkdir -p "$install_dir/live/data"
 mkdir -p "$install_dir/live_ldap/data"
@@ -53,6 +54,7 @@ ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" -
 
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
+chmod +x "$install_dir/build/galene-password-generator"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -99,6 +101,8 @@ chown -R $app:www-data "$data_dir"
 # ADD A CONFIGURATION
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=1
+
+password_hash=$(echo $install_dir/build/galene-password-generator $password)
 
 # Configure Galène
 ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
