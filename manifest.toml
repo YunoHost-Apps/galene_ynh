@@ -72,14 +72,6 @@ ram.runtime = "50M"
     url = "https://github.com/jech/galene-ldap/archive/33b8a930372388b2b8b506d2564516fb3eaf895a.tar.gz"
     sha256 = "00247712e4e7944fed42026f056f48eb59a95cf476c3ff1cb6e24c54469ce070"
 
-    [resources.sources.generator]
-    url = "https://www.irif.fr/~jch/software/files/galene-password-generator-linux-amd64.gz"
-    sha256 = "a7fccbfa54c82e2e7ada0491364b41f5604ae85fe41b0501a592465e758f8cc4"
-    #arm64.url = "https://www.irif.fr/~jch/software/files/galene-password-generator-linux-arm64.gz"
-    #arm64.sha256 = "7e2e354438321b331f10779d700fc84ee3542f77b1142da9f90c8bbc7aa2680a"
-    in_subdir = false
-    rename = "galene-password-generator"
-
     [resources.system_user]
 
     [resources.install_dir]
