@@ -14,17 +14,7 @@ source /usr/share/yunohost/helpers
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-#group_name=$YNH_APP_ARG_GROUP_NAME
-#group_description=$YNH_APP_ARG_GROUP_DESCRIPTION
 password=$YNH_APP_ARG_PASSWORD
-
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-ynh_script_progression --message="Storing installation settings..." --weight=4
-
-#ynh_app_setting_set --app=$app --key=group_name --value="$group_name"
-#ynh_app_setting_set --app=$app --key=group_description --value="$group_description"
 ynh_app_setting_set --app=$app --key=password --value="$password"
 
 #=================================================
@@ -104,7 +94,6 @@ chown -R $app:www-data "$data_dir"
 # ADD A CONFIGURATION
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=1
-
 
 password_hash=$(echo $($install_dir/galene-password-generator $password))
 
