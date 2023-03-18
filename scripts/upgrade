@@ -37,12 +37,6 @@ ynh_systemd_action --service_name=${app}_ldap --action="stop" --log_path="system
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
-# If open, close direct access to $port in firewall
-if yunohost firewall list | grep -q "\- $port$"
-then
-    ynh_exec_warn_less yunohost firewall disallow TCP $port
-fi
-
 # For version 0.6~ynh1 and before
 if [[ ! -d "$install_dir/live" ]]
 then
@@ -114,8 +108,11 @@ fi
 #=================================================
 ynh_script_progression --message="Updating a configuration file..." --weight=2
 
-password_hash=$(echo $($install_dir/galene-password-generator $password))
-
+# If password_hash doesn't exist, create it
+if [ -z "$password_hash" ]; then
+	password_hash=$(echo $($install_dir/galene-password-generator $password))
+	ynh_app_setting_set --app=$app --key=password_hash --value="$password_hash"
+fi
 # Configure Galène
 ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
 chmod 400 "$install_dir/live/data/config.json"
