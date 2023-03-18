@@ -1,5 +1,5 @@
 {
-	"op": [{"username": "__ADMIN__", "password": "__PASSWORD__"}],
+	"op": [{"username": "__ADMIN__", "password": __PASSWORD_HASH__}],
 	"presenter": [{}],
  	"description": "__GROUP_DESCRIPTION__",
 	"public": true,

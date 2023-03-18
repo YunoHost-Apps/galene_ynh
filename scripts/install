@@ -14,17 +14,7 @@ source /usr/share/yunohost/helpers
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-#group_name=$YNH_APP_ARG_GROUP_NAME
-#group_description=$YNH_APP_ARG_GROUP_DESCRIPTION
 password=$YNH_APP_ARG_PASSWORD
-
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-ynh_script_progression --message="Storing installation settings..." --weight=4
-
-#ynh_app_setting_set --app=$app --key=group_name --value="$group_name"
-#ynh_app_setting_set --app=$app --key=group_description --value="$group_description"
 ynh_app_setting_set --app=$app --key=password --value="$password"
 
 #=================================================
@@ -71,6 +61,9 @@ ynh_script_progression --message="Building app..." --weight=1
 
 ynh_exec_warn_less ynh_install_go --go_version=$go_version
 ynh_use_go
+pushd $install_dir/build/galene-password-generator/
+	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -o $install_dir/
+popd
 pushd $install_dir/build/
 	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live/
 popd
@@ -83,6 +76,8 @@ ynh_secure_remove --file="$install_dir/build_ldap/"
 ynh_secure_remove --file="$install_dir/.cache/"
 ynh_secure_remove --file="$install_dir/go/"
 ynh_secure_remove --file="$install_dir/.go-version"
+
+chmod +x "$install_dir/galene-password-generator"
 
 #=================================================
 # CREATE DATA DIRECTORY
@@ -99,6 +94,8 @@ chown -R $app:www-data "$data_dir"
 # ADD A CONFIGURATION
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=1
+
+password_hash=$(echo $($install_dir/galene-password-generator $password))
 
 # Configure Galène
 ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"

@@ -13,10 +13,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
 
-group_name=$(ynh_app_setting_get --app=$app --key=group_name)
-group_description=$(ynh_app_setting_get --app=$app --key=group_description)
 password=$(ynh_app_setting_get --app=$app --key=password)
 
 #=================================================
@@ -67,7 +64,7 @@ ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
 mkdir -p "$install_dir/live/data"
 mkdir -p "$install_dir/live_ldap/data"
-#REMOVEME? ynh_secure_remove --file="$install_dir/live/static/"
+ynh_secure_remove --file="$install_dir/live/static/"
 cp -r "$install_dir/build/static/" "$install_dir/live/"
 ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" --replace_string="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --target_file="$install_dir/live/static/galene.html"
 
@@ -93,6 +90,9 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_exec_warn_less ynh_install_go --go_version=$go_version
 	ynh_use_go
+	pushd $install_dir/build/galene-password-generator/
+		ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -o $install_dir/
+	popd
 	pushd $install_dir/build/
 		ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live/
 	popd
@@ -105,12 +105,16 @@ then
 	ynh_secure_remove --file="$install_dir/.cache/"
 	ynh_secure_remove --file="$install_dir/go/"
 	ynh_secure_remove --file="$install_dir/.go-version"
+
+	chmod +x "$install_dir/galene-password-generator"
 fi
 
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
 ynh_script_progression --message="Updating a configuration file..." --weight=2
+
+password_hash=$(echo $($install_dir/galene-password-generator $password))
 
 # Configure Galène
 ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
