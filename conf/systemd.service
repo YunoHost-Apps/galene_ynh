@@ -1,5 +1,5 @@
 [Unit]
-Description=Galène: Videoconferencing server
+Description=Galène: videoconferencing server
 Documentation=https://galene.org
 After=network.target
 
