@@ -102,7 +102,9 @@ chown -R $app:www-data "$data_dir"
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=1
 
-password_hash=$(echo $install_dir/build/galene-password-generator $password)
+pushd $install_dir/build/
+	password_hash=$(echo ./galene-password-generator $password)
+popd
 
 # Configure Galène
 ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
