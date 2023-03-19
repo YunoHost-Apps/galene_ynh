@@ -49,14 +49,14 @@ chmod 400 "$install_dir/live/data/config.json"
 chown $app:$app "$install_dir/live/data/config.json"
 
 # Configure Galene LDAP
-ynh_add_config --template="../conf/galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
-chmod 400 "$install_dir/live_ldap/data/galene-ldap.json"
-chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
+#ynh_add_config --template="../conf/galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
+#chmod 400 "$install_dir/live_ldap/data/galene-ldap.json"
+#chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
 
 # Create a group name config
-ynh_add_config --template="../conf/groupname.json" --destination="$data_dir/groups/$group_name.json"
-chmod 400 "$data_dir/groups/$group_name.json"
-chown $app:$app "$data_dir/groups/$group_name.json"
+#ynh_add_config --template="../conf/groupname.json" --destination="$data_dir/groups/$group_name.json"
+#chmod 400 "$data_dir/groups/$group_name.json"
+#chown $app:$app "$data_dir/groups/$group_name.json"
 
 # Create a group name authenticated on LDAP
 ynh_add_config --template="../conf/groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"

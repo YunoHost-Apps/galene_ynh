@@ -56,8 +56,10 @@ ynh_script_progression --message="Upgrading source files..." --weight=2
 
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
+
 mkdir -p "$install_dir/live/data"
 mkdir -p "$install_dir/live_ldap/data"
+
 ynh_secure_remove --file="$install_dir/live/static/"
 cp -r "$install_dir/build/static/" "$install_dir/live/"
 ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" --replace_string="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --target_file="$install_dir/live/static/galene.html"
