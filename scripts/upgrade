@@ -120,7 +120,7 @@ chown $app:$app "$install_dir/live/data/config.json"
 
 # Configure Galène LDAP
 # If key doesn't exist, create it
-if [ -z "$key" ]; then
+if [ -z "${key:-}" ]; then
 	key=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
 	ynh_app_setting_set --app=$app --key=key --value=$key
 fi
