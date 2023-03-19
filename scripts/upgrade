@@ -13,10 +13,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
 
-group_name=$(ynh_app_setting_get --app=$app --key=group_name)
-group_description=$(ynh_app_setting_get --app=$app --key=group_description)
 password=$(ynh_app_setting_get --app=$app --key=password)
 
 #=================================================
@@ -40,12 +37,6 @@ ynh_systemd_action --service_name=${app}_ldap --action="stop" --log_path="system
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
 
-# If open, close direct access to $port in firewall
-if yunohost firewall list | grep -q "\- $port$"
-then
-    ynh_exec_warn_less yunohost firewall disallow TCP $port
-fi
-
 # For version 0.6~ynh1 and before
 if [[ ! -d "$install_dir/live" ]]
 then
@@ -65,9 +56,11 @@ ynh_script_progression --message="Upgrading source files..." --weight=2
 
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
+
 mkdir -p "$install_dir/live/data"
 mkdir -p "$install_dir/live_ldap/data"
-#REMOVEME? ynh_secure_remove --file="$install_dir/live/static/"
+
+ynh_secure_remove --file="$install_dir/live/static/"
 cp -r "$install_dir/build/static/" "$install_dir/live/"
 ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" --replace_string="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --target_file="$install_dir/live/static/galene.html"
 
@@ -93,6 +86,9 @@ if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_exec_warn_less ynh_install_go --go_version=$go_version
 	ynh_use_go
+	pushd $install_dir/build/galene-password-generator/
+		ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -o $install_dir/
+	popd
 	pushd $install_dir/build/
 		ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live/
 	popd
@@ -105,6 +101,8 @@ then
 	ynh_secure_remove --file="$install_dir/.cache/"
 	ynh_secure_remove --file="$install_dir/go/"
 	ynh_secure_remove --file="$install_dir/.go-version"
+
+	chmod +x "$install_dir/galene-password-generator"
 fi
 
 #=================================================
@@ -112,6 +110,11 @@ fi
 #=================================================
 ynh_script_progression --message="Updating a configuration file..." --weight=2
 
+# If password_hash doesn't exist, create it
+if [ -z "${password_hash:-}" ]; then
+	password_hash=$(echo $($install_dir/galene-password-generator $password))
+	ynh_app_setting_set --app=$app --key=password_hash --value="$password_hash"
+fi
 # Configure Galène
 ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
 chmod 400 "$install_dir/live/data/config.json"
@@ -119,7 +122,7 @@ chown $app:$app "$install_dir/live/data/config.json"
 
 # Configure Galène LDAP
 # If key doesn't exist, create it
-if [ -z "$key" ]; then
+if [ -z "${key:-}" ]; then
 	key=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
 	ynh_app_setting_set --app=$app --key=key --value=$key
 fi
