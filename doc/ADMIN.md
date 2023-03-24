@@ -12,6 +12,27 @@ To create a new group, you need to create a `GroupNameExample.json` file and res
 
 When Galène is removed, the data directory (`__DATA_DIR__`) is preserved. If you want to remove it along with Galène app, use the `--purge` option: `sudo yunohost app remove galene --purge`.
 
+#### Hashed passwords
+
+If you don’t wish to store cleartext passwords on the server, you may generate hashed passwords with the galene-password-generator utility:
+
+`./__INSTALL_DIR__/galene-password-generator your_password`
+
+
+A user entry with a hashed password looks like this:
+``` 
+{
+    "username": "jch",
+    "password": {
+        "type": "pbkdf2",
+        "hash": "sha-256",
+        "key": "f591c35604e6aef572851d9c3543c812566b032b6dc083c81edd15cc24449913",
+        "salt": "92bff2ace56fe38f",
+        "iterations": 4096
+    }
+}
+```
+
 ### Configuring your TURN server
 
 #### Using *Galène*'s internal TURN server
