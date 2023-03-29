@@ -12,6 +12,27 @@ Pour créer un nouveau groupe, vous devez créer un fichier `GroupNameExample.js
 
 Lorsque Galène est supprimé, le répertoire de données (`__DATA_DIR__`) est conservé. Si vous souhaitez le supprimer avec l'application Galène, utilisez l'option `--purge` : `sudo yunohost app remove galene --purge`. 
 
+#### Mots de passe hachés
+
+Si vous ne souhaitez pas stocker les mots de passe en clair sur le serveur, vous pouvez générer des mots de passe hachés avec l'utilitaire galene-password-generator :
+
+`./__INSTALL_DIR__/galene-password-generator votre_mot_de_passe`
+
+Une entrée utilisateur avec un mot de passe haché ressemble à ceci :
+
+``` 
+{
+    "username": "jch",
+    "password": {
+        "type": "pbkdf2",
+        "hash": "sha-256",
+        "key": "f591c35604e6aef572851d9c3543c812566b032b6dc083c81edd15cc24449913",
+        "salt": "92bff2ace56fe38f",
+        "iterations": 4096
+    }
+}
+```
+
 ### Configurer votre serveur TURN
 
 #### Utilisation du serveur TURN de *Galène*
