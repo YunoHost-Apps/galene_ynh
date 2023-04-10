@@ -27,6 +27,7 @@ Galène est un serveur de visioconférence (un « SFU ») facile à déployer et
 - streaming vidéo et audio à partir du disque
 - détection d'activité
 - prise en charge LDAP
+- inviter un utilisateur
 
 
 **Version incluse :** 0.7.0~ynh1
