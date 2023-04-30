@@ -76,13 +76,13 @@ pushd $install_dir/build/galene-password-generator/
 popd
 
 pushd $install_dir/galene-file-transfer/
-	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build #-o $install_dir/
+	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -o $install_dir/
 popd
 
 ynh_remove_go
 ynh_secure_remove --file="$install_dir/build/"
 ynh_secure_remove --file="$install_dir/build_ldap/"
-#ynh_secure_remove --file="$install_dir/build_transferarchive/"
+ynh_secure_remove --file="$install_dir/galene-file-transfer/"
 ynh_secure_remove --file="$install_dir/.cache/"
 ynh_secure_remove --file="$install_dir/go/"
 ynh_secure_remove --file="$install_dir/.go-version"
