@@ -34,7 +34,7 @@ ynh_script_progression --message="Setting up source files..." --weight=1
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
-ynh_setup_source --dest_dir="$install_dir/galene-file-transfer" --source_id="transferarchive"
+ynh_setup_source --dest_dir="$install_dir/build-file-transfer" --source_id="transferarchive"
 
 mkdir -p "$install_dir/live/data"
 mkdir -p "$install_dir/live_ldap/data"
@@ -82,12 +82,13 @@ popd
 ynh_remove_go
 ynh_secure_remove --file="$install_dir/build/"
 ynh_secure_remove --file="$install_dir/build_ldap/"
-ynh_secure_remove --file="$install_dir/galene-file-transfer/"
+ynh_secure_remove --file="$install_dir/build-file-transfer/"
 ynh_secure_remove --file="$install_dir/.cache/"
 ynh_secure_remove --file="$install_dir/go/"
 ynh_secure_remove --file="$install_dir/.go-version"
 
 chmod +x "$install_dir/galene-password-generator"
+chmod +x "$install_dir/galene-file-transfer"
 
 #=================================================
 # ADD A CONFIGURATION
