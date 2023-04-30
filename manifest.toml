@@ -18,7 +18,7 @@ userdoc = "https://galene.org/faq.html"
 code = "https://github.com/jech/galene"
 
 [integration]
-yunohost = ">= 11.1.17"
+yunohost = ">= 11.1.18"
 architectures = "all"
 multi_instance = false
 ldap = true
@@ -73,6 +73,12 @@ ram.runtime = "50M"
     url = "https://github.com/jech/galene-ldap/archive/33b8a930372388b2b8b506d2564516fb3eaf895a.tar.gz"
     sha256 = "00247712e4e7944fed42026f056f48eb59a95cf476c3ff1cb6e24c54469ce070"
     autoupdate.upstream = "https://github.com/jech/galene-ldap"
+    autoupdate.strategy = "latest_github_commit"
+
+    [resources.sources.transferarchive]
+    url = "https://github.com/jech/galene-file-transfer/archive/8ad893eb75de0fb25958a77183ab52d19430d27a.tar.gz"
+    sha256 = "afdf2ee4df933824b92cfb3aec1e733b38e46571d007377116fdf789db8b7bc6"
+    autoupdate.upstream = "https://github.com/jech/galene-file-tranfer"
     autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
