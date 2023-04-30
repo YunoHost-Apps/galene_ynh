@@ -75,7 +75,7 @@ pushd $install_dir/build/galene-password-generator/
 	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -o $install_dir/
 popd
 
-pushd $install_dir/galene-file-transfer/
+pushd $install_dir/build-file-transfer/
 	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -o $install_dir/
 popd
 
