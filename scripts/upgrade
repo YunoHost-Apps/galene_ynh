@@ -107,6 +107,7 @@ then
 	ynh_secure_remove --file="$install_dir/.go-version"
 
 	chmod +x "$install_dir/galene-password-generator"
+	chmod +x "$install_dir/galene-file-transfer"
 fi
 
 #=================================================
