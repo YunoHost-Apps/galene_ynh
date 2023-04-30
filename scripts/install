@@ -7,7 +7,6 @@
 #=================================================
 
 source _common.sh
-source ynh_install_go
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -35,7 +34,7 @@ ynh_script_progression --message="Setting up source files..." --weight=1
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
-ynh_setup_source --dest_dir="$install_dir/build_transferarchive" --source_id="transferarchive"
+ynh_setup_source --dest_dir="$install_dir/galene-file-transfer" --source_id="transferarchive"
 
 mkdir -p "$install_dir/live/data"
 mkdir -p "$install_dir/live_ldap/data"
@@ -76,9 +75,9 @@ pushd $install_dir/build/galene-password-generator/
 	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -o $install_dir/
 popd
 
-#pushd $install_dir/build_transferarchive/
-#	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -o $install_dir/
-#popd
+pushd $install_dir/galene-file-transfer/
+	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build #-o $install_dir/
+popd
 
 ynh_remove_go
 ynh_secure_remove --file="$install_dir/build/"
