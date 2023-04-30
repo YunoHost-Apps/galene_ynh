@@ -30,7 +30,7 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 - invite user
 
 
-**Shipped version:** 0.7.0~ynh1
+**Shipped version:** 0.7.0~ynh2
 
 **Demo:** https://galene.org:8443/
 
