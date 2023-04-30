@@ -1,5 +1,5 @@
 {
 	"canonicalHost": "__DOMAIN__",
-	"proxyURL": "__DOMAIN__",
+	"proxyURL": "https://__DOMAIN__",
 	"admin":[{"username":"__ADMIN__", "password": __PASSWORD_HASH__}]
 }
