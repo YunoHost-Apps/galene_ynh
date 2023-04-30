@@ -76,8 +76,8 @@ ram.runtime = "50M"
     autoupdate.strategy = "latest_github_commit"
 
     [resources.sources.transferarchive]
-    url = "https://github.com/jech/galene-file-transfer/archive/8ad893eb75de0fb25958a77183ab52d19430d27a.tar.gz"
-    sha256 = "afdf2ee4df933824b92cfb3aec1e733b38e46571d007377116fdf789db8b7bc6"
+    url = "https://github.com/jech/galene-file-transfer/archive/1e87efbf022f862164d289dcfdc3ce8f11bf9326.tar.gz"
+    sha256 = "fca555072b4f5647eff5a167064395274218559d292d9acf04db761a49a6838b"
     autoupdate.upstream = "https://github.com/jech/galene-file-tranfer"
     autoupdate.strategy = "latest_github_commit"
 
