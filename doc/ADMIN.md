@@ -66,3 +66,7 @@ Statistics are available under `/opt/yunohost/galene/stats.json`, with a human-r
 ### How do I record my lecture?
 
 Make sure allow-recording is set in your group configuration. Log-in as an operator, then say `/record` before you start your lecture. Don't forget to say `/unrecord` at the end. You will find your recordings under `https://__DOMAIN__/recordings/groupname/`. The video recordings are stored in `__DATA_DIR__/recordings` folder.
+
+### Command-line client for Galene file transfer
+
+https://github.com/jech/galene-file-transfer/blob/master/README

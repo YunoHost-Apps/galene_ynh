@@ -66,3 +66,7 @@ Les statistiques sont disponibles sous `/opt/yunohost/galene/stats.json`, avec u
 ### Comment enregistrer ma conférence ?
 
 Assurez-vous que l'autorisation d'enregistrement est définie dans la configuration de votre groupe. Connectez-vous en tant qu'opérateur, puis dites `/record` dans la fenêtre de chat avant de commencer la visio. N'oubliez pas de dire `/unrecord` à la fin. Vous trouverez vos enregistrements sous `https://__DOMAIN__/recordings/groupname/`. Les enregistrements vidéo sont stockés dans le dossier `__DATA_DIR__/recordings`. 
+
+### Client en ligne de commande pour le transfert de fichiers
+
+https://github.com/jech/galene-file-transfer/blob/master/README
