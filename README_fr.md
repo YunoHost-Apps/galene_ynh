@@ -28,9 +28,10 @@ Galène est un serveur de visioconférence (un « SFU ») facile à déployer et
 - détection d'activité
 - prise en charge LDAP
 - inviter un utilisateur
+- Client en ligne de commande pour le transfert de fichiers Galene
 
 
-**Version incluse :** 0.7.0~ynh1
+**Version incluse :** 0.7.0~ynh2
 
 **Démo :** https://galene.org:8443/
 

@@ -85,17 +85,6 @@ ynh_secure_remove --file="$install_dir/.go-version"
 chmod +x "$install_dir/galene-password-generator"
 
 #=================================================
-# CREATE DATA DIRECTORY
-#=================================================
-ynh_script_progression --message="Creating a data directory..." --weight=1
-
-mkdir -p $data_dir/{groups,recordings}
-
-chmod 750 "$data_dir"
-chmod -R o-rwx "$data_dir"
-chown -R $app:www-data "$data_dir"
-
-#=================================================
 # ADD A CONFIGURATION
 #=================================================
 ynh_script_progression --message="Adding a configuration file..." --weight=1
