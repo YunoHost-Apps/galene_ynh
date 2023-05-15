@@ -57,7 +57,7 @@ ynh_script_progression --message="Upgrading source files..." --weight=2
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
 
-mkdir -p "$install_dir/live/data"
+mkdir -p "$install_dir/live"
 mkdir -p "$install_dir/live_ldap/data"
 
 ynh_secure_remove --file="$install_dir/live/static/"
@@ -111,10 +111,10 @@ fi
 ynh_script_progression --message="Updating a configuration file..." --weight=2
 
 # If password_hash doesn't exist, create it
-if [ -z "${password_hash:-}" ]; then
-	password_hash=$(echo $($install_dir/galene-password-generator $password))
-	ynh_app_setting_set --app=$app --key=password_hash --value="$password_hash"
-fi
+#if [ -z "${password_hash:-}" ]; then
+#	password_hash=$(echo $($install_dir/galene-password-generator $password))
+#	ynh_app_setting_set --app=$app --key=password_hash --value="$password_hash"
+#fi
 # Configure Galène
 #ynh_add_config --template="../conf/config.json" --destination="$data_dir/data/config.json"
 #chmod 400 "$data_dir/data/config.json"
