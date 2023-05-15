@@ -80,7 +80,7 @@ ram.runtime = "50M"
     [resources.install_dir]
 
     [resources.data_dir]
-    subdirs = ["groups", "recordings"]
+    subdirs = ["groups", "recordings", "data"]
 
     [resources.permissions]
     main.url = "/"

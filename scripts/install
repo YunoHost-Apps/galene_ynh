@@ -36,7 +36,7 @@ ynh_script_progression --message="Setting up source files..." --weight=1
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
 
-mkdir -p "$install_dir/live/data"
+mkdir -p "$install_dir/live"
 mkdir -p "$install_dir/live_ldap/data"
 
 cp -r "$install_dir/build/static/" "$install_dir/live/"
@@ -93,9 +93,9 @@ password_hash=$(echo $($install_dir/galene-password-generator $password))
 ynh_app_setting_set --app=$app --key=password_hash --value="$password_hash"
 
 # Configure Galène
-ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
-chmod 400 "$install_dir/live/data/config.json"
-chown $app:$app "$install_dir/live/data/config.json"
+ynh_add_config --template="../conf/config.json" --destination="$data_dir/data/config.json"
+chmod 400 "$data_dir/data/config.json"
+chown $app:$app "$data_dir/data/config.json"
 
 # Configure Galène LDAP
 key=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')

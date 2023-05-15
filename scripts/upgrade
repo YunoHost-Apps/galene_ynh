@@ -116,9 +116,9 @@ if [ -z "${password_hash:-}" ]; then
 	ynh_app_setting_set --app=$app --key=password_hash --value="$password_hash"
 fi
 # Configure Galène
-ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
-chmod 400 "$install_dir/live/data/config.json"
-chown $app:$app "$install_dir/live/data/config.json"
+#ynh_add_config --template="../conf/config.json" --destination="$data_dir/data/config.json"
+#chmod 400 "$data_dir/data/config.json"
+#chown $app:$app "$data_dir/data/config.json"
 
 # Configure Galène LDAP
 # If key doesn't exist, create it
@@ -131,9 +131,9 @@ chmod 400 "$install_dir/live_ldap/data/galene-ldap.json"
 chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
 
 # Create a group name config
-ynh_add_config --template="../conf/groupname.json" --destination="$data_dir/groups/$group_name.json"
-chmod 400 "$data_dir/groups/$group_name.json"
-chown $app:$app "$data_dir/groups/$group_name.json"
+#ynh_add_config --template="../conf/groupname.json" --destination="$data_dir/groups/$group_name.json"
+#chmod 400 "$data_dir/groups/$group_name.json"
+#chown $app:$app "$data_dir/groups/$group_name.json"
 
 # Create a group name authenticated on LDAP
 ynh_add_config --template="../conf/groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"
