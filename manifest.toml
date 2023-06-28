@@ -18,7 +18,7 @@ userdoc = "https://galene.org/faq.html"
 code = "https://github.com/jech/galene"
 
 [integration]
-yunohost = ">= 11.1.19"
+yunohost = ">= 11.1.21"
 architectures = "all"
 multi_instance = false
 ldap = true
