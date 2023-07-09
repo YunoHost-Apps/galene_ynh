@@ -49,12 +49,6 @@ ynh_remove_nginx_config
 # CLOSE A PORT
 #=================================================
 
-if yunohost firewall list | grep -q "\- $port_turn$"
-then
-	ynh_script_progression --message="Closing port $port_turn..." --weight=1
-	ynh_exec_warn_less yunohost firewall disallow both $port_turn
-fi
-
 if yunohost firewall list | grep -q "\- 49152:65535"
 then
 	ynh_script_progression --message="Closing UDP ports..." --weight=1
