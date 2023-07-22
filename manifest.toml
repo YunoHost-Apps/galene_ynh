@@ -70,8 +70,8 @@ ram.runtime = "50M"
     autoupdate.strategy = "latest_github_tag"
  
     [resources.sources.ldap]
-    url = "https://github.com/jech/galene-ldap/archive/33b8a930372388b2b8b506d2564516fb3eaf895a.tar.gz"
-    sha256 = "00247712e4e7944fed42026f056f48eb59a95cf476c3ff1cb6e24c54469ce070"
+    url = "https://github.com/jech/galene-ldap/archive/18cbd36080bdc7544f340f716a9ac1b31472ed3c.tar.gz"
+    sha256 = "2b7b4f7f2ba8eadc64f5f48ebf87a6dac171f29f45340e71c50316681f527f78"
     autoupdate.upstream = "https://github.com/jech/galene-ldap"
     autoupdate.strategy = "latest_github_commit"
 
