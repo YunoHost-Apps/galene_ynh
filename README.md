@@ -45,7 +45,7 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 * Official user documentation: <https://galene.org/faq.html>
 * Official admin documentation: <https://galene.org/>
 * Upstream app code repository: <https://github.com/jech/galene>
-* YunoHost documentation for this app: <https://yunohost.org/app_galene>
+* YunoHost Store: <https://apps.yunohost.org/app/galene>
 * Report a bug: <https://github.com/YunoHost-Apps/galene_ynh/issues>
 
 ## Developer info
