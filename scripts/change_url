@@ -14,7 +14,6 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression --message="Loading installation settings..." --weight=1
 
-# Add settings here as needed by your application
 key=$(ynh_app_setting_get --app=$app --key=key)
 password_hash=$(ynh_app_setting_get --app=$app --key=password_hash)
 
@@ -43,7 +42,7 @@ ynh_change_url_nginx_config
 ynh_script_progression --message="Updating a configuration file..." --weight=2
 
 domain="$new_domain"
-# Configure Galene
+# Configure Galène
 ynh_add_config --template="../conf/config.json" --destination="$install_dir/live/data/config.json"
 chmod 400 "$install_dir/live/data/config.json"
 chown $app:$app "$install_dir/live/data/config.json"
