@@ -47,8 +47,8 @@ fi
 #=================================================
 ynh_script_progression --message="Upgrading source files..." --weight=2
 
-ynh_setup_source --dest_dir="$install_dir/build"
-ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
+ynh_setup_source --dest_dir="$install_dir/build" --full_replace=1
+ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap" --full_replace=1
 
 mkdir -p "$install_dir/live/data"
 mkdir -p "$install_dir/live_ldap/data"
