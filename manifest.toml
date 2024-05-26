@@ -5,7 +5,7 @@ name = "Galène"
 description.en = "Videoconferencing server that is easy to deploy"
 description.fr = "Serveur de visioconférence facile à déployer"
 
-version = "0.8.2~ynh1"
+version = "0.9~ynh1"
 
 maintainers = ["eric_G"]
 
@@ -18,7 +18,7 @@ userdoc = "https://galene.org/faq.html"
 code = "https://github.com/jech/galene"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 11.2.12"
 architectures = "all"
 multi_instance = false
 
@@ -67,13 +67,13 @@ ram.runtime = "50M"
 
 [resources.sources]
     [resources.sources.main]
-    url = "https://github.com/jech/galene/archive/refs/tags/galene-0.8.2.tar.gz"
-    sha256 = "d97fa47b6f301396d4ef220cd648099e67471c00793872744e41b908bf898731"
+    url = "https://github.com/jech/galene/archive/refs/tags/galene-0.9.tar.gz"
+    sha256 = "066f2b06fdbda4b8d29d3048166123dc5bc2c0f6f863cee235df82758ddbef90"
     autoupdate.strategy = "latest_github_tag"
  
     [resources.sources.ldap]
-    url = "https://github.com/jech/galene-ldap/archive/4ca51804f43b2f13a10397c5f84c32395a3f17ca.tar.gz"
-    sha256 = "3db8594b2c09b175adde5dc202110fc095d556def17dfebc21462a5a9b386644"
+    url = "https://github.com/jech/galene-ldap/archive/c6b6f3859927a3cb8bf36b6e39614dff79275dd5.tar.gz"
+    sha256 = "5f261fde39694b2dc4412c9abaf8f2c269119ccdaea5fd0a6f69bd00a42885f3"
     autoupdate.upstream = "https://github.com/jech/galene-ldap"
     autoupdate.strategy = "latest_github_commit"
 
