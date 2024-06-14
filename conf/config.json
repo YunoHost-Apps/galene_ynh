@@ -4,7 +4,7 @@
     "users": {
         "__ADMIN__": {
             "permissions": "admin",
-            "password": "__PASSWORD_HASH__"
+            "password": __PASSWORD_HASH__
         }
     }
 }
