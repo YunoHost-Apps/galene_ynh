@@ -43,7 +43,7 @@ ynh_script_progression --message="Updating a configuration file..." --weight=2
 
 domain="$new_domain"
 
-# Configure Galene
+# Configure Galène
 ynh_add_config --template="config.json" --destination="$data_dir/data/config.json"
 chmod 400 "$data_dir/data/config.json"
 chown $app:$app "$data_dir/data/config.json"

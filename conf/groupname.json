@@ -1,5 +1,5 @@
 "users": {
-    "__ADMIN__": {"permissions": "op", "password": "__PASSWORD_HASH__"},
+    "__ADMIN__": {"permissions": "op", "password": __PASSWORD_HASH__},
     "description": "__GROUP_DESCRIPTION__",
 	"public": true,
 	"allow-recording": true,
