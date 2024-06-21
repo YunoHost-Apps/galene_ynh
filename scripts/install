@@ -43,7 +43,7 @@ chown -R $app:www-data "$install_dir"
 #=================================================
 ynh_script_progression "Building app..."
 
-go_install
+ynh_go_install
 
 pushd $install_dir/build/galene-password-generator/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -o $install_dir/
@@ -57,7 +57,7 @@ pushd $install_dir/build_ldap/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -ldflags='-s -w' -o $install_dir/live_ldap/
 popd
 
-go_remove
+ynh_go_remove
 ynh_safe_rm "$install_dir/build/"
 ynh_safe_rm "$install_dir/build_ldap/"
 ynh_safe_rm "$install_dir/.cache/"
