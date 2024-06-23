@@ -23,7 +23,6 @@ ynh_hide_warnings yunohost firewall allow UDP -4 49152:65535
 #=================================================
 ynh_script_progression "Setting up source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
 
@@ -41,7 +40,7 @@ chown -R $app:www-data "$install_dir"
 #=================================================
 # BUILD APP
 #=================================================
-ynh_script_progression "Building app..."
+ynh_script_progression "Building $app..."
 
 ynh_go_install
 
@@ -103,10 +102,8 @@ ynh_script_progression "Adding system configurations related to $app..."
 
 public_ip4="$(curl -s ip.yunohost.org)" || true
 
-# Create a dedicated NGINX config
 ynh_config_add_nginx
 
-# Create a dedicated systemd config
 ynh_config_add_systemd
 ynh_config_add_systemd --service=${app}_ldap --template="ldap.service"
 
