@@ -1,7 +1,11 @@
-"users": {
-    "description": "YunoHost User Group",
-	"public": true,
-	"authServer": "https://__DOMAIN__/auth/",
-	"authKeys": [__KEY__],
-	"auto-subgroups": true
+{
+   "users":{
+      "description":"YunoHost User Group",
+      "public":true,
+      "authServer":"https://__DOMAIN__/auth/",
+      "authKeys":[
+         "__KEY__"
+      ],
+      "auto-subgroups":true
+   }
 }
