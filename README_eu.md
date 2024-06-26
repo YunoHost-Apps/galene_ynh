@@ -5,7 +5,7 @@ EZ editatu eskuz.
 
 # Galène YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/galene.svg)](https://dash.yunohost.org/appci/app/galene) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)
+[![Integrazio maila](https://dash.yunohost.org/integration/galene.svg)](https://ci-apps.yunohost.org/ci/apps/galene/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)
 
 [![Instalatu Galène YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=galene)
 
