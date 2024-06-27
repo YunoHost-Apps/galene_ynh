@@ -5,7 +5,7 @@ No se debe editar a mano.
 
 # Galène para Yunohost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/galene.svg)](https://dash.yunohost.org/appci/app/galene) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)
+[![Nivel de integración](https://dash.yunohost.org/integration/galene.svg)](https://ci-apps.yunohost.org/ci/apps/galene/) ![Estado funcional](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![Estado En Mantención](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)
 
 [![Instalar Galène con Yunhost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=galene)
 
@@ -31,7 +31,7 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 - Command-line client for Galene file transfer
 
 
-**Versión actual:** 0.9~ynh2
+**Versión actual:** 0.9~ynh4
 
 **Demo:** <https://galene.org:8443/>
 
