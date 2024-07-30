@@ -106,4 +106,4 @@ ram.runtime = "50M"
     turn.exposed = "Both"
 
     [resources.apt]
-    packages = "jose"
+    packages = "jose, cmake"
