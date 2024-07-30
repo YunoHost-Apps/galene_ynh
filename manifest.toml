@@ -82,7 +82,7 @@ ram.runtime = "50M"
     sha256 = "da7988072022acc3cfa61b370b3c51baad017f1900c3dc4e68cb276499f66894"
     autoupdate.strategy = "latest_github_tag"
 
-    [resources.sources.galene-stt]
+    [resources.sources.stt]
     url = "https://github.com/jech/galene-stt/archive/d2aa2ae4932cf04be33718bb39a08a91fa7777f4.tar.gz"
     sha256 = "08bc36b5ff4ddff05c0522cfc5c0eef98da18725880c7ed6e2e22071e226ff3d"
     autoupdate.upstream = "https://github.com/jech/galene-stt"
