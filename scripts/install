@@ -81,7 +81,7 @@ pushd $install_dir/build_ldap/
 popd
 
 pushd $install_dir/build_stt/
-	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -o $install_dir/stt/
+	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=1 $ynh_go build -o $install_dir/stt/
 	ln -s $install_dir/stt/whisper.cpp/models $install_dir/stt/
 popd
 
