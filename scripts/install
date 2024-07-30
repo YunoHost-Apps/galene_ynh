@@ -51,7 +51,7 @@ chown -R $app:www-data "$install_dir"
 pushd $install_dir/stt/whisper.cpp/
 	mkdir build
 	cd build
-	cmake ..
+	ynh_exec_warn_less cmake ..
 	ynh_exec_warn_less make -j
 	ynh_exec_warn_less make install
 popd
