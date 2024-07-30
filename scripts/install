@@ -34,6 +34,8 @@ ynh_script_progression --message="Setting up source files..." --weight=1
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
+ynh_setup_source --dest_dir="$install_dir/stt/whisper.cpp/" --source_id="whisper"
+ynh_setup_source --dest_dir="$install_dir/build_stt" --source_id="stt"
 
 mkdir -p "$install_dir/live/data"
 mkdir -p "$install_dir/live_ldap/data"
@@ -43,6 +45,19 @@ ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" -
 
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
+
+
+#Build and install whisper.cpp:
+pushd $install_dir/stt/whisper.cpp/
+	mkdir build
+	cd build
+	cmake ..
+	make -j
+	sudo make install
+popd
+
+#Download your favourite model:
+$install_dir/stt/whisper.cpp/models/download-ggml-model.sh base.en
 
 #=================================================
 # SPECIFIC SETUP
@@ -66,9 +81,16 @@ pushd $install_dir/build_ldap/
 	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/live_ldap/
 popd
 
+pushd $install_dir/build_stt/
+	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/stt/
+	ln -s $install_dir/stt/whisper.cpp/models .
+popd
+
+
 ynh_remove_go
 ynh_secure_remove --file="$install_dir/build/"
 ynh_secure_remove --file="$install_dir/build_ldap/"
+ynh_secure_remove --file="$install_dir/build_stt/"
 ynh_secure_remove --file="$install_dir/.cache/"
 ynh_secure_remove --file="$install_dir/go/"
 ynh_secure_remove --file="$install_dir/.go-version"
@@ -118,9 +140,11 @@ ynh_add_nginx_config
 # Create a dedicated systemd config
 ynh_add_systemd_config
 ynh_add_systemd_config --service=${app}_ldap --template="ldap.service"
+ynh_add_systemd_config --service=${app}_stt --template="stt.service"
 
 yunohost service add $app --description="Videoconferencing server" --needs_exposed_ports="$port_turn"
 yunohost service add ${app}_ldap --description="LDAP integration for the videoconferencing server"
+yunohost service add ${app}_stt --description="Speech-to-text support for Galene"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -130,6 +154,7 @@ ynh_script_progression --message="Starting a systemd service..." --weight=1
 # Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
 ynh_systemd_action --service_name=${app}_ldap --action="start" --log_path="systemd"
+ynh_systemd_action --service_name=${app}_stt --action="start" --log_path="systemd"
 
 #=================================================
 # END OF SCRIPT
