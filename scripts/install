@@ -52,8 +52,8 @@ pushd $install_dir/stt/whisper.cpp/
 	mkdir build
 	cd build
 	cmake ..
-	make -j
-	sudo make install
+	ynh_exec_warn_less make -j
+	ynh_exec_warn_less make install
 popd
 
 #Download your favourite model:
@@ -82,10 +82,9 @@ pushd $install_dir/build_ldap/
 popd
 
 pushd $install_dir/build_stt/
-	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -ldflags='-s -w' -o $install_dir/stt/
+	ynh_exec_warn_less ynh_exec_as $app CGO_ENABLED=0 $ynh_go build -o $install_dir/stt/
 	ln -s $install_dir/stt/whisper.cpp/models .
 popd
-
 
 ynh_remove_go
 ynh_secure_remove --file="$install_dir/build/"
