@@ -46,7 +46,6 @@ ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" -
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
-
 #Build and install whisper.cpp:
 pushd $install_dir/stt/whisper.cpp/
 	mkdir build
