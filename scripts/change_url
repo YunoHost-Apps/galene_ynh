@@ -1,80 +1,70 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC STARTING
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression --message="Loading installation settings..." --weight=1
+ynh_script_progression "Loading installation settings..."
 
-key=$(ynh_app_setting_get --app=$app --key=key)
-password_hash=$(ynh_app_setting_get --app=$app --key=password_hash)
+key=$(ynh_app_setting_get --key=key)
+password_hash=$(ynh_app_setting_get --key=password_hash)
 
-#=================================================
-# STANDARD MODIFICATIONS
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a systemd service..." --weight=1
+ynh_script_progression "Stopping $app's systemd service..."
 
-ynh_systemd_action --service_name=$app --action="stop" --log_path="systemd"
-ynh_systemd_action --service_name=${app}_ldap --action="stop" --log_path="systemd"
+ynh_systemctl --service=$app --action="stop" --log_path="systemd"
+ynh_systemctl --service=${app}_ldap --action="stop" --log_path="systemd"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
-ynh_script_progression --message="Updating NGINX web server configuration..." --weight=2
+ynh_script_progression "Updating NGINX web server configuration..."
 
-ynh_change_url_nginx_config
+ynh_config_change_url_nginx
 
 #=================================================
 # SPECIFIC MODIFICATIONS
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression --message="Updating a configuration file..." --weight=2
+ynh_script_progression "Updating configuration..."
 
 domain="$new_domain"
 # Configure Galène
-ynh_add_config --template="config.json" --destination="$install_dir/live/data/config.json"
-chmod 400 "$install_dir/live/data/config.json"
-chown $app:$app "$install_dir/live/data/config.json"
+ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
+#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$install_dir/live/data/config.json"
+#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$install_dir/live/data/config.json"
 
 # Configure Galene LDAP
-#ynh_add_config --template="galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
+#ynh_config_add --template="galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
 #chmod 400 "$install_dir/live_ldap/data/galene-ldap.json"
 #chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
 
 # Create a group name config
-#ynh_add_config --template="groupname.json" --destination="$data_dir/groups/$group_name.json"
-#chmod 400 "$data_dir/groups/$group_name.json"
-#chown $app:$app "$data_dir/groups/$group_name.json"
+#ynh_config_add --template="groupname.json" --destination="$data_dir/groups/$group_name.json"
+##REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$data_dir/groups/$group_name.json"
+##REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$data_dir/groups/$group_name.json"
 
 # Create a group name authenticated on LDAP
-ynh_add_config --template="groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"
-chmod 400 "$data_dir/groups/YunoHost_Users.json"
-chown $app:$app "$data_dir/groups/YunoHost_Users.json"
+ynh_config_add --template="groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"
+#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$data_dir/groups/YunoHost_Users.json"
+#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$data_dir/groups/YunoHost_Users.json"
 
-#=================================================
-# GENERIC FINALISATION
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..." --weight=3
+ynh_script_progression "Starting $app's systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
-ynh_systemd_action --service_name=${app}_ldap --action="start" --log_path="systemd"
+ynh_systemctl --service=$app --action="start" --log_path="systemd"
+ynh_systemctl --service=${app}_ldap --action="start" --log_path="systemd"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Change of URL completed for $app" --last
+ynh_script_progression "Change of URL completed for $app"
