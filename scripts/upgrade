@@ -49,8 +49,6 @@ ynh_safe_rm "$install_dir/live/static/"
 cp -r "$install_dir/build/static/" "$install_dir/live/"
 ynh_replace --match="<div class=\"galene-header\">Galène</div>" --replace="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --file="$install_dir/live/static/galene.html"
 
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
 #=================================================
 # BUILD APP
 #=================================================
@@ -83,36 +81,23 @@ chmod +x "$install_dir/galene-password-generator"
 ynh_script_progression "Updating configuration..."
 
 # If password_hash doesn't exist, create it
-# FIXMEhelpers2.1: maybe replace with: ynh_app_setting_set_default --key=password_hash --value=$(echo $($install_dir/galene-password-generator $password))
-if [ -z "${password_hash:-}" ]; then
-	password_hash=$(echo $($install_dir/galene-password-generator $password))
-	ynh_app_setting_set --key=password_hash --value="$password_hash"
-fi
+ynh_app_setting_set_default --key=password_hash --value=$(echo $($install_dir/galene-password-generator $password))
+
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$install_dir/live/data/config.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$install_dir/live/data/config.json"
 
 # Configure Galène LDAP
-# If key doesn't exist, create it
-# FIXMEhelpers2.1: maybe replace with: ynh_app_setting_set_default --key=key --value=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
-if [ -z "${key:-}" ]; then
-	key=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
-	ynh_app_setting_set --key=key --value=$key
-fi
+ynh_app_setting_set_default --key=key --value=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
+
 ynh_config_add --template="galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
 chmod 400 "$install_dir/live_ldap/data/galene-ldap.json"
 chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
 
 # Create a group name config
 ynh_config_add --template="groupname.json" --destination="$data_dir/groups/$group_name.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$data_dir/groups/$group_name.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$data_dir/groups/$group_name.json"
 
 # Create a group name authenticated on LDAP
 ynh_config_add --template="groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$data_dir/groups/YunoHost_Users.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$data_dir/groups/YunoHost_Users.json"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
@@ -121,10 +106,8 @@ ynh_script_progression "Upgrading system configurations related to $app..."
 
 public_ip4="$(curl -s ip.yunohost.org)" || true
 
-# Create a dedicated NGINX config
 ynh_config_add_nginx
 
-# Create a dedicated systemd config
 ynh_config_add_systemd
 ynh_config_add_systemd --service=${app}_ldap --template="ldap.service"
 

@@ -23,7 +23,6 @@ ynh_hide_warnings yunohost firewall allow UDP -4 49152:65535
 #=================================================
 ynh_script_progression "Setting up source files..."
 
-# Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
 
@@ -33,8 +32,6 @@ mkdir -p "$install_dir/live_ldap/data"
 cp -r "$install_dir/build/static/" "$install_dir/live/"
 ynh_replace --match="<div class=\"galene-header\">Galène</div>" --replace="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --file="$install_dir/live/static/galene.html"
 
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
 #=================================================
 # SPECIFIC SETUP
 #=================================================
@@ -75,8 +72,6 @@ ynh_app_setting_set --key=password_hash --value="$password_hash"
 
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$install_dir/live/data/config.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$install_dir/live/data/config.json"
 
 # Configure Galène LDAP
 key=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
@@ -87,13 +82,9 @@ chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
 
 # Create a group name config
 ynh_config_add --template="groupname.json" --destination="$data_dir/groups/$group_name.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$data_dir/groups/$group_name.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$data_dir/groups/$group_name.json"
 
 # Create a group name authenticated on LDAP
 ynh_config_add --template="groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$data_dir/groups/YunoHost_Users.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$data_dir/groups/YunoHost_Users.json"
 
 #=================================================
 # SYSTEM CONFIGURATION
@@ -102,10 +93,8 @@ ynh_script_progression "Adding system configurations related to $app..."
 
 public_ip4="$(curl -s ip.yunohost.org)" || true
 
-# Create a dedicated NGINX config
 ynh_config_add_nginx
 
-# Create a dedicated systemd config
 ynh_config_add_systemd
 ynh_config_add_systemd --service=${app}_ldap --template="ldap.service"
 
@@ -117,7 +106,6 @@ yunohost service add ${app}_ldap --description="LDAP integration for the videoco
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-# Start a systemd service
 ynh_systemctl --service=$app --action="start" --log_path="systemd"
 ynh_systemctl --service=${app}_ldap --action="start" --log_path="systemd"
 

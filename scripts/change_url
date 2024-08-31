@@ -36,30 +36,21 @@ ynh_script_progression "Updating configuration..."
 domain="$new_domain"
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$install_dir/live/data/config.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$install_dir/live/data/config.json"
 
 # Configure Galene LDAP
 #ynh_config_add --template="galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
-#chmod 400 "$install_dir/live_ldap/data/galene-ldap.json"
-#chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
 
 # Create a group name config
 #ynh_config_add --template="groupname.json" --destination="$data_dir/groups/$group_name.json"
-##REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$data_dir/groups/$group_name.json"
-##REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$data_dir/groups/$group_name.json"
 
 # Create a group name authenticated on LDAP
 ynh_config_add --template="groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 400 "$data_dir/groups/YunoHost_Users.json"
-#REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown $app:$app "$data_dir/groups/YunoHost_Users.json"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-# Start a systemd service
 ynh_systemctl --service=$app --action="start" --log_path="systemd"
 ynh_systemctl --service=${app}_ldap --action="start" --log_path="systemd"
 
