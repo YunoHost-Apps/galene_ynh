@@ -1,8 +1,6 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
@@ -15,8 +13,6 @@ source /usr/share/yunohost/helpers
 
 password=$(ynh_app_setting_get --app=$app --key=password)
 
-#=================================================
-# STANDARD UPGRADE STEPS
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
@@ -60,8 +56,6 @@ ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" -
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
-#=================================================
-# SPECIFIC UPGRADE
 #=================================================
 # BUILD APP
 #=================================================
@@ -131,10 +125,8 @@ ynh_script_progression --message="Upgrading system configurations related to $ap
 
 public_ip4="$(curl -s ip.yunohost.org)" || true
 
-# Create a dedicated NGINX config
 ynh_add_nginx_config
 
-# Create a dedicated systemd config
 ynh_add_systemd_config
 ynh_add_systemd_config --service=${app}_ldap --template="ldap.service"
 
