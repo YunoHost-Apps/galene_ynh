@@ -33,8 +33,6 @@ cp -r "$install_dir/build/static/" "$install_dir/live/"
 ynh_replace --match="<div class=\"galene-header\">Galène</div>" --replace="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --file="$install_dir/live/static/galene.html"
 
 #=================================================
-# SPECIFIC SETUP
-#=================================================
 # BUILD APP
 #=================================================
 ynh_script_progression "Building app..."
