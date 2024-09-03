@@ -1,10 +1,12 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
-#=================================================
-# STANDARD REMOVE
 #=================================================
 # REMOVE SERVICE INTEGRATION IN YUNOHOST
 #=================================================
@@ -23,7 +25,7 @@ then
 fi
 
 ynh_config_remove_systemd
-ynh_config_remove_systemd${app}_ldap
+ynh_config_remove_systemd ${app}_ldap
 
 ynh_config_remove_nginx
 
