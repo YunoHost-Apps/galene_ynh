@@ -1,10 +1,6 @@
 {
+    "users":{"__ADMIN__": {"password":"__PASSWORD_HASH__", "permissions": "admin"}},
     "canonicalHost": "__DOMAIN__",
     "proxyURL": "https://__DOMAIN__",
-    "users": {
-        "__ADMIN__": {
-            "permissions": "admin",
-            "password": __PASSWORD_HASH__
-        }
-    }
+    "publicServer": true
 }
