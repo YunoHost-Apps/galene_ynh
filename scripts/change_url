@@ -18,8 +18,6 @@ key=$(ynh_app_setting_get --app=$app --key=key)
 password_hash=$(ynh_app_setting_get --app=$app --key=password_hash)
 
 #=================================================
-# STANDARD MODIFICATIONS
-#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..." --weight=1
@@ -66,7 +64,6 @@ chown $app:$app "$data_dir/groups/YunoHost_Users.json"
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --weight=3
 
-# Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd"
 ynh_systemd_action --service_name=${app}_ldap --action="start" --log_path="systemd"
 
