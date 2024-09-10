@@ -18,23 +18,6 @@ ynh_systemctl --service=$app --action="stop" --log_path="systemd"
 ynh_systemctl --service=${app}_ldap --action="stop" --log_path="systemd"
 
 #=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-ynh_script_progression "Ensuring downward compatibility..."
-
-# For version 0.6~ynh1 and before
-if [[ ! -d "$install_dir/live" ]]
-then
-    tempdir="$(mktemp -d)"
-    mv $install_dir $tempdir
-    mkdir -p "$install_dir/live"
-    mv $tempdir/$app/galene "$install_dir/live/"
-    mv $tempdir/$app/data/ "$install_dir/live/"
-    mv $tempdir/$app/static/ "$install_dir/live/"
-    ynh_safe_rm "$tempdir"
-fi
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression "Upgrading source files..."
@@ -70,6 +53,7 @@ pushd $install_dir/build_ldap/
 popd
 
 ynh_go_remove
+
 ynh_safe_rm "$install_dir/build/"
 ynh_safe_rm "$install_dir/build_ldap/"
 ynh_safe_rm "$install_dir/.cache/"
