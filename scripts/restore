@@ -1,12 +1,9 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
-# Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
 source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
@@ -32,8 +29,6 @@ chown -R $app:www-data "$data_dir"
 #=================================================
 # RESTORE SYSTEM CONFIGURATIONS
 #=================================================
-# RESTORE THE PHP-FPM CONFIGURATION
-#=================================================
 ynh_script_progression --message="Restoring system configurations related to $app..." --weight=1
 
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
@@ -45,8 +40,6 @@ systemctl enable $app.service --quiet
 yunohost service add $app --description="Videoconferencing server" --needs_exposed_ports="$port_turn"
 yunohost service add ${app}_ldap --description="LDAP integration for the videoconferencing server"
 
-#=================================================
-# GENERIC FINALIZATION
 #=================================================
 # RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
 #=================================================
