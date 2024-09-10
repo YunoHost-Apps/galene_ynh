@@ -89,17 +89,17 @@ chmod +x "$install_dir/galene-password-generator"
 ynh_script_progression --message="Updating a configuration file..." --weight=2
 
 # If password_hash doesn't exist, create it
-#if [ -z "${password_hash:-}" ]; then
-#	password_hash=$(echo $($install_dir/galene-password-generator $password))
-#	ynh_app_setting_set --app=$app --key=password_hash --value="$password_hash"
-#fi
+if [ -z "${password_hash:-}" ]; then
+	password_hash=$(echo $($install_dir/galene-password-generator $password))
+	ynh_app_setting_set --app=$app --key=password_hash --value="$password_hash"
+fi
+
 # Configure Galène
 #ynh_add_config --template="config.json" --destination="$data_dir/data/config.json"
 #chmod 400 "$data_dir/data/config.json"
 #chown $app:$app "$data_dir/data/config.json"
 
-# Configure Galène LDAP
-# If key doesn't exist, create it
+# Configure Galène LDAP. If key doesn't exist, create it
 if [ -z "${key:-}" ]; then
 	key=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
 	ynh_app_setting_set --app=$app --key=key --value=$key

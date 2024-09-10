@@ -1,8 +1,6 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
@@ -16,8 +14,6 @@ source /usr/share/yunohost/helpers
 password=$YNH_APP_ARG_PASSWORD
 ynh_app_setting_set --app=$app --key=password --value="$password"
 
-#=================================================
-# STANDARD MODIFICATIONS
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
@@ -43,8 +39,6 @@ ynh_replace_string --match_string="<div class=\"galene-header\">Galène</div>" -
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
 
-#=================================================
-# SPECIFIC SETUP
 #=================================================
 # BUILD APP
 #=================================================

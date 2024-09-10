@@ -35,8 +35,6 @@ ynh_script_progression --message="Updating NGINX web server configuration..." --
 ynh_change_url_nginx_config
 
 #=================================================
-# SPECIFIC MODIFICATIONS
-#=================================================
 # UPDATE A CONFIG FILE
 #=================================================
 ynh_script_progression --message="Updating a configuration file..." --weight=2
@@ -63,8 +61,6 @@ ynh_add_config --template="groupname-ldap.json" --destination="$data_dir/groups/
 chmod 400 "$data_dir/groups/YunoHost_Users.json"
 chown $app:$app "$data_dir/groups/YunoHost_Users.json"
 
-#=================================================
-# GENERIC FINALISATION
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
