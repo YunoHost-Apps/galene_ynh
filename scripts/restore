@@ -29,6 +29,7 @@ ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
 ynh_restore "/etc/systemd/system/$app.service"
 ynh_restore "/etc/systemd/system/${app}_ldap.service"
 systemctl enable $app.service --quiet
+systemctl enable ${app}_ldap.service --quiet
 
 yunohost service add $app --description="Videoconferencing server" --needs_exposed_ports="$port_turn"
 yunohost service add ${app}_ldap --description="LDAP integration for the videoconferencing server"
