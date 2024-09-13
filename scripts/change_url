@@ -27,13 +27,12 @@ ynh_script_progression "Updating NGINX web server configuration..."
 ynh_config_change_url_nginx
 
 #=================================================
-# SPECIFIC MODIFICATIONS
-#=================================================
 # UPDATE A CONFIG FILE
 #=================================================
 ynh_script_progression "Updating configuration..."
 
 domain="$new_domain"
+
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
 

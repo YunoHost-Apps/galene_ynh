@@ -26,7 +26,7 @@ ynh_script_progression "Setting up source files..."
 ynh_setup_source --dest_dir="$install_dir/build"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
 
-mkdir -p "$install_dir/live/data"
+mkdir -p "$install_dir/live"
 mkdir -p "$install_dir/live_ldap/data"
 
 cp -r "$install_dir/build/static/" "$install_dir/live/"
