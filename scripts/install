@@ -32,9 +32,6 @@ mkdir -p "$install_dir/live_ldap/data"
 cp -r "$install_dir/build/static/" "$install_dir/live/"
 ynh_replace --match="<div class=\"galene-header\">Galène</div>" --replace="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --file="$install_dir/live/static/galene.html"
 
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
-
 #=================================================
 # BUILD APP
 #=================================================

@@ -32,9 +32,6 @@ ynh_safe_rm "$install_dir/live/static/"
 cp -r "$install_dir/build/static/" "$install_dir/live/"
 ynh_replace --match="<div class=\"galene-header\">Galène</div>" --replace="<div class=\"galene-header\" onclick=\"location.href=window.location.origin\" style=\"cursor:pointer\">Galène</div>" --file="$install_dir/live/static/galene.html"
 
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
-
 #=================================================
 # BUILD APP
 #=================================================
@@ -77,8 +74,6 @@ ynh_config_add --template="config.json" --destination="$install_dir/live/data/co
 ynh_app_setting_set_default --key=key --value=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
 
 ynh_config_add --template="galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
-chmod 400 "$install_dir/live_ldap/data/galene-ldap.json"
-chown $app:$app "$install_dir/live_ldap/data/galene-ldap.json"
 
 # Create a group name config
 ynh_config_add --template="groupname.json" --destination="$data_dir/groups/$group_name.json"
