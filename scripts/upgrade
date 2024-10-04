@@ -38,7 +38,7 @@ chown -R $app:$app "$install_dir"
 #=================================================
 # BUILD APP
 #=================================================
-ynh_script_progression "Building app..."
+ynh_script_progression "Building $app..."
 
 ynh_go_install
 
