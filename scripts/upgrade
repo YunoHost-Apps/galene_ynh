@@ -89,7 +89,7 @@ ynh_config_add --template="groupname-ldap.json" --destination="$data_dir/groups/
 #=================================================
 ynh_script_progression "Upgrading system configurations related to $app..."
 
-public_ip4="$(curl -s ip.yunohost.org)" || true
+public_ip4="$(curl -s https://ip.yunohost.org)" || true
 
 ynh_config_add_nginx
 
