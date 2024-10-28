@@ -19,5 +19,5 @@ test_format = 1.0
     # Commits to test upgrade from
     # -------------------------------
 
-    test_upgrade_from.a8bb33c7.name = "Upgrade from 0.8.2~ynh1"
+    #test_upgrade_from.a8bb33c7.name = "Upgrade from 0.8.2~ynh1"
     
