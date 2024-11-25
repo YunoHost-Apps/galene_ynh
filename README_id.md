@@ -5,7 +5,9 @@ Ini TIDAK boleh diedit dengan tangan.
 
 # Galène untuk YunoHost
 
-[![Tingkat integrasi](https://dash.yunohost.org/integration/galene.svg)](https://ci-apps.yunohost.org/ci/apps/galene/) ![Status kerja](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![Status pemeliharaan](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/galene)](https://ci-apps.yunohost.org/ci/apps/galene/)
+![Status kerja](https://apps.yunohost.org/badge/state/galene)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/galene)
 
 [![Pasang Galène dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=galene)
 

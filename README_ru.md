@@ -5,7 +5,9 @@
 
 # Galène для YunoHost
 
-[![Уровень интеграции](https://dash.yunohost.org/integration/galene.svg)](https://ci-apps.yunohost.org/ci/apps/galene/) ![Состояние работы](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![Состояние сопровождения](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)
+[![Уровень интеграции](https://apps.yunohost.org/badge/integration/galene)](https://ci-apps.yunohost.org/ci/apps/galene/)
+![Состояние работы](https://apps.yunohost.org/badge/state/galene)
+![Состояние сопровождения](https://apps.yunohost.org/badge/maintained/galene)
 
 [![Установите Galène с YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=galene)
 

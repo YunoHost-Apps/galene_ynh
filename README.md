@@ -5,7 +5,9 @@ It shall NOT be edited by hand.
 
 # Galène for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/galene.svg)](https://ci-apps.yunohost.org/ci/apps/galene/) ![Working status](https://ci-apps.yunohost.org/ci/badges/galene.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/galene.maintain.svg)
+[![Integration level](https://apps.yunohost.org/badge/integration/galene)](https://ci-apps.yunohost.org/ci/apps/galene/)
+![Working status](https://apps.yunohost.org/badge/state/galene)
+![Maintenance status](https://apps.yunohost.org/badge/maintained/galene)
 
 [![Install Galène with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=galene)
 
