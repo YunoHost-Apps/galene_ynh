@@ -42,7 +42,7 @@ ynh_script_progression "Building $app..."
 
 ynh_go_install
 
-pushd $install_dir/build/galene-password-generator/
+pushd $install_dir/build/galenectl/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -o $install_dir/
 popd
 
@@ -61,18 +61,21 @@ ynh_safe_rm "$install_dir/.cache/"
 ynh_safe_rm "$install_dir/go/"
 ynh_safe_rm "$install_dir/.go-version"
 
-chmod +x "$install_dir/galene-password-generator"
+chmod +x "$install_dir/galenectl"
 
 #=================================================
 # ADD A CONFIGURATION
 #=================================================
 ynh_script_progression "Adding $app's configuration..."
 
-password_hash=$(echo $($install_dir/galene-password-generator $password))
+password_hash=$(echo $($install_dir/galenectl hash-password $password))
 ynh_app_setting_set --key=password_hash --value="$password_hash"
 
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
+
+# Configure galenectl
+ynh_config_add --template="galenectl.json" --destination="$install_dir/live/data/galenectl.json"
 
 # Configure Galène LDAP
 key=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
