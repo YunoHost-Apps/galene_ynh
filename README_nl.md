@@ -33,7 +33,7 @@ Galène is a videoconference server (an “SFU”) that is easy to deploy and th
 - Command-line client for Galene file transfer
 
 
-**Geleverde versie:** 0.95~ynh4
+**Geleverde versie:** 0.95~ynh1
 
 **Demo:** <https://galene.org:8443/>
 
