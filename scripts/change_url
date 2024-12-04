@@ -6,7 +6,6 @@ source /usr/share/yunohost/helpers
 #=================================================
 # LOAD SETTINGS
 #=================================================
-ynh_script_progression "Loading installation settings..."
 
 key=$(ynh_app_setting_get --key=key)
 password_hash=$(ynh_app_setting_get --key=password_hash)
