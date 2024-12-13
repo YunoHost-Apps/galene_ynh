@@ -11,6 +11,13 @@ password=$YNH_APP_ARG_PASSWORD
 ynh_app_setting_set --key=password --value="$password"
 
 #=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression "Installing dependencies..."
+
+ynh_nodejs_install
+
+#=================================================
 # FIND AND OPEN A PORT
 #=================================================
 ynh_script_progression "Configuring firewall..."
@@ -62,6 +69,24 @@ ynh_safe_rm "$install_dir/go/"
 ynh_safe_rm "$install_dir/.go-version"
 
 chmod +x "$install_dir/galenectl"
+
+#=================================================
+# ADD BLUR BACKGROUND
+#=================================================
+ynh_script_progression "Adding blur background option..."
+
+mkdir $install_dir/mediapipe
+
+pushd "$install_dir/mediapipe"
+	ynh_hide_warnings ynh_exec_as_app npm pack @mediapipe/tasks-vision
+	tar xzf mediapipe-tasks-vision-*.tgz
+	rm -f ../static/third-party/tasks-vision
+	mv package ../static/third-party/tasks-vision
+	cd ../static/third-party/tasks-vision
+	mkdir models
+	cd models
+	wget https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite
+popd
 
 #=================================================
 # ADD A CONFIGURATION
