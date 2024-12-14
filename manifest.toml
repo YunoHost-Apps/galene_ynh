@@ -67,8 +67,8 @@ ram.runtime = "50M"
 
 [resources.sources]
     [resources.sources.main]
-    url = "https://github.com/jech/galene/archive/refs/tags/galene-0.95.tar.gz"
-    sha256 = "a67cb12d3244e4e2c5c3a8c491b23e03bda7781c83d074bd30dfad5810bbaa76"
+    url = "https://github.com/jech/galene/archive/0a14b78d67d10717919d97064488107148656d28.tar.gz"
+    sha256 = "ead665307a8e905246e53c06eed2b3b875ae533a905566cab839f0498dd31029"
     autoupdate.strategy = "latest_github_tag"
  
     [resources.sources.ldap]
