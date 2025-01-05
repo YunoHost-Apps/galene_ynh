@@ -81,9 +81,8 @@ pushd "$install_dir/mediapipe"
 	ynh_hide_warnings npm pack @mediapipe/tasks-vision
 	tar xzf mediapipe-tasks-vision-*.tgz
 	rm -f ../static/third-party/tasks-vision
-	mkdir $install_dir/mediapipe/static/third-party/tasks-vision
-	mv package $install_dir/mediapipe/static/third-party/tasks-vision
-	cd $install_dir/mediapipe/static/third-party/tasks-vision
+	mv package ../static/third-party/tasks-vision
+	cd ../static/third-party/tasks-vision
 	mkdir models
 	cd models
 	wget https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite 2>&1
