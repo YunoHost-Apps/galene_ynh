@@ -5,7 +5,7 @@ name = "Galène"
 description.en = "Videoconferencing server that is easy to deploy"
 description.fr = "Serveur de visioconférence facile à déployer"
 
-version = "0.96.1~ynh1"
+version = "0.96.1~ynh2"
 
 maintainers = ["eric_G"]
 
@@ -72,8 +72,8 @@ ram.runtime = "50M"
     autoupdate.strategy = "latest_github_tag"
  
     [resources.sources.ldap]
-    url = "https://github.com/jech/galene-ldap/archive/c6b6f3859927a3cb8bf36b6e39614dff79275dd5.tar.gz"
-    sha256 = "5f261fde39694b2dc4412c9abaf8f2c269119ccdaea5fd0a6f69bd00a42885f3"
+    url = "https://github.com/jech/galene-ldap/archive/6de51be51aede731fbb803b81725b25e1822e10f.tar.gz"
+    sha256 = "9e20a081066c2a7ee593211e588361334c666383dfa213752797e968933a3f7e"
     autoupdate.upstream = "https://github.com/jech/galene-ldap"
     autoupdate.strategy = "latest_github_commit"
 
