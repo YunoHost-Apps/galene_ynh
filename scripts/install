@@ -10,8 +10,6 @@ source /usr/share/yunohost/helpers
 password=$YNH_APP_ARG_PASSWORD
 ynh_app_setting_set --key=password --value="$password"
 
-
-
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
