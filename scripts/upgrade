@@ -11,13 +11,6 @@ password=$(ynh_app_setting_get --key=password)
 password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password "$password")
 
 #=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-#ynh_script_progression "Ensuring downward compatibility..."
-
-#ynh_app_setting_set_default --key=password_hash --value=$(HOME=$install_dir $install_dir/galenectl hash-password -password $password)
-
-#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Stopping $app's systemd service..."
@@ -62,8 +55,8 @@ popd
 
 ynh_go_remove
 
-ynh_safe_rm "$install_dir/build/"
-ynh_safe_rm "$install_dir/build_ldap/"
+#ynh_safe_rm "$install_dir/build/"
+#ynh_safe_rm "$install_dir/build_ldap/"
 ynh_safe_rm "$install_dir/.cache/"
 ynh_safe_rm "$install_dir/go/"
 ynh_safe_rm "$install_dir/.go-version"
