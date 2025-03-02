@@ -16,7 +16,7 @@ Lorsque Galène est supprimé, le répertoire de données (`__DATA_DIR__`) est c
 
 Si vous ne souhaitez pas stocker les mots de passe en clair sur le serveur, vous pouvez générer des mots de passe hachés avec l'utilitaire galene-password-generator :
 
-`./__INSTALL_DIR__/galene-password-generator votre_mot_de_passe`
+`./__INSTALL_DIR__/galenectl hash-password -password "votre_mot_de_passe"`
 
 Une entrée utilisateur avec un mot de passe haché ressemble à ceci :
 
