@@ -16,8 +16,7 @@ When Galène is removed, the data directory (`__DATA_DIR__`) is preserved. If yo
 
 If you don’t wish to store cleartext passwords on the server, you may generate hashed passwords with the galene-password-generator utility:
 
-`./__INSTALL_DIR__/galene-password-generator your_password`
-
+`./__INSTALL_DIR__/galenectl hash-password -password "your_password"`
 
 A user entry with a hashed password looks like this:
 ``` 

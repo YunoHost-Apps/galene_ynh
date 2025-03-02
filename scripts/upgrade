@@ -92,8 +92,7 @@ popd
 #=================================================
 ynh_script_progression "Updating configuration..."
 
-# If password_hash doesn't exist, create it
-ynh_app_setting_set_default --key=password_hash --value=$(echo $($install_dir/galenectl hash-password $password))
+password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password "$password")
 
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
