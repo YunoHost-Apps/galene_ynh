@@ -8,7 +8,6 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 password=$(ynh_app_setting_get --key=password)
-password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password "$password")
 
 #=================================================
 # STOP SYSTEMD SERVICE
@@ -67,6 +66,8 @@ chmod +x "$install_dir/galenectl"
 # UPDATE A CONFIG FILE
 #=================================================
 ynh_script_progression "Updating configuration..."
+
+password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password "$password")
 
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
