@@ -42,8 +42,6 @@ ynh_script_progression "Building $app..."
 
 ynh_go_install
 
-password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password "$password")
-
 pushd $install_dir/build/galenectl/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -o $install_dir/
 popd
@@ -68,6 +66,8 @@ chmod +x "$install_dir/galenectl"
 # UPDATE A CONFIG FILE
 #=================================================
 ynh_script_progression "Updating configuration..."
+
+password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password "$password")
 
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
