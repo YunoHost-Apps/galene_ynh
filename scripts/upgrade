@@ -8,14 +8,14 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 password=$(ynh_app_setting_get --key=password)
-password_hash=$(echo $($install_dir/galenectl hash-password -password $password))
+#password_hash=$(echo $($install_dir/galenectl hash-password -password $password))
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 ynh_script_progression "Ensuring downward compatibility..."
 
-#ynh_app_setting_set_default --key=password_hash --value=$(echo $($install_dir/galenectl hash-password -password $password))
+ynh_app_setting_set_default --key=password_hash --value=$(HOME=$install_dir $install_dir/galenectl hash-password -password $password)
 
 #=================================================
 # STOP SYSTEMD SERVICE
