@@ -33,12 +33,6 @@ ynh_script_progression "Updating configuration..."
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
 
-# Configure Galene LDAP
-#ynh_config_add --template="galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
-
-# Create a group name config
-#ynh_config_add --template="groupname.json" --destination="$data_dir/groups/$group_name.json"
-
 # Create a group name authenticated on LDAP
 ynh_config_add --template="groupname-ldap.json" --destination="$data_dir/groups/YunoHost_Users.json"
 
