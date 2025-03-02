@@ -55,8 +55,8 @@ popd
 
 ynh_go_remove
 
-#ynh_safe_rm "$install_dir/build/"
-#ynh_safe_rm "$install_dir/build_ldap/"
+ynh_safe_rm "$install_dir/build/"
+ynh_safe_rm "$install_dir/build_ldap/"
 ynh_safe_rm "$install_dir/.cache/"
 ynh_safe_rm "$install_dir/go/"
 ynh_safe_rm "$install_dir/.go-version"

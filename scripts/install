@@ -10,6 +10,9 @@ source /usr/share/yunohost/helpers
 password=$YNH_APP_ARG_PASSWORD
 ynh_app_setting_set --key=password --value="$password"
 
+password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password "$password")
+ynh_app_setting_set --key=password_hash --value="$password_hash"
+
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
@@ -67,9 +70,6 @@ chmod +x "$install_dir/galenectl"
 # ADD A CONFIGURATION
 #=================================================
 ynh_script_progression "Adding $app's configuration..."
-
-password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password "$password")
-ynh_app_setting_set --key=password_hash --value="$password_hash"
 
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
