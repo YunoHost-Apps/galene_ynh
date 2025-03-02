@@ -8,7 +8,6 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 password=$(ynh_app_setting_get --key=password)
-password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password "$password")
 
 #=================================================
 # STOP SYSTEMD SERVICE
@@ -42,6 +41,8 @@ chown -R $app:$app "$install_dir"
 ynh_script_progression "Building $app..."
 
 ynh_go_install
+
+password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password "$password")
 
 pushd $install_dir/build/galenectl/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -o $install_dir/
