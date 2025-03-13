@@ -68,7 +68,8 @@ ynh_safe_rm "$install_dir/.cache/"
 ynh_safe_rm "$install_dir/go/"
 ynh_safe_rm "$install_dir/.go-version"
 
-#chmod +x "$install_dir/galenectl"
+chmod +x "$install_dir/galenectl"
+chmod +x "$install_dir/galene-file-transfer"
 
 #=================================================
 # UPDATE A CONFIG FILE
