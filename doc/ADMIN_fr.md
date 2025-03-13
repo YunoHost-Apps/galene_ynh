@@ -10,8 +10,6 @@ Pour créer un nouveau groupe, vous devez créer un fichier `GroupNameExample.js
 
 *NB : Les espaces sont pris en charge dans les noms de fichiers de groupe.* 
 
-Lorsque Galène est supprimé, le répertoire de données (`__DATA_DIR__`) est conservé. Si vous souhaitez le supprimer avec l'application Galène, utilisez l'option `--purge` : `sudo yunohost app remove galene --purge`. 
-
 #### Mots de passe hachés
 
 Si vous ne souhaitez pas stocker les mots de passe en clair sur le serveur, vous pouvez générer des mots de passe hachés avec l'utilitaire galene-password-generator :

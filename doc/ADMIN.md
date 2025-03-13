@@ -10,8 +10,6 @@ To create a new group, you need to create a `GroupNameExample.json` file and res
 
 *NB: Spaces are supported in group file names.*
 
-When Galène is removed, the data directory (`__DATA_DIR__`) is preserved. If you want to remove it along with Galène app, use the `--purge` option: `sudo yunohost app remove galene --purge`.
-
 #### Hashed passwords
 
 If you don’t wish to store cleartext passwords on the server, you may generate hashed passwords with the galene-password-generator utility:
