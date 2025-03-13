@@ -23,6 +23,7 @@ ynh_systemctl --service=${app}_ldap --action="stop" --log_path="systemd"
 ynh_script_progression "Upgrading source files..."
 
 ynh_setup_source --dest_dir="$install_dir/build" --full_replace
+ynh_setup_source --dest_dir="$install_dir/file" --source_id="file-transfer" --full_replace
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap" --full_replace
 
 mkdir -p "$install_dir/live/data"
@@ -45,9 +46,15 @@ ynh_go_install
 pushd $install_dir/build/galenectl/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -o $install_dir/
 popd
+
+pushd $install_dir/file/
+	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -o $install_dir/
+popd
+
 pushd $install_dir/build/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -ldflags='-s -w' -o $install_dir/live/
 popd
+
 pushd $install_dir/build_ldap/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -ldflags='-s -w' -o $install_dir/live_ldap/
 popd
@@ -55,6 +62,7 @@ popd
 ynh_go_remove
 
 ynh_safe_rm "$install_dir/build/"
+ynh_safe_rm "$install_dir/file/"
 ynh_safe_rm "$install_dir/build_ldap/"
 ynh_safe_rm "$install_dir/.cache/"
 ynh_safe_rm "$install_dir/go/"

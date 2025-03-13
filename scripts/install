@@ -24,6 +24,7 @@ ynh_hide_warnings yunohost firewall allow UDP -4 49152:65535
 ynh_script_progression "Setting up source files..."
 
 ynh_setup_source --dest_dir="$install_dir/build"
+ynh_setup_source --dest_dir="$install_dir/file" --source_id="file-transfer"
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap"
 
 mkdir -p "$install_dir/live/data"
@@ -46,6 +47,10 @@ pushd $install_dir/build/galenectl/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -o $install_dir/
 popd
 
+pushd $install_dir/file/
+	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -o $install_dir/
+popd
+
 pushd $install_dir/build/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -ldflags='-s -w' -o $install_dir/live/
 popd
@@ -56,6 +61,7 @@ popd
 
 ynh_go_remove
 ynh_safe_rm "$install_dir/build/"
+ynh_safe_rm "$install_dir/file/"
 ynh_safe_rm "$install_dir/build_ldap/"
 ynh_safe_rm "$install_dir/.cache/"
 ynh_safe_rm "$install_dir/go/"
