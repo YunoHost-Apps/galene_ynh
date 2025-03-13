@@ -14,7 +14,7 @@ Pour créer un nouveau groupe, vous devez créer un fichier `GroupNameExample.js
 
 Si vous ne souhaitez pas stocker les mots de passe en clair sur le serveur, vous pouvez générer des mots de passe hachés avec l'utilitaire galene-password-generator :
 
-`./__INSTALL_DIR__/galenectl hash-password -password "votre_mot_de_passe"`
+`.__INSTALL_DIR__/galenectl hash-password -password "votre_mot_de_passe"`
 
 Une entrée utilisateur avec un mot de passe haché ressemble à ceci :
 
@@ -59,7 +59,7 @@ Pour vérifier si le serveur TURN est opérationnel, tapez `/relay-test` dans la
 
 ### Statistiques du serveur
 
-Les statistiques sont disponibles sous `/opt/yunohost/galene/stats.json`, avec une version lisible sur `domain.ltd/stats.html`. Cette page n'est disponible que pour l'administrateur du serveur (le mot de passe et l'administrateur sont définis dans le fichier `config.json` : `/opt/yunohost/galene/data/config.json`).
+Les statistiques sont disponibles sous `/opt/yunohost/galene/stats.json`, avec une version lisible sur `__DOMAIN__/stats.html`. Cette page n'est disponible que pour l'administrateur du serveur (le mot de passe et l'administrateur sont définis dans le fichier `config.json` : `/opt/yunohost/galene/data/config.json`).
 
 ### Comment enregistrer ma conférence ?
 

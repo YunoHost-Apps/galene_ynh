@@ -14,7 +14,7 @@ To create a new group, you need to create a `GroupNameExample.json` file and res
 
 If you don’t wish to store cleartext passwords on the server, you may generate hashed passwords with the galene-password-generator utility:
 
-`./__INSTALL_DIR__/galenectl hash-password -password "your_password"`
+`.__INSTALL_DIR__/galenectl hash-password -password "your_password"`
 
 A user entry with a hashed password looks like this:
 ``` 
@@ -58,7 +58,7 @@ To check if the TURN server is up and running, type `/relay-test` in the chat bo
 
 ### Server Statistics page
 
-Statistics are available under `/opt/yunohost/galene/stats.json`, with a human-readable version at `domain.ltd/stats.html`. This is only available to the server administrator (the admin/password is set in the `config.json` file: `/opt/yunohost/galene/data/config.json`).
+Statistics are available under `/opt/yunohost/galene/stats.json`, with a human-readable version at `__DOMAIN__/stats.html`. This is only available to the server administrator (the admin/password is set in the `config.json` file: `/opt/yunohost/galene/data/config.json`).
 
 ### How do I record my lecture?
 
