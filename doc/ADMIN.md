@@ -66,4 +66,15 @@ Make sure allow-recording is set in your group configuration. Log-in as an opera
 
 ### Command-line client for Galene file transfer
 
+# Sending files
+
+    .__INSTALL_DIR__/galene-file-transfer -to UserName \
+                         https://__DOMAIN__/group/public/ \
+                         FileName
+
+# Receiving files
+
+    .__INSTALL_DIR__/galene-file-transfer https://__DOMAIN__/group/public/
+
+
 https://github.com/jech/galene-file-transfer/blob/master/README
