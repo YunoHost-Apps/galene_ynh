@@ -1,3 +1,5 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
 packaging_format = 2
 
 id = "galene"
@@ -5,7 +7,7 @@ name = "Galène"
 description.en = "Videoconferencing server that is easy to deploy"
 description.fr = "Serveur de visioconférence facile à déployer"
 
-version = "0.96.3~ynh2"
+version = "0.96.3~ynh3"
 
 maintainers = ["eric_G"]
 
@@ -24,6 +26,7 @@ architectures = "all"
 multi_instance = false
 
 ldap = true
+
 sso = false
 
 disk = "50M"
@@ -65,7 +68,7 @@ ram.runtime = "50M"
 
 [resources]
 
-[resources.sources]
+    [resources.sources]
     [resources.sources.main]
     url = "https://github.com/jech/galene/archive/refs/tags/galene-0.96.3.tar.gz"
     sha256 = "c76e5b6c059b94d102c2b726ab144ba6a70bdde8135f6733893217172af5201a"
