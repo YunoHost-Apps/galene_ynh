@@ -77,5 +77,4 @@ Assurez-vous que l'autorisation d'enregistrement est définie dans la configurat
 
     .__INSTALL_DIR__/galene-file-transfer https://__DOMAIN__/group/public/
 
-
 https://github.com/jech/galene-file-transfer/blob/master/README
