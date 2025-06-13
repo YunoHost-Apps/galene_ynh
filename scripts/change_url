@@ -1,28 +1,26 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
-
-#=================================================
-# LOAD SETTINGS
-#=================================================
-
-key=$(ynh_app_setting_get --key=key)
-password_hash=$(ynh_app_setting_get --key=password_hash)
 
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Stopping $app's systemd service..."
 
-ynh_systemctl --service=$app --action="stop" --log_path="systemd"
-ynh_systemctl --service=${app}_ldap --action="stop" --log_path="systemd"
+ynh_systemctl --service="$app" --action="stop" --log_path="systemd"
+ynh_systemctl --service="${app}_ldap" --action="stop" --log_path="systemd"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
 #=================================================
 ynh_script_progression "Updating NGINX web server configuration..."
 
+# this will most likely adjust NGINX config correctly
 ynh_config_change_url_nginx
 
 #=================================================
@@ -41,8 +39,8 @@ ynh_config_add --template="groupname-ldap.json" --destination="$data_dir/groups/
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service=$app --action="start" --log_path="systemd"
-ynh_systemctl --service=${app}_ldap --action="start" --log_path="systemd"
+ynh_systemctl --service="$app" --action="start" --wait_until="Started galene.service" --log_path="systemd"
+ynh_systemctl --service="${app}_ldap" --action="start" --wait_until="Started galene_ldap.service" --log_path="systemd"
 
 #=================================================
 # END OF SCRIPT
