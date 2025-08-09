@@ -42,8 +42,8 @@ yunohost service add "${app}_ldap" --description="LDAP integration for the video
 #=================================================
 ynh_script_progression "Reloading NGINX web server and $app's service..."
 
-ynh_systemctl --service="$app" --action="start" --wait_until="Started galene.service" --log_path="systemd"
-ynh_systemctl --service="${app}_ldap" --action="start" --wait_until="Started galene_ldap.service" --log_path="systemd"
+ynh_systemctl --service="$app" --action="start" --log_path="systemd" #--wait_until="Started galene.service"
+ynh_systemctl --service="${app}_ldap" --action="start" --log_path="systemd" #--wait_until="Started galene_ldap.service"
 
 ynh_systemctl --service=nginx --action=reload
 

@@ -39,8 +39,8 @@ ynh_config_add --template="groupname-ldap.json" --destination="$data_dir/groups/
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="start" --wait_until="Started galene.service" --log_path="systemd"
-ynh_systemctl --service="${app}_ldap" --action="start" --wait_until="Started galene_ldap.service" --log_path="systemd"
+ynh_systemctl --service="$app" --action="start" --log_path="systemd" #--wait_until="Started galene.service"
+ynh_systemctl --service="${app}_ldap" --action="start" --log_path="systemd" #--wait_until="Started galene_ldap.service"
 
 #=================================================
 # END OF SCRIPT
