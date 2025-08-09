@@ -1,3 +1,5 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
 packaging_format = 2
 
 id = "galene"
@@ -5,7 +7,7 @@ name = "Galène"
 description.en = "Videoconferencing server that is easy to deploy"
 description.fr = "Serveur de visioconférence facile à déployer"
 
-version = "0.96.3~ynh1"
+version = "1.0~ynh1"
 
 maintainers = ["eric_G"]
 
@@ -65,15 +67,15 @@ ram.runtime = "50M"
 
 [resources]
 
-[resources.sources]
+    [resources.sources]
     [resources.sources.main]
-    url = "https://github.com/jech/galene/archive/refs/tags/galene-0.96.3.tar.gz"
-    sha256 = "c76e5b6c059b94d102c2b726ab144ba6a70bdde8135f6733893217172af5201a"
+    url = "https://github.com/jech/galene/archive/refs/tags/galene-1.0.tar.gz"
+    sha256 = "663639649ab417cddbb8d88b16cfc2f8a2391903f27a25b16e0239202ae2245e"
     autoupdate.strategy = "latest_github_tag"
  
     [resources.sources.ldap]
-    url = "https://github.com/jech/galene-ldap/archive/6de51be51aede731fbb803b81725b25e1822e10f.tar.gz"
-    sha256 = "9e20a081066c2a7ee593211e588361334c666383dfa213752797e968933a3f7e"
+    url = "https://github.com/jech/galene-ldap/archive/8c6d6ec1604b72bc4fc5161eabb27aee0a7fbca5.tar.gz"
+    sha256 = "cb374d5b95ad17ae673cdd33b9d4629b4bec36b2da1cbfea170f6500d1cba8d5"
     autoupdate.upstream = "https://github.com/jech/galene-ldap"
     autoupdate.strategy = "latest_github_commit"
 
