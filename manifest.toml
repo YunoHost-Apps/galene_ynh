@@ -100,4 +100,3 @@ ram.runtime = "50M"
 
     [resources.go]
     version = "1.22"
-
