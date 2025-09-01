@@ -97,3 +97,7 @@ ram.runtime = "50M"
 
     [resources.apt]
     packages = "jose"
+
+    [resources.go]
+    version = "1.22"
+
