@@ -57,8 +57,6 @@ pushd $install_dir/build_ldap/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -ldflags='-s -w' -o $install_dir/live_ldap/
 popd
 
-ynh_go_remove
-
 ynh_safe_rm "$install_dir/build/"
 ynh_safe_rm "$install_dir/build_ldap/"
 ynh_safe_rm "$install_dir/.cache/"
