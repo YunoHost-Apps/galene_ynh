@@ -4,7 +4,6 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -14,11 +13,6 @@ ynh_script_progression "Stopping $app's systemd service..."
 
 ynh_systemctl --service="$app" --action="stop" --log_path="systemd"
 ynh_systemctl --service="${app}_ldap" --action="stop" --log_path="systemd"
-
-#=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-ynh_script_progression "Ensuring downward compatibility..."
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -56,8 +50,6 @@ popd
 pushd $install_dir/build_ldap/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -ldflags='-s -w' -o $install_dir/live_ldap/
 popd
-
-#REMOVEME? ynh_go_remove
 
 ynh_safe_rm "$install_dir/build/"
 ynh_safe_rm "$install_dir/build_ldap/"

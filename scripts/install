@@ -4,7 +4,6 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -44,8 +43,6 @@ chown -R $app:$app "$install_dir"
 # BUILD APP
 #=================================================
 ynh_script_progression "Building $app..."
-
-#REMOVEME? ynh_go_install
 
 pushd $install_dir/build/galenectl/
 	ynh_hide_warnings ynh_exec_as_app CGO_ENABLED=0 go build -o $install_dir/
