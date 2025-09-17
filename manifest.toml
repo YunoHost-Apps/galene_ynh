@@ -79,6 +79,12 @@ ram.runtime = "50M"
     autoupdate.upstream = "https://github.com/jech/galene-ldap"
     autoupdate.strategy = "latest_github_commit"
 
+    [resources.sources.file-transfer]
+    url = "https://github.com/jech/galene-file-transfer/archive/0a7ff12003be52088493ac3cfe17f50bc351bd1a.tar.gz"
+    sha256 = "6110c046c96bf7e29ed23217f47b16a021f2582d50488fc6493eac5638c60b34"
+    autoupdate.upstream = "https://github.com/jech/galene-file-transfer"
+    autoupdate.strategy = "latest_github_commit"
+
     [resources.system_user]
 
     [resources.install_dir]
