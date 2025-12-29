@@ -11,7 +11,6 @@ source /usr/share/yunohost/helpers
 # INITIALIZE AND STORE SETTINGS
 #=================================================
 
-password=$YNH_APP_ARG_PASSWORD
 ynh_app_setting_set --key=password --value="$password"
 
 #=================================================
