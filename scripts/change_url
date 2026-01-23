@@ -4,7 +4,6 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -12,8 +11,8 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Stopping $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="stop" --log_path="systemd"
-ynh_systemctl --service="${app}_ldap" --action="stop" --log_path="systemd"
+ynh_systemctl --service="$app" --action="stop"
+ynh_systemctl --service="${app}_ldap" --action="stop"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
@@ -39,8 +38,8 @@ ynh_config_add --template="groupname-ldap.json" --destination="$data_dir/groups/
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="start" --wait_until="Started galene.service" --log_path="systemd"
-ynh_systemctl --service="${app}_ldap" --action="start" --wait_until="Started galene_ldap.service" --log_path="systemd"
+ynh_systemctl --service="$app" --action="start"
+ynh_systemctl --service="${app}_ldap" --action="start"
 
 #=================================================
 # END OF SCRIPT
