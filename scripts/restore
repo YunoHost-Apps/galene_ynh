@@ -29,6 +29,7 @@ ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
 
 ynh_restore "/etc/systemd/system/$app.service"
 systemctl enable "$app.service" --quiet
+
 ynh_restore "/etc/systemd/system/${app}_ldap.service"
 systemctl enable "${app}_ldap.service" --quiet
 
