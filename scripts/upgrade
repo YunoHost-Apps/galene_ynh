@@ -14,8 +14,8 @@ ynh_app_setting_set_default --key=key --value=$(jose jwk gen -i '{"kty":"oct","a
 #=================================================
 ynh_script_progression "Stopping $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="stop" --log_path="systemd"
-ynh_systemctl --service="${app}_ldap" --action="stop" --log_path="systemd"
+ynh_systemctl --service="$app" --action="stop"
+ynh_systemctl --service="${app}_ldap" --action="stop"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -98,8 +98,8 @@ yunohost service add "${app}_ldap" --description="LDAP integration for the video
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service="$app" --action="start" --log_path="systemd" #--wait_until="Started galene.service"
-ynh_systemctl --service="${app}_ldap" --action="start" --log_path="systemd" #--wait_until="Started galene_ldap.service"
+ynh_systemctl --service="$app" --action="start"
+ynh_systemctl --service="${app}_ldap" --action="start"
 
 #=================================================
 # END OF SCRIPT
