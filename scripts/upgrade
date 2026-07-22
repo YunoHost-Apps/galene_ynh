@@ -6,6 +6,9 @@
 
 source /usr/share/yunohost/helpers
 
+# Configure Galène LDAP
+ynh_app_setting_set_default --key=key --value=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
+
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
@@ -22,7 +25,7 @@ ynh_script_progression "Upgrading source files..."
 ynh_setup_source --dest_dir="$install_dir/build" --full_replace
 ynh_setup_source --dest_dir="$install_dir/build_ldap" --source_id="ldap" --full_replace
 
-mkdir -p "$install_dir/live/data"
+mkdir -p "$install_dir/live"
 mkdir -p "$install_dir/live_ldap/data"
 
 ynh_safe_rm "$install_dir/live/static/"
@@ -66,9 +69,6 @@ password_hash=$(HOME=$install_dir $install_dir/galenectl hash-password -password
 
 # Configure Galène
 ynh_config_add --template="config.json" --destination="$install_dir/live/data/config.json"
-
-# Configure Galène LDAP
-ynh_app_setting_set_default --key=key --value=$(jose jwk gen -i '{"kty":"oct","alg":"HS256"}')
 
 ynh_config_add --template="galene-ldap.json" --destination="$install_dir/live_ldap/data/galene-ldap.json"
 

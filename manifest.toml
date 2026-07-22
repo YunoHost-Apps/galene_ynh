@@ -72,7 +72,7 @@ ram.runtime = "50M"
     url = "https://github.com/jech/galene/archive/refs/tags/galene-1.1.tar.gz"
     sha256 = "f904a77585596dd8c284aced0dc33a24f9988f42fc77a9865d9422801e4c9285"
     autoupdate.strategy = "latest_github_tag"
- 
+
     [resources.sources.ldap]
     url = "https://github.com/jech/galene-ldap/archive/8c6d6ec1604b72bc4fc5161eabb27aee0a7fbca5.tar.gz"
     sha256 = "cb374d5b95ad17ae673cdd33b9d4629b4bec36b2da1cbfea170f6500d1cba8d5"
@@ -84,7 +84,7 @@ ram.runtime = "50M"
     [resources.install_dir]
 
     [resources.data_dir]
-    subdirs = ["groups", "recordings"]
+    subdirs = ["groups", "recordings", "data"]
 
     [resources.permissions]
     main.url = "/"
