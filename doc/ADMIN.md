@@ -6,7 +6,7 @@ During install a group is created with YunoHost LDAP authentication, accessible 
 #### Creating and configuring groups
 
 Groups are defined by JSON files located in the folder `__DATA_DIR__/groups`. Each group is represented by a `GroupName.json` file.
-To create a new group, you need to create a `GroupNameExample.json` file and restart Galène service (you can also make subfolder groups, and the groups will be accessible with `https://__DOMAIN__/group/subfolder/GroupName/`). Various configuration options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
+To create a new group, you need to create a `GroupNameExample.json` file and restart Galène service (you can also make subfolder groups, and the groups will be accessible with `https://__DOMAIN__/group/subfolder/GroupName/`).
 
 *NB: Spaces are supported in group file names.*
 
