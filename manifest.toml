@@ -7,7 +7,7 @@ name = "Galène"
 description.en = "Videoconferencing server that is easy to deploy"
 description.fr = "Serveur de visioconférence facile à déployer"
 
-version = "1.1~ynh1"
+version = "1.1~ynh2"
 
 maintainers = ["eric_G"]
 
@@ -80,8 +80,8 @@ ram.runtime = "50M"
     autoupdate.strategy = "latest_github_commit"
 
     [resources.sources.file-transfer]
-    url = "https://github.com/jech/galene-file-transfer/archive/0a7ff12003be52088493ac3cfe17f50bc351bd1a.tar.gz"
-    sha256 = "6110c046c96bf7e29ed23217f47b16a021f2582d50488fc6493eac5638c60b34"
+    url = "https://github.com/jech/galene-file-transfer/archive/ad0d6a3e2770c98b16f480cc31daed2021f22daa.tar.gz"
+    sha256 = "168d532786580e30aaedd03e4e6c09b5c0c42bbfbe94ada09228555a175cdfc1"
     autoupdate.upstream = "https://github.com/jech/galene-file-transfer"
     autoupdate.strategy = "latest_github_commit"
 
