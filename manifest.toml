@@ -7,7 +7,7 @@ name = "Galène"
 description.en = "Videoconferencing server that is easy to deploy"
 description.fr = "Serveur de visioconférence facile à déployer"
 
-version = "1.1~ynh2"
+version = "1.2.1~ynh1"
 
 maintainers = ["eric_G"]
 
@@ -33,6 +33,7 @@ ram.build = "400M"
 ram.runtime = "50M"
 
 [install]
+
     [install.domain]
     type = "domain"
 
@@ -69,8 +70,8 @@ ram.runtime = "50M"
 
     [resources.sources]
     [resources.sources.main]
-    url = "https://github.com/jech/galene/archive/refs/tags/galene-1.1.tar.gz"
-    sha256 = "f904a77585596dd8c284aced0dc33a24f9988f42fc77a9865d9422801e4c9285"
+    url = "https://github.com/jech/galene/archive/refs/tags/galene-1.2.1.tar.gz"
+    sha256 = "230db9843995f6776b885cf7cb88d7de241abefc634e7845e20ce001fcdefd1a"
     autoupdate.strategy = "latest_github_tag"
  
     [resources.sources.ldap]
