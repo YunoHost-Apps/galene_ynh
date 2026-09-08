@@ -38,14 +38,14 @@ Galène comes with a built-in TURN server that should work out-of-the-box.
 
 #### Using your own TURN server
 - Install [coturn_ynh](https://github.com/YunoHost-Apps/coturn_ynh).
-- Add `/opt/yunohost/galene/data/ice-servers.json` with these lines and change `turn.example.org` and `secret`
+- Add `__INSTALL_DIR__/data/ice-servers.json` with these lines and change `turn.__DOMAIN__` and `secret`
 
 ```
     [
         {
             "urls": [
-                "turn:turn.example.org:5349",
-                "turn:turn.example.org:5349?transport=tcp"
+                "turn:turn.__DOMAIN__:5349",
+                "turn:turn.__DOMAIN__:5349?transport=tcp"
             ],
             "username": "galene",
             "credential": "secret"
@@ -58,7 +58,7 @@ To check if the TURN server is up and running, type `/relay-test` in the chat bo
 
 ### Server Statistics page
 
-Statistics are available under `/opt/yunohost/galene/stats.json`, with a human-readable version at `__DOMAIN__/stats.html`. This is only available to the server administrator (the admin/password is set in the `config.json` file: `/opt/yunohost/galene/data/config.json`).
+Statistics are available under `__INSTALL_DIR__/stats.json`, with a human-readable version at `__DOMAIN__/stats.html`. This is only available to the server administrator (the admin/password is set in the `config.json` file: `__INSTALL_DIR__/data/config.json`).
 
 ### How do I record my lecture?
 
