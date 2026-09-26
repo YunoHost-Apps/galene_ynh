@@ -6,7 +6,7 @@ During install a group is created with YunoHost LDAP authentication, accessible 
 #### Creating and configuring groups
 
 Groups are defined by JSON files located in the folder `__DATA_DIR__/groups`. Each group is represented by a `GroupName.json` file.
-To create a new group, you need to create a `GroupNameExample.json` file and restart Galène service (you can also make subfolder groups, and the groups will be accessible with `https://__DOMAIN__/group/subfolder/GroupName/`). Various configuration options are available (see https://github.com/YunoHost-Apps/galene_ynh/wiki/Configuration-file).
+To create a new group, you need to create a `GroupNameExample.json` file and restart Galène service (you can also make subfolder groups, and the groups will be accessible with `https://__DOMAIN__/group/subfolder/GroupName/`).
 
 *NB: Spaces are supported in group file names.*
 
@@ -38,14 +38,14 @@ Galène comes with a built-in TURN server that should work out-of-the-box.
 
 #### Using your own TURN server
 - Install [coturn_ynh](https://github.com/YunoHost-Apps/coturn_ynh).
-- Add `/opt/yunohost/galene/data/ice-servers.json` with these lines and change `turn.example.org` and `secret`
+- Add `__INSTALL_DIR__/data/ice-servers.json` with these lines and change `turn.__DOMAIN__` and `secret`
 
 ```
     [
         {
             "urls": [
-                "turn:turn.example.org:5349",
-                "turn:turn.example.org:5349?transport=tcp"
+                "turn:turn.__DOMAIN__:5349",
+                "turn:turn.__DOMAIN__:5349?transport=tcp"
             ],
             "username": "galene",
             "credential": "secret"
@@ -58,12 +58,23 @@ To check if the TURN server is up and running, type `/relay-test` in the chat bo
 
 ### Server Statistics page
 
-Statistics are available under `/opt/yunohost/galene/stats.json`, with a human-readable version at `__DOMAIN__/stats.html`. This is only available to the server administrator (the admin/password is set in the `config.json` file: `/opt/yunohost/galene/data/config.json`).
+Statistics are available under `__INSTALL_DIR__/stats.json`, with a human-readable version at `__DOMAIN__/stats.html`. This is only available to the server administrator (the admin/password is set in the `config.json` file: `__INSTALL_DIR__/data/config.json`).
 
 ### How do I record my lecture?
 
 Make sure allow-recording is set in your group configuration. Log-in as an operator, then say `/record` before you start your lecture. Don't forget to say `/unrecord` at the end. You will find your recordings under `https://__DOMAIN__/recordings/groupname/`. The video recordings are stored in `__DATA_DIR__/recordings` folder.
 
 ### Command-line client for Galene file transfer
+
+# Sending files
+
+    .__INSTALL_DIR__/galene-file-transfer -to UserName \
+                         https://__DOMAIN__/group/public/ \
+                         FileName
+
+# Receiving files
+
+    .__INSTALL_DIR__/galene-file-transfer https://__DOMAIN__/group/public/
+
 
 https://github.com/jech/galene-file-transfer/blob/master/README
