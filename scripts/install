@@ -87,6 +87,7 @@ mkdir $install_dir/mediapipe
 pushd "$install_dir/mediapipe"
 	ynh_hide_warnings corepack enable && corepack prepare pnpm@latest --activate
 	ynh_hide_warnings ynh_exec_as_app npm pack @mediapipe/tasks-vision
+	chown -R $app:$app "$install_dir"
 	tar xzf mediapipe-tasks-vision-*.tgz
 	rm -f ../static/third-party/tasks-vision
 	mv package ../static/third-party/tasks-vision
