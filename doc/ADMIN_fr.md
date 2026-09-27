@@ -39,14 +39,14 @@ Galène est livré avec un serveur TURN intégré qui devrait fonctionner imméd
 
 #### Utilisation de votre propre serveur TURN
 - Installez [coturn_ynh](https://github.com/YunoHost-Apps/coturn_ynh).
-- Ajoutez `/var/www/galene/data/ice-servers.json` avec ces lignes et changez `turn.example.org` et `secret`
+- Ajoutez `__INSTALL_DIR__/data/ice-servers.json` avec ces lignes et changez `turn.__DOMAIN__` et `secret`
 
 ```
     [
         {
             "urls": [
-                "turn:turn.example.org:5349",
-                "turn:turn.example.org:5349?transport=tcp"
+                "turn:turn.__DOMAIN__:5349",
+                "turn:turn.__DOMAIN__:5349?transport=tcp"
             ],
             "username": "galene",
             "credential": "secret"
@@ -59,12 +59,22 @@ Pour vérifier si le serveur TURN est opérationnel, tapez `/relay-test` dans la
 
 ### Statistiques du serveur
 
-Les statistiques sont disponibles sous `/opt/yunohost/galene/stats.json`, avec une version lisible sur `__DOMAIN__/stats.html`. Cette page n'est disponible que pour l'administrateur du serveur (le mot de passe et l'administrateur sont définis dans le fichier `config.json` : `/opt/yunohost/galene/data/config.json`).
+Les statistiques sont disponibles sous `__INSTALL_DIR__/stats.json`, avec une version lisible sur `__DOMAIN__/stats.html`. Cette page n'est disponible que pour l'administrateur du serveur (le mot de passe et l'administrateur sont définis dans le fichier `config.json` : `__INSTALL_DIR__/data/config.json`).
 
 ### Comment enregistrer ma conférence ?
 
 Assurez-vous que l'autorisation d'enregistrement est définie dans la configuration de votre groupe. Connectez-vous en tant qu'opérateur, puis dites `/record` dans la fenêtre de chat avant de commencer la visio. N'oubliez pas de dire `/unrecord` à la fin. Vous trouverez vos enregistrements sous `https://__DOMAIN__/recordings/groupname/`. Les enregistrements vidéo sont stockés dans le dossier `__DATA_DIR__/recordings`. 
 
-### Client en ligne de commande pour le transfert de fichiers
+### Client en ligne de commande pour le transfert de fichiers Galène
+
+# Envoi de fichiers
+
+    .__INSTALL_DIR__/galene-file-transfer -to UserName \
+                         https://__DOMAIN__/group/public/ \
+                         FileName
+
+# Réception de fichiers
+
+    .__INSTALL_DIR__/galene-file-transfer https://__DOMAIN__/group/public/
 
 https://github.com/jech/galene-file-transfer/blob/master/README
