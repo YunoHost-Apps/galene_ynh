@@ -7,6 +7,19 @@
 source /usr/share/yunohost/helpers
 
 #=================================================
+# LOAD SETTINGS
+#=================================================
+
+password=$(ynh_app_setting_get --key=password)
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression "Installing dependencies..."
+
+ynh_nodejs_install
+
+#=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
 ynh_script_progression "Stopping $app's systemd service..."
@@ -63,6 +76,24 @@ ynh_safe_rm "$install_dir/.go-version"
 
 chmod +x "$install_dir/galenectl"
 chmod +x "$install_dir/galene-file-transfer"
+
+#=================================================
+# ADD BLUR BACKGROUND
+#=================================================
+ynh_script_progression "Adding blur background option..."
+
+mkdir $install_dir/mediapipe
+
+pushd "$install_dir/mediapipe"
+	ynh_hide_warnings corepack enable && corepack prepare pnpm@latest --activate
+	ynh_hide_warnings ynh_exec_as_app npm pack @mediapipe/tasks-vision
+	ynh_hide_warnings ynh_exec_as_app tar xzf mediapipe-tasks-vision-*.tgz
+	ynh_hide_warnings ynh_exec_as_app rm -f ../static/third-party/tasks-vision
+	ynh_hide_warnings ynh_exec_as_app mv package ../static/third-party/tasks-vision
+	ynh_hide_warnings ynh_exec_as_app mkdir ../static/third-party/tasks-vision/models
+	ynh_hide_warnings ynh_exec_as_app cd models
+	ynh_hide_warnings ynh_exec_as_app wget https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite 2>&1
+popd
 
 #=================================================
 # UPDATE A CONFIG FILE
